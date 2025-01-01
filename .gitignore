@@ -1,0 +1,25 @@
+# Environments
+.venv/
+
+# Poetry
+poetry.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ruff
+.ruff_cache/
+
+# Visual Studio Code
+.vscode/
+
+# backlib
+.tmp/
+
+# mypy
+.mypy_cache/
+
+# pytest
+.pytest_cache/

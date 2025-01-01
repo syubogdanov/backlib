@@ -1,0 +1,93 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "backlib"
+version = "0.1.0"
+description = "Backports for the Python standard library."
+license = "MIT"
+authors = ["Sergei Bogdanov <syubogdanov@outlook.com>"]
+maintainers = ["Sergei Bogdanov <syubogdanov@outlook.com>"]
+readme = "README.md"
+homepage = "https://github.com/syubogdanov/backlib"
+repository = "https://github.com/syubogdanov/backlib"
+documentation = "https://github.com/syubogdanov/backlib/tree/main/docs/"
+keywords = [
+    "python",
+    "backport",
+    "stdlib",
+    "io",
+    "json",
+    "os",
+    "pathlib",
+    "shutil",
+    "sys",
+    "tarfile",
+    "tempfile",
+    "tomllib",
+    "zipfile",
+]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[tool.poetry.dependencies]
+python = ">=3.9, <3.14"
+typing-extensions = {version = "^4.12", python = "<3.11"}
+
+[tool.poetry.group.lint]
+optional = true
+
+[tool.poetry.group.lint.dependencies]
+mypy = "^1.13"
+ruff = "^0.7"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3"
+
+[tool.mypy]
+disallow_any_unimported = true
+disallow_incomplete_defs = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+explicit_package_bases = true
+no_implicit_optional = true
+strict_equality = true
+warn_unused_ignores = true
+python_version = "3.9"
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["D100", "D104"]
+
+[tool.ruff.lint.flake8-type-checking]
+exempt-modules = ["typing", "typing_extensions"]
+
+[tool.ruff.lint.isort]
+lines-after-imports = 2
+lines-between-types = 1
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.pylint]
+max-args = 8
