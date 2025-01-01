@@ -30,7 +30,7 @@ pip install backlib
 
 ## License
 
-MIT License, Copyright (c) 2024 Sergei Bogdanov. See [LICENSE][github/license] file.
+MIT License, Copyright (c) 2025 Sergei Bogdanov. See [LICENSE][github/license] file.
 
 <!-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- -->
 
