@@ -1,6 +1,15 @@
+from __future__ import annotations
+
 import re
 
+from typing import TYPE_CHECKING, Any
+
 from backlib.py313.internal.stdlib.json import scanner
+from backlib.py313.internal.stdlib.typing import Self
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 __all__: list[str] = ["JSONDecodeError", "JSONDecoder"]
@@ -23,8 +32,18 @@ class JSONDecodeError(ValueError):
     -------
     * Python 3.13.
     """
-    # Note that this exception is used from _json
-    def __init__(self, msg: str, doc: str, pos: int) -> None:
+
+    def __init__(self: Self, msg: str, doc: str, pos: int) -> None:
+        """Initialize the object.
+
+        See Also
+        --------
+        * `json.JSONDecodeError.__init__`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
         lineno = doc.count("\n", 0, pos) + 1
         colno = pos - doc.rfind("\n", 0, pos)
         errmsg = f"{msg}: line {lineno} column {colno} (char {pos})"
@@ -35,7 +54,17 @@ class JSONDecodeError(ValueError):
         self.lineno = lineno
         self.colno = colno
 
-    def __reduce__(self):
+    def __reduce__(self: Self) -> tuple[type[Self], tuple[str, str, int]]:
+        """Return a `tuple` for pickling.
+
+        See Also
+        --------
+        * `json.JSONDecodeError.__reduce__`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
         return self.__class__, (self.msg, self.doc, self.pos)
 
 
@@ -53,7 +82,8 @@ BACKSLASH = {
     "b": "\b", "f": "\f", "n": "\n", "r": "\r", "t": "\t",
 }
 
-def _decode_uXXXX(s, pos):
+
+def _decode_uXXXX(s: str, pos: int) -> int:  # noqa: N802
     esc = HEXDIGITS.match(s, pos + 1)
     if esc is not None:
         try:
@@ -63,8 +93,8 @@ def _decode_uXXXX(s, pos):
     msg = "Invalid \\uXXXX escape"
     raise JSONDecodeError(msg, s, pos)
 
-def scanstring(s, end, strict=True,
-        _b=BACKSLASH, _m=STRINGCHUNK.match):
+
+def scanstring(s, end, strict=True):
     """Scan the string s for a JSON string. End is the index of the
     character in s after the quote that started the JSON string.
     Unescapes all valid JSON string escape sequences and raises ValueError
@@ -77,7 +107,7 @@ def scanstring(s, end, strict=True,
     _append = chunks.append
     begin = end - 1
     while 1:
-        chunk = _m(s, end)
+        chunk = STRINGCHUNK.match(s, end)
         if chunk is None:
             detail = "Unterminated string starting at"
             raise JSONDecodeError(detail, s, begin)
@@ -104,7 +134,7 @@ def scanstring(s, end, strict=True,
         # If not a unicode escape sequence, must be in the lookup table
         if esc != "u":
             try:
-                char = _b[esc]
+                char = BACKSLASH[esc]
             except KeyError:
                 detail = f"Invalid \\escape: {esc!r}"
                 raise JSONDecodeError(detail, s, end) from None
@@ -225,6 +255,7 @@ def JSONObject(s_and_end, strict, scan_once, object_hook, object_pairs_hook,
 
     return pairs, end
 
+
 def JSONArray(s_and_end, scan_once):
     s, end = s_and_end
     values = []
@@ -291,9 +322,16 @@ class JSONDecoder:
     * Python 3.13.
     """
 
-    def __init__(self, *, object_hook=None, parse_float=None,
-            parse_int=None, parse_constant=None, strict=True,
-            object_pairs_hook=None) -> None:
+    def __init__(
+        self: Self,
+        *,
+        object_hook: Callable[[dict[str, Any]], Any] | None = None,
+        parse_float: Callable[[str], Any] | None = None,
+        parse_int: Callable[[str], Any] | None = None,
+        parse_constant: Callable[[str], Any] | None = None,
+        strict: bool = True,
+        object_pairs_hook: Callable[[list[tuple[str, Any]]], Any] | None = None,
+    ) -> None:
         """Initialize the object.
 
         See Also
@@ -316,7 +354,7 @@ class JSONDecoder:
         self.memo = {}
         self.scan_once = scanner.make_scanner(self)
 
-    def decode(self, s):
+    def decode(self: Self, s: str) -> Any:  # noqa: ANN401
         """Return the Python representation of `s`.
 
         See Also
@@ -336,7 +374,7 @@ class JSONDecoder:
 
         return obj
 
-    def raw_decode(self, s, idx=0):
+    def raw_decode(self: Self, s: str, idx: int = 0) -> tuple[Any, int]:
         """Decode a JSON document from `s`.
 
         See Also
