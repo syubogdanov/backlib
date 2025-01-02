@@ -1,6 +1,9 @@
 # Environments
 .venv/
 
+# Other
+.tmp/
+
 # Poetry
 poetry.lock
 
@@ -14,9 +17,6 @@ __pycache__/
 
 # Visual Studio Code
 .vscode/
-
-# backlib
-.tmp/
 
 # mypy
 .mypy_cache/
