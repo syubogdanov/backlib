@@ -50,8 +50,6 @@ with open("./aiostdlib.toml", mode="rb") as file:
 
 The `backlib` API is the same as the standard library, so you can refer to the official documentation:
 
-* [Python 3.11][docs/3.11]
-* [Python 3.12][docs/3.12]
 * [Python 3.13][docs/3.13]
 
 ## License
@@ -60,8 +58,6 @@ MIT License, Copyright (c) 2025 Sergei Bogdanov. See [LICENSE][github/license] f
 
 <!-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- -->
 
-[docs/3.11]: https://docs.python.org/3.11/library/index.html
-[docs/3.12]: https://docs.python.org/3.12/library/index.html
 [docs/3.13]: https://docs.python.org/3.13/library/index.html
 
 [github/license]: https://github.com/syubogdanov/backlib/tree/main/LICENSE
