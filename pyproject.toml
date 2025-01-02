@@ -71,6 +71,9 @@ target-version = "py39"
 select = ["ALL"]
 ignore = ["D100", "D104"]
 
+[tool.ruff.lint.extend-per-file-ignores]
+"backlib/py3*/internal/**" = ["D"]
+
 [tool.ruff.lint.flake8-type-checking]
 exempt-modules = ["typing", "typing_extensions"]
 
