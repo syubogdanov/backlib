@@ -26,8 +26,6 @@ pip install backlib
 
 ### Usage
 
-Note that the same objects from backports of different versions are unrelated.
-
 #### json
 
 ```python
