@@ -57,11 +57,29 @@ BASIC_STR_ESCAPE_REPLACEMENTS = MappingProxyType(
 
 
 class TOMLDecodeError(ValueError):
-    """An error raised if a document is not valid TOML."""
+    """An error raised if a document is not valid `TOML`.
+
+    See Also
+    --------
+    * `tomllib.TOMLDecodeError`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
 
 
 def load(fp: BinaryIO, /, *, parse_float: ParseFloat = float) -> dict[str, Any]:
-    """Parse TOML from a binary file object."""
+    """Parse `TOML` from a binary file object.
+
+    See Also
+    --------
+    * `tomllib.loads`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
     b = fp.read()
 
     try:
@@ -75,7 +93,16 @@ def load(fp: BinaryIO, /, *, parse_float: ParseFloat = float) -> dict[str, Any]:
 
 
 def loads(s: str, /, *, parse_float: ParseFloat = float) -> dict[str, Any]:  # noqa: C901
-    """Parse TOML from a string."""
+    """Parse `TOML` from a string.
+
+    See Also
+    --------
+    * `tomllib.load`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
     # The spec allows converting "\r\n" to "\n", even in string
     # literals. Let's do so to simplify parsing.
     src = s.replace("\r\n", "\n")
