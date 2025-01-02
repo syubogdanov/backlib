@@ -15,14 +15,15 @@ NegInf = float("-inf")
 
 
 class JSONDecodeError(ValueError):
-    """Subclass of ValueError with the following additional properties:
+    """Subclass of `ValueError` with additional properties.
 
-    msg: The unformatted error message
-    doc: The JSON document being parsed
-    pos: The start index of doc where parsing failed
-    lineno: The line corresponding to pos
-    colno: The column corresponding to pos
+    See Also
+    --------
+    * `json.JSONDecodeError`.
 
+    Version
+    -------
+    * Python 3.13.
     """
     # Note that this exception is used from _json
     def __init__(self, msg: str, doc: str, pos: int) -> None:
@@ -281,69 +282,29 @@ def JSONArray(s_and_end, scan_once):
 
 
 class JSONDecoder:
-    """Simple JSON <https://json.org> decoder
+    """Simple JSON decoder.
 
-    Performs the following translations in decoding by default:
+    See Also
+    --------
+    * `json.JSONDecoder`.
 
-    +---------------+-------------------+
-    | JSON          | Python            |
-    +===============+===================+
-    | object        | dict              |
-    +---------------+-------------------+
-    | array         | list              |
-    +---------------+-------------------+
-    | string        | str               |
-    +---------------+-------------------+
-    | number (int)  | int               |
-    +---------------+-------------------+
-    | number (real) | float             |
-    +---------------+-------------------+
-    | true          | True              |
-    +---------------+-------------------+
-    | false         | False             |
-    +---------------+-------------------+
-    | null          | None              |
-    +---------------+-------------------+
-
-    It also understands ``NaN``, ``Infinity``, and ``-Infinity`` as
-    their corresponding ``float`` values, which is outside the JSON spec.
-
+    Version
+    -------
+    * Python 3.13.
     """
 
     def __init__(self, *, object_hook=None, parse_float=None,
             parse_int=None, parse_constant=None, strict=True,
             object_pairs_hook=None) -> None:
-        """``object_hook``, if specified, will be called with the result
-        of every JSON object decoded and its return value will be used in
-        place of the given ``dict``.  This can be used to provide custom
-        deserializations (e.g. to support JSON-RPC class hinting).
+        """Initialize the object.
 
-        ``object_pairs_hook``, if specified will be called with the result of
-        every JSON object decoded with an ordered list of pairs.  The return
-        value of ``object_pairs_hook`` will be used instead of the ``dict``.
-        This feature can be used to implement custom decoders.
-        If ``object_hook`` is also defined, the ``object_pairs_hook`` takes
-        priority.
+        See Also
+        --------
+        * `json.JSONDecoder.__init__`.
 
-        ``parse_float``, if specified, will be called with the string
-        of every JSON float to be decoded. By default this is equivalent to
-        float(num_str). This can be used to use another datatype or parser
-        for JSON floats (e.g. decimal.Decimal).
-
-        ``parse_int``, if specified, will be called with the string
-        of every JSON int to be decoded. By default this is equivalent to
-        int(num_str). This can be used to use another datatype or parser
-        for JSON integers (e.g. float).
-
-        ``parse_constant``, if specified, will be called with one of the
-        following strings: -Infinity, Infinity, NaN.
-        This can be used to raise an exception if invalid JSON numbers
-        are encountered.
-
-        If ``strict`` is false (true is the default), then control
-        characters will be allowed inside strings.  Control characters in
-        this context are those with character codes in the 0-31 range,
-        including ``'\\t'`` (tab), ``'\\n'``, ``'\\r'`` and ``'\\0'``.
+        Version
+        -------
+        * Python 3.13.
         """
         self.object_hook = object_hook
         self.parse_float = parse_float or float
@@ -357,11 +318,16 @@ class JSONDecoder:
         self.memo = {}
         self.scan_once = scanner.make_scanner(self)
 
-
     def decode(self, s):
-        """Return the Python representation of ``s`` (a ``str`` instance
-        containing a JSON document).
+        """Return the Python representation of `s`.
 
+        See Also
+        --------
+        * `json.JSONDecoder.decode`.
+
+        Version
+        -------
+        * Python 3.13.
         """
         obj, end = self.raw_decode(s, idx=WHITESPACE.match(s, 0).end())
         end = WHITESPACE.match(s, end).end()
@@ -373,13 +339,15 @@ class JSONDecoder:
         return obj
 
     def raw_decode(self, s, idx=0):
-        """Decode a JSON document from ``s`` (a ``str`` beginning with
-        a JSON document) and return a 2-tuple of the Python
-        representation and the index in ``s`` where the document ended.
+        """Decode a JSON document from `s`.
 
-        This can be used to decode a JSON document from a string that may
-        have extraneous data at the end.
+        See Also
+        --------
+        * `json.JSONDecoder.raw_decode`.
 
+        Version
+        -------
+        * Python 3.13.
         """
         try:
             obj, end = self.scan_once(s, idx)
