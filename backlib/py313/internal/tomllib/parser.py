@@ -132,7 +132,7 @@ def loads(s: str, /, *, parse_float: ParseFloat = float) -> dict[str, Any]:  # n
             break
         if char != "\n":
             raise suffixed_err(
-                src, pos, "Expected newline or end of document after a statement"
+                src, pos, "Expected newline or end of document after a statement",
             )
         pos += 1
 
@@ -276,7 +276,7 @@ def skip_comment(src: str, pos: Pos) -> Pos:
         char = None
     if char == "#":
         return skip_until(
-            src, pos + 1, "\n", error_on=ILLEGAL_COMMENT_CHARS, error_on_eof=False
+            src, pos + 1, "\n", error_on=ILLEGAL_COMMENT_CHARS, error_on_eof=False,
         )
     return pos
 
@@ -330,7 +330,7 @@ def create_list_rule(src: str, pos: Pos, out: Output) -> tuple[Pos, Key]:
 
 
 def key_value_rule(
-    src: str, pos: Pos, out: Output, header: Key, parse_float: ParseFloat
+    src: str, pos: Pos, out: Output, header: Key, parse_float: ParseFloat,
 ) -> Pos:
     pos, key, value = parse_key_value_pair(src, pos, parse_float)
     key_parent, key_stem = key[:-1], key[-1]
@@ -347,7 +347,7 @@ def key_value_rule(
 
     if out.flags.is_(abs_key_parent, Flags.FROZEN):
         raise suffixed_err(
-            src, pos, f"Cannot mutate immutable namespace {abs_key_parent}"
+            src, pos, f"Cannot mutate immutable namespace {abs_key_parent}",
         )
 
     try:
@@ -364,7 +364,7 @@ def key_value_rule(
 
 
 def parse_key_value_pair(
-    src: str, pos: Pos, parse_float: ParseFloat
+    src: str, pos: Pos, parse_float: ParseFloat,
 ) -> tuple[Pos, Key, Any]:
     pos, key = parse_key(src, pos)
     try:
@@ -475,7 +475,7 @@ def parse_inline_table(src: str, pos: Pos, parse_float: ParseFloat) -> tuple[Pos
 
 
 def parse_basic_str_escape(
-    src: str, pos: Pos, *, multiline: bool = False
+    src: str, pos: Pos, *, multiline: bool = False,
 ) -> tuple[Pos, str]:
     escape_id = src[pos : pos + 2]
     pos += 2
@@ -522,7 +522,7 @@ def parse_literal_str(src: str, pos: Pos) -> tuple[Pos, str]:
     pos += 1  # Skip starting apostrophe
     start_pos = pos
     pos = skip_until(
-        src, pos, "'", error_on=ILLEGAL_LITERAL_STR_CHARS, error_on_eof=True
+        src, pos, "'", error_on=ILLEGAL_LITERAL_STR_CHARS, error_on_eof=True,
     )
     return pos + 1, src[start_pos:pos]  # Skip ending apostrophe
 
@@ -590,8 +590,8 @@ def parse_basic_str(src: str, pos: Pos, *, multiline: bool) -> tuple[Pos, str]:
         pos += 1
 
 
-def parse_value(  # noqa: C901
-    src: str, pos: Pos, parse_float: ParseFloat
+def parse_value(  # noqa: C901, PLR0911, PLR0912
+    src: str, pos: Pos, parse_float: ParseFloat,
 ) -> tuple[Pos, Any]:
     try:
         char: str | None = src[pos]
@@ -671,7 +671,7 @@ def suffixed_err(src: str, pos: Pos, msg: str) -> TOMLDecodeError:
 
 
 def is_unicode_scalar_value(codepoint: int) -> bool:
-    return (0 <= codepoint <= 55295) or (57344 <= codepoint <= 1114111)
+    return (0 <= codepoint <= 55295) or (57344 <= codepoint <= 1114111)  # noqa: PLR2004
 
 
 def make_safe_parse_float(parse_float: ParseFloat) -> ParseFloat:
@@ -686,7 +686,7 @@ def make_safe_parse_float(parse_float: ParseFloat) -> ParseFloat:
     if parse_float is float:  # type: ignore[comparison-overlap]
         return float
 
-    def safe_parse_float(float_str: str) -> Any:
+    def safe_parse_float(float_str: str) -> Any:  # noqa: ANN401
         float_value = parse_float(float_str)
         if isinstance(float_value, (dict, list)):
             detail = "parse_float must not return dicts or lists"
