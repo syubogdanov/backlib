@@ -26,6 +26,15 @@ pip install backlib
 
 ### Usage
 
+#### io
+
+```python
+from backlib.py313 import io
+
+with io.open_code("backlib.py") as file:
+    data = file.read()
+```
+
 #### json
 
 ```python
@@ -35,6 +44,44 @@ with open("./backlib.json", mode="w") as file:
     json.dump(["backlib"], file)
 ```
 
+#### os
+
+```python
+from backlib.py313 import os
+
+if not os.access("backlib.txt", os.R_OK):
+    detail = "Something went wrong..."
+    raise RuntimeError(detail)
+```
+
+#### pathlib
+
+```python
+from backlib.py313 import pathlib
+
+if not pathlib.Path("./backlib.txt").exists():
+    detail = "Something went wrong..."
+    raise RuntimeError(detail)
+```
+
+#### shutil
+
+```python
+from backlib.py313 import shutil
+
+shutil.rmtree("/tmp/backlib/")
+```
+
+#### tarfile
+
+```python
+from backlib.py313 import tarfile
+
+if not tarfile.is_tarfile("./backlib.tar.gz"):
+    detail = "Something went wrong..."
+    raise RuntimeError(detail)
+```
+
 #### tomllib
 
 ```python
@@ -42,6 +89,16 @@ from backlib.py313 import tomllib
 
 with open("./backlib.toml", mode="rb") as file:
     data = tomllib.load(file)
+```
+
+#### zipfile
+
+```python
+from backlib.py313 import zipfile
+
+if not zipfile.is_zipfile("./backlib.zip"):
+    detail = "Something went wrong..."
+    raise RuntimeError(detail)
 ```
 
 ## Documentation
