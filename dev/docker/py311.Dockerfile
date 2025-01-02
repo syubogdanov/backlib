@@ -1,6 +1,6 @@
 FROM python:3.11-slim-bullseye
 
-WORKDIR /backlib
+WORKDIR /backlib/
 
 RUN apt-get update \
     && apt-get install --no-install-recommends --yes make \
