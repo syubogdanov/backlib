@@ -26,7 +26,7 @@ pip install backlib
 
 ### Usage
 
-Note that objects from backports of different versions are entirely separate and have nothing to do with each other.
+Note that the same objects from backports of different versions are unrelated.
 
 #### json
 
