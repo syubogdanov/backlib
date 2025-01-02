@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING, Any
 
 
 if TYPE_CHECKING:
-    from backlib.py313.internal.tomllib.types import ParseFloat
+    from backlib.py313.internal.stdlib.tomllib.types import ParseFloat
 
 # E.g.
 # - 00:32:00.999999

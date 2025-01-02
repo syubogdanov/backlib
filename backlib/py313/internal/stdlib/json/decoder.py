@@ -1,8 +1,6 @@
-"""Implementation of JSONDecoder
-"""
 import re
 
-from backlib.py313.internal.json import scanner
+from backlib.py313.internal.stdlib.json import scanner
 
 
 __all__: list[str] = ["JSONDecodeError", "JSONDecoder"]

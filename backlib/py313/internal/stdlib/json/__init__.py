@@ -4,8 +4,9 @@ import codecs
 
 from typing import TYPE_CHECKING, Any
 
-from backlib.py313.internal.json.decoder import JSONDecodeError, JSONDecoder
-from backlib.py313.internal.json.encoder import JSONEncoder
+from backlib.py313.internal.stdlib.json.decoder import JSONDecodeError, JSONDecoder
+from backlib.py313.internal.stdlib.json.encoder import JSONEncoder
+from backlib.py313.internal.utils.typing import SupportsRead, SupportsWrite
 
 
 if TYPE_CHECKING:
@@ -28,7 +29,7 @@ __all__: list[str] = [
 
 def dump(  # noqa: PLR0913
     obj: Any,  # noqa: ANN401
-    fp,
+    fp: SupportsWrite[str],
     *,
     skipkeys: bool = False,
     ensure_ascii: bool = True,
@@ -144,7 +145,7 @@ def detect_encoding(b: bytes | bytearray) -> str:  # noqa: PLR0911
 
 
 def load(
-    fp,
+    fp: SupportsRead[str | bytes | bytearray],
     *,
     cls: type[JSONDecoder] | None = None,
     object_hook: Callable[[dict[Any, Any]], Any] | None = None,
