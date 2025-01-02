@@ -160,8 +160,7 @@ class JSONEncoder:
         markers = {} if self.check_circular else None
         _encoder = encode_basestring_ascii if self.ensure_ascii else encode_basestring
 
-        def floatstr(o, allow_nan=self.allow_nan,
-                _repr=float.__repr__):
+        def floatstr(o, allow_nan=self.allow_nan, _repr=float.__repr__):
             # Check for specials.  Note that this type of test is processor
             # and/or platform-specific, so do tests which don't depend on the
             # internals.
@@ -194,13 +193,21 @@ class JSONEncoder:
 
         return _iterencode(o, 0)
 
-def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
-        _key_separator, _item_separator, _sort_keys, _skipkeys,
-        ## HACK: hand-optimized bytecode; turn globals into locals
-        _intstr=int.__repr__,
+def _make_iterencode(
+    markers,
+    _default,
+    _encoder,
+    _indent,
+    _floatstr,
+    _key_separator,
+    _item_separator,
+    _sort_keys,
+    _skipkeys,
+    ## HACK: hand-optimized bytecode; turn globals into locals
+    _intstr=int.__repr__,
     ):
 
-    def _iterencode_list(lst, _current_indent_level):
+    def _iterencode_list(lst, _current_indent_level: int):
         if not lst:
             yield "[]"
             return
@@ -257,7 +264,7 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
         if markers is not None:
             del markers[markerid]
 
-    def _iterencode_dict(dct, _current_indent_level):
+    def _iterencode_dict(dct, _current_indent_level: int):
         if not dct:
             yield "{}"
             return
@@ -335,7 +342,7 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
         if markers is not None:
             del markers[markerid]
 
-    def _iterencode(o, _current_indent_level):
+    def _iterencode(o, _current_indent_level: int):
         if isinstance(o, str):
             yield _encoder(o)
         elif o is None:
