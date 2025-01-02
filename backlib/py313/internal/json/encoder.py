@@ -4,10 +4,7 @@ try:
     from _json import encode_basestring_ascii as c_encode_basestring_ascii
 except ImportError:
     c_encode_basestring_ascii = None
-try:
-    from _json import encode_basestring as c_encode_basestring
-except ImportError:
-    c_encode_basestring = None
+
 try:
     from _json import make_encoder as c_make_encoder
 except ImportError:
@@ -15,33 +12,29 @@ except ImportError:
 
 ESCAPE = re.compile(r'[\x00-\x1f\\"\b\f\n\r\t]')
 ESCAPE_ASCII = re.compile(r'([\\"]|[^\ -~])')
-HAS_UTF8 = re.compile(b'[\x80-\xff]')
+HAS_UTF8 = re.compile(b"[\x80-\xff]")
 ESCAPE_DCT = {
-    '\\': '\\\\',
+    "\\": "\\\\",
     '"': '\\"',
-    '\b': '\\b',
-    '\f': '\\f',
-    '\n': '\\n',
-    '\r': '\\r',
-    '\t': '\\t',
+    "\b": "\\b",
+    "\f": "\\f",
+    "\n": "\\n",
+    "\r": "\\r",
+    "\t": "\\t",
 }
 for i in range(0x20):
-    ESCAPE_DCT.setdefault(chr(i), '\\u{0:04x}'.format(i))
-    #ESCAPE_DCT.setdefault(chr(i), '\\u%04x' % (i,))
+    ESCAPE_DCT.setdefault(chr(i), f"\\u{i:04x}")
 del i
 
-INFINITY = float('inf')
+INFINITY = float("inf")
 
-def py_encode_basestring(s):
+def encode_basestring(s):
     """Return a JSON representation of a Python string
 
     """
     def replace(match):
         return ESCAPE_DCT[match.group(0)]
     return '"' + ESCAPE.sub(replace, s) + '"'
-
-
-encode_basestring = (c_encode_basestring or py_encode_basestring)
 
 
 def py_encode_basestring_ascii(s):
@@ -55,21 +48,20 @@ def py_encode_basestring_ascii(s):
         except KeyError:
             n = ord(s)
             if n < 0x10000:
-                return '\\u{0:04x}'.format(n)
-                #return '\\u%04x' % (n,)
+                return f"\\u{n:04x}"
             else:
                 # surrogate pair
                 n -= 0x10000
                 s1 = 0xd800 | ((n >> 10) & 0x3ff)
                 s2 = 0xdc00 | (n & 0x3ff)
-                return '\\u{0:04x}\\u{1:04x}'.format(s1, s2)
+                return f"\\u{s1:04x}\\u{s2:04x}"
     return '"' + ESCAPE_ASCII.sub(replace, s) + '"'
 
 
 encode_basestring_ascii = (
     c_encode_basestring_ascii or py_encode_basestring_ascii)
 
-class JSONEncoder(object):
+class JSONEncoder:
     """Extensible JSON <https://json.org> encoder for Python data structures.
 
     Supports the following objects and types by default:
@@ -98,11 +90,11 @@ class JSONEncoder(object):
     implementation (to raise ``TypeError``).
 
     """
-    item_separator = ', '
-    key_separator = ': '
+    item_separator = ", "
+    key_separator = ": "
     def __init__(self, *, skipkeys=False, ensure_ascii=True,
             check_circular=True, allow_nan=True, sort_keys=False,
-            indent=None, separators=None, default=None):
+            indent=None, separators=None, default=None) -> None:
         """Constructor for JSONEncoder, with sensible defaults.
 
         If skipkeys is false, then it is a TypeError to attempt
@@ -152,7 +144,7 @@ class JSONEncoder(object):
         if separators is not None:
             self.item_separator, self.key_separator = separators
         elif indent is not None:
-            self.item_separator = ','
+            self.item_separator = ","
         if default is not None:
             self.default = default
 
@@ -175,8 +167,8 @@ class JSONEncoder(object):
                 return super().default(o)
 
         """
-        raise TypeError(f'Object of type {o.__class__.__name__} '
-                        f'is not JSON serializable')
+        detail = f"Object of type {o.__class__.__name__} is not JSON serializable"
+        raise TypeError(detail)
 
     def encode(self, o):
         """Return a JSON string representation of a Python data structure.
@@ -198,7 +190,7 @@ class JSONEncoder(object):
         chunks = self.iterencode(o, _one_shot=True)
         if not isinstance(chunks, (list, tuple)):
             chunks = list(chunks)
-        return ''.join(chunks)
+        return "".join(chunks)
 
     def iterencode(self, o, _one_shot=False):
         """Encode the given object and yield each string
@@ -226,18 +218,17 @@ class JSONEncoder(object):
             # internals.
 
             if o != o:
-                text = 'NaN'
+                text = "NaN"
             elif o == _inf:
-                text = 'Infinity'
+                text = "Infinity"
             elif o == _neginf:
-                text = '-Infinity'
+                text = "-Infinity"
             else:
                 return _repr(o)
 
             if not allow_nan:
-                raise ValueError(
-                    "Out of range float values are not JSON compliant: " +
-                    repr(o))
+                detail = f"Out of range float values are not JSON compliant: {o!r}"
+                raise ValueError(detail)
 
             return text
 
@@ -245,7 +236,7 @@ class JSONEncoder(object):
         if self.indent is None or isinstance(self.indent, str):
             indent = self.indent
         else:
-            indent = ' ' * self.indent
+            indent = " " * self.indent
         if _one_shot and c_make_encoder is not None:
             _iterencode = c_make_encoder(
                 markers, self.default, _encoder, indent,
@@ -261,15 +252,6 @@ class JSONEncoder(object):
 def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
         _key_separator, _item_separator, _sort_keys, _skipkeys, _one_shot,
         ## HACK: hand-optimized bytecode; turn globals into locals
-        ValueError=ValueError,
-        dict=dict,
-        float=float,
-        id=id,
-        int=int,
-        isinstance=isinstance,
-        list=list,
-        str=str,
-        tuple=tuple,
         _intstr=int.__repr__,
     ):
 
@@ -280,12 +262,13 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
         if markers is not None:
             markerid = id(lst)
             if markerid in markers:
-                raise ValueError("Circular reference detected")
+                detail = "Circular reference detected"
+                raise ValueError(detail)
             markers[markerid] = lst
-        buf = '['
+        buf = "["
         if _indent is not None:
             _current_indent_level += 1
-            newline_indent = '\n' + _indent * _current_indent_level
+            newline_indent = "\n" + _indent * _current_indent_level
             separator = _item_separator + newline_indent
             buf += newline_indent
         else:
@@ -300,11 +283,11 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
             if isinstance(value, str):
                 yield buf + _encoder(value)
             elif value is None:
-                yield buf + 'null'
+                yield buf + "null"
             elif value is True:
-                yield buf + 'true'
+                yield buf + "true"
             elif value is False:
-                yield buf + 'false'
+                yield buf + "false"
             elif isinstance(value, int):
                 # Subclasses of int/float may override __repr__, but we still
                 # want to encode them as integers/floats in JSON. One example
@@ -324,24 +307,25 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
                 yield from chunks
         if newline_indent is not None:
             _current_indent_level -= 1
-            yield '\n' + _indent * _current_indent_level
-        yield ']'
+            yield "\n" + _indent * _current_indent_level
+        yield "]"
         if markers is not None:
             del markers[markerid]
 
     def _iterencode_dict(dct, _current_indent_level):
         if not dct:
-            yield '{}'
+            yield "{}"
             return
         if markers is not None:
             markerid = id(dct)
             if markerid in markers:
-                raise ValueError("Circular reference detected")
+                detail = "Circular reference detected"
+                raise ValueError(detail)
             markers[markerid] = dct
-        yield '{'
+        yield "{"
         if _indent is not None:
             _current_indent_level += 1
-            newline_indent = '\n' + _indent * _current_indent_level
+            newline_indent = "\n" + _indent * _current_indent_level
             item_separator = _item_separator + newline_indent
             yield newline_indent
         else:
@@ -361,11 +345,11 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
                 # see comment for int/float in _make_iterencode
                 key = _floatstr(key)
             elif key is True:
-                key = 'true'
+                key = "true"
             elif key is False:
-                key = 'false'
+                key = "false"
             elif key is None:
-                key = 'null'
+                key = "null"
             elif isinstance(key, int):
                 # see comment for int/float in _make_iterencode
                 key = _intstr(key)
@@ -383,11 +367,11 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
             if isinstance(value, str):
                 yield _encoder(value)
             elif value is None:
-                yield 'null'
+                yield "null"
             elif value is True:
-                yield 'true'
+                yield "true"
             elif value is False:
-                yield 'false'
+                yield "false"
             elif isinstance(value, int):
                 # see comment for int/float in _make_iterencode
                 yield _intstr(value)
@@ -404,8 +388,8 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
                 yield from chunks
         if newline_indent is not None:
             _current_indent_level -= 1
-            yield '\n' + _indent * _current_indent_level
-        yield '}'
+            yield "\n" + _indent * _current_indent_level
+        yield "}"
         if markers is not None:
             del markers[markerid]
 
@@ -413,11 +397,11 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
         if isinstance(o, str):
             yield _encoder(o)
         elif o is None:
-            yield 'null'
+            yield "null"
         elif o is True:
-            yield 'true'
+            yield "true"
         elif o is False:
-            yield 'false'
+            yield "false"
         elif isinstance(o, int):
             # see comment for int/float in _make_iterencode
             yield _intstr(o)
@@ -432,7 +416,8 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
             if markers is not None:
                 markerid = id(o)
                 if markerid in markers:
-                    raise ValueError("Circular reference detected")
+                    detail = "Circular reference detected"
+                    raise ValueError(detail)
                 markers[markerid] = o
             o = _default(o)
             yield from _iterencode(o, _current_indent_level)
