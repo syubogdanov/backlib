@@ -1,14 +1,5 @@
 import re
 
-try:
-    from _json import encode_basestring_ascii as c_encode_basestring_ascii
-except ImportError:
-    c_encode_basestring_ascii = None
-
-try:
-    from _json import make_encoder as c_make_encoder
-except ImportError:
-    c_make_encoder = None
 
 ESCAPE = re.compile(r'[\x00-\x1f\\"\b\f\n\r\t]')
 ESCAPE_ASCII = re.compile(r'([\\"]|[^\ -~])')
@@ -37,7 +28,7 @@ def encode_basestring(s):
     return '"' + ESCAPE.sub(replace, s) + '"'
 
 
-def py_encode_basestring_ascii(s):
+def encode_basestring_ascii(s):
     """Return an ASCII-only JSON representation of a Python string
 
     """
@@ -47,7 +38,7 @@ def py_encode_basestring_ascii(s):
             return ESCAPE_DCT[s]
         except KeyError:
             n = ord(s)
-            if n < 0x10000:
+            if n < 0x10000:  # noqa: PLR2004
                 return f"\\u{n:04x}"
             else:
                 # surrogate pair
@@ -57,9 +48,6 @@ def py_encode_basestring_ascii(s):
                 return f"\\u{s1:04x}\\u{s2:04x}"
     return '"' + ESCAPE_ASCII.sub(replace, s) + '"'
 
-
-encode_basestring_ascii = (
-    c_encode_basestring_ascii or py_encode_basestring_ascii)
 
 class JSONEncoder:
     """Extensible JSON <https://json.org> encoder for Python data structures.
@@ -237,16 +225,12 @@ class JSONEncoder:
             indent = self.indent
         else:
             indent = " " * self.indent
-        if _one_shot and c_make_encoder is not None:
-            _iterencode = c_make_encoder(
-                markers, self.default, _encoder, indent,
-                self.key_separator, self.item_separator, self.sort_keys,
-                self.skipkeys, self.allow_nan)
-        else:
-            _iterencode = _make_iterencode(
+
+        _iterencode = _make_iterencode(
                 markers, self.default, _encoder, indent, floatstr,
                 self.key_separator, self.item_separator, self.sort_keys,
                 self.skipkeys, _one_shot)
+
         return _iterencode(o, 0)
 
 def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
@@ -257,7 +241,7 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
 
     def _iterencode_list(lst, _current_indent_level):
         if not lst:
-            yield '[]'
+            yield "[]"
             return
         if markers is not None:
             markerid = id(lst)
@@ -332,10 +316,7 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
             newline_indent = None
             item_separator = _item_separator
         first = True
-        if _sort_keys:
-            items = sorted(dct.items())
-        else:
-            items = dct.items()
+        items = sorted(dct.items()) if _sort_keys else dct.items()
         for key, value in items:
             if isinstance(key, str):
                 pass
