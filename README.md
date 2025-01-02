@@ -26,7 +26,25 @@ pip install backlib
 
 ### Usage
 
-...
+Note that objects from backports of different versions are entirely separate and have nothing to do with each other.
+
+#### json
+
+```python
+from backlib.py313 import json
+
+with open("./aiostdlib.json", mode="w") as file:
+    json.dump(["aiostdlib"], file)
+```
+
+#### tomllib
+
+```python
+from backlib.py313 import tomllib
+
+with open("./aiostdlib.toml", mode="rb") as file:
+    data = tomllib.load(file)
+```
 
 ## Documentation
 
