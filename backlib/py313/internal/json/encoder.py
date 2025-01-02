@@ -1,5 +1,3 @@
-"""Implementation of JSONEncoder
-"""
 import re
 
 try:
