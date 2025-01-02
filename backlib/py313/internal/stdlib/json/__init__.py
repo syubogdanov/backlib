@@ -16,6 +16,7 @@ if TYPE_CHECKING:
 __author__ = "Bob Ippolito <bob@redivi.com>"
 __version__ = "2.0.9"
 
+
 __all__: list[str] = [
     "JSONDecodeError",
     "JSONDecoder",

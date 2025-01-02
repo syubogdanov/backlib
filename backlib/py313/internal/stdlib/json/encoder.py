@@ -1,5 +1,7 @@
 import re
 
+from math import isnan
+
 
 ESCAPE = re.compile(r'[\x00-\x1f\\"\b\f\n\r\t]')
 ESCAPE_ASCII = re.compile(r'([\\"]|[^\ -~])')
@@ -141,16 +143,16 @@ class JSONEncoder:
         _encoder = encode_basestring_ascii if self.ensure_ascii else encode_basestring
 
         def floatstr(o, allow_nan=self.allow_nan,
-                _repr=float.__repr__, _inf=INFINITY, _neginf=-INFINITY):
+                _repr=float.__repr__):
             # Check for specials.  Note that this type of test is processor
             # and/or platform-specific, so do tests which don't depend on the
             # internals.
 
-            if o != o:
+            if isnan(o):
                 text = "NaN"
-            elif o == _inf:
+            elif o == INFINITY:
                 text = "Infinity"
-            elif o == _neginf:
+            elif o == -INFINITY:
                 text = "-Infinity"
             else:
                 return _repr(o)

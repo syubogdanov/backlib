@@ -1,5 +1,8 @@
 import re
 
+from collections.abc import Callable
+from typing import Any
+
 
 __all__ = ["make_scanner"]
 
@@ -10,7 +13,7 @@ NUMBER_RE = re.compile(
 )
 
 
-def make_scanner(context):
+def make_scanner(context) -> Callable[[str, int], tuple[Any, int]]:  # noqa: C901
     parse_object = context.parse_object
     parse_array = context.parse_array
     parse_string = context.parse_string
@@ -23,7 +26,7 @@ def make_scanner(context):
     object_pairs_hook = context.object_pairs_hook
     memo = context.memo
 
-    def _scan_once(string, idx):
+    def _scan_once(string: str, idx: int) -> tuple[Any, int]:  # noqa: C901, PLR0911, PLR0912
         try:
             nextchar = string[idx]
         except IndexError:
@@ -59,7 +62,7 @@ def make_scanner(context):
             return parse_constant("-Infinity"), idx + 9
         raise StopIteration(idx)
 
-    def scan_once(string, idx):
+    def scan_once(string: str, idx: int) -> tuple[Any, int]:
         try:
             return _scan_once(string, idx)
         finally:
