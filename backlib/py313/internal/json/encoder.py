@@ -40,12 +40,11 @@ def encode_basestring_ascii(s):
             n = ord(s)
             if n < 0x10000:  # noqa: PLR2004
                 return f"\\u{n:04x}"
-            else:
-                # surrogate pair
-                n -= 0x10000
-                s1 = 0xd800 | ((n >> 10) & 0x3ff)
-                s2 = 0xdc00 | (n & 0x3ff)
-                return f"\\u{s1:04x}\\u{s2:04x}"
+            # surrogate pair
+            n -= 0x10000
+            s1 = 0xd800 | ((n >> 10) & 0x3ff)
+            s2 = 0xdc00 | (n & 0x3ff)
+            return f"\\u{s1:04x}\\u{s2:04x}"
     return '"' + ESCAPE_ASCII.sub(replace, s) + '"'
 
 
@@ -168,10 +167,8 @@ class JSONEncoder:
         """
         # This is for extremely simple cases and benchmarks.
         if isinstance(o, str):
-            if self.ensure_ascii:
-                return encode_basestring_ascii(o)
-            else:
-                return encode_basestring(o)
+            encoder = encode_basestring_ascii if self.ensure_ascii else encode_basestring
+            return encoder(o)
         # This doesn't pass the iterator directly to ''.join() because the
         # exceptions aren't as detailed.  The list call should be roughly
         # equivalent to the PySequence_Fast that ''.join() would do.
@@ -180,7 +177,7 @@ class JSONEncoder:
             chunks = list(chunks)
         return "".join(chunks)
 
-    def iterencode(self, o, _one_shot=False):
+    def iterencode(self, o):
         """Encode the given object and yield each string
         representation as available.
 
@@ -190,14 +187,8 @@ class JSONEncoder:
                 mysocket.write(chunk)
 
         """
-        if self.check_circular:
-            markers = {}
-        else:
-            markers = None
-        if self.ensure_ascii:
-            _encoder = encode_basestring_ascii
-        else:
-            _encoder = encode_basestring
+        markers = {} if self.check_circular else None
+        _encoder = encode_basestring_ascii if self.ensure_ascii else encode_basestring
 
         def floatstr(o, allow_nan=self.allow_nan,
                 _repr=float.__repr__, _inf=INFINITY, _neginf=-INFINITY):
@@ -229,12 +220,12 @@ class JSONEncoder:
         _iterencode = _make_iterencode(
                 markers, self.default, _encoder, indent, floatstr,
                 self.key_separator, self.item_separator, self.sort_keys,
-                self.skipkeys, _one_shot)
+                self.skipkeys)
 
         return _iterencode(o, 0)
 
 def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
-        _key_separator, _item_separator, _sort_keys, _skipkeys, _one_shot,
+        _key_separator, _item_separator, _sort_keys, _skipkeys,
         ## HACK: hand-optimized bytecode; turn globals into locals
         _intstr=int.__repr__,
     ):

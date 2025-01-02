@@ -9,7 +9,7 @@ from backlib.py313.internal.json.encoder import JSONEncoder
 __author__ = "Bob Ippolito <bob@redivi.com>"
 __version__ = "2.0.9"
 
-__all__ = [
+__all__: list[str] = [
     "JSONDecodeError",
     "JSONDecoder",
     "JSONEncoder",

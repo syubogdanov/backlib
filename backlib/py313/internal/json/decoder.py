@@ -25,7 +25,7 @@ class JSONDecodeError(ValueError):
 
     """
     # Note that this exception is used from _json
-    def __init__(self, msg, doc, pos):
+    def __init__(self, msg: str, doc: str, pos: int) -> None:
         lineno = doc.count("\n", 0, pos) + 1
         colno = pos - doc.rfind("\n", 0, pos)
         errmsg = f"{msg}: line {lineno} column {colno} (char {pos})"
@@ -226,13 +226,13 @@ def JSONObject(s_and_end, strict, scan_once, object_hook, object_pairs_hook,
 
     return pairs, end
 
-def JSONArray(s_and_end, scan_once, _w=WHITESPACE.match):
+def JSONArray(s_and_end, scan_once):
     s, end = s_and_end
     values = []
     nextchar = s[end:end + 1]
 
     if nextchar in WHITESPACE_STR:
-        end = _w(s, end + 1).end()
+        end = WHITESPACE.match(s, end + 1).end()
         nextchar = s[end:end + 1]
 
     # Look-ahead for trivial empty array
@@ -252,7 +252,7 @@ def JSONArray(s_and_end, scan_once, _w=WHITESPACE.match):
         _append(value)
         nextchar = s[end:end + 1]
         if nextchar in WHITESPACE_STR:
-            end = _w(s, end + 1).end()
+            end = WHITESPACE.match(s, end + 1).end()
             nextchar = s[end:end + 1]
         end += 1
 
@@ -268,7 +268,7 @@ def JSONArray(s_and_end, scan_once, _w=WHITESPACE.match):
             if s[end] in WHITESPACE_STR:
                 end += 1
                 if s[end] in WHITESPACE_STR:
-                    end = _w(s, end + 1).end()
+                    end = WHITESPACE.match(s, end + 1).end()
             nextchar = s[end:end + 1]
         except IndexError:
             pass
