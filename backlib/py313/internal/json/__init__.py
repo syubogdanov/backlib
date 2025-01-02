@@ -244,14 +244,15 @@ def loads(s, *, cls=None, object_hook=None, parse_float=None,
     kwarg; otherwise ``JSONDecoder`` is used.
     """
     if isinstance(s, str):
-        if s.startswith('\ufeff'):
-            raise JSONDecodeError("Unexpected UTF-8 BOM (decode using utf-8-sig)",
-                                  s, 0)
+        if s.startswith("\ufeff"):
+            detail = "Unexpected UTF-8 BOM (decode using utf-8-sig)"
+            raise JSONDecodeError(detail, s, 0)
     else:
         if not isinstance(s, (bytes, bytearray)):
-            raise TypeError(f'the JSON object must be str, bytes or bytearray, '
-                            f'not {s.__class__.__name__}')
-        s = s.decode(detect_encoding(s), 'surrogatepass')
+            detail = f"the JSON object must be str, bytes or bytearray, not {s.__class__.__name__}"
+            raise TypeError(detail)
+
+        s = s.decode(detect_encoding(s), "surrogatepass")
 
     if (cls is None and object_hook is None and
             parse_int is None and parse_float is None and
@@ -260,13 +261,13 @@ def loads(s, *, cls=None, object_hook=None, parse_float=None,
     if cls is None:
         cls = JSONDecoder
     if object_hook is not None:
-        kw['object_hook'] = object_hook
+        kw["object_hook"] = object_hook
     if object_pairs_hook is not None:
-        kw['object_pairs_hook'] = object_pairs_hook
+        kw["object_pairs_hook"] = object_pairs_hook
     if parse_float is not None:
-        kw['parse_float'] = parse_float
+        kw["parse_float"] = parse_float
     if parse_int is not None:
-        kw['parse_int'] = parse_int
+        kw["parse_int"] = parse_int
     if parse_constant is not None:
-        kw['parse_constant'] = parse_constant
+        kw["parse_constant"] = parse_constant
     return cls(**kw).decode(s)
