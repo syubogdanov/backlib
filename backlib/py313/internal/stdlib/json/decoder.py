@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 
+from contextlib import suppress
 from typing import TYPE_CHECKING, Any
 
 from backlib.py313.internal.stdlib.json import scanner
@@ -77,24 +78,29 @@ _CONSTANTS = {
 
 HEXDIGITS = re.compile(r"[0-9A-Fa-f]{4}", FLAGS)
 STRINGCHUNK = re.compile(r'(.*?)(["\\\x00-\x1f])', FLAGS)
+
 BACKSLASH = {
-    '"': '"', "\\": "\\", "/": "/",
-    "b": "\b", "f": "\f", "n": "\n", "r": "\r", "t": "\t",
+    '"': '"',
+    "\\": "\\",
+    "/": "/",
+    "b": "\b",
+    "f": "\f",
+    "n": "\n",
+    "r": "\r",
+    "t": "\t",
 }
 
 
 def _decode_uXXXX(s: str, pos: int) -> int:  # noqa: N802
-    esc = HEXDIGITS.match(s, pos + 1)
-    if esc is not None:
-        try:
+    if esc := HEXDIGITS.match(s, pos + 1):
+        with suppress(ValueError):
             return int(esc.group(), 16)
-        except ValueError:
-            pass
-    msg = "Invalid \\uXXXX escape"
-    raise JSONDecodeError(msg, s, pos)
+
+    detail = "Invalid \\uXXXX escape"
+    raise JSONDecodeError(detail, s, pos)
 
 
-def scanstring(s, end, strict=True):
+def scanstring(s: str, end: int, strict: bool = True) -> str:
     """Scan the string s for a JSON string. End is the index of the
     character in s after the quote that started the JSON string.
     Unescapes all valid JSON string escape sequences and raises ValueError
@@ -104,7 +110,6 @@ def scanstring(s, end, strict=True):
     Returns a tuple of the decoded string and the index of the character in s
     after the end quote."""
     chunks = []
-    _append = chunks.append
     begin = end - 1
     while 1:
         chunk = STRINGCHUNK.match(s, end)
@@ -115,7 +120,7 @@ def scanstring(s, end, strict=True):
         content, terminator = chunk.groups()
         # Content is contains zero or more unescaped string characters
         if content:
-            _append(content)
+            chunks.append(content)
         # Terminator is the end of string, a literal control character,
         # or a backslash denoting that an escape sequence follows
         if terminator == '"':
@@ -124,7 +129,7 @@ def scanstring(s, end, strict=True):
             if strict:
                 msg = f"Invalid control character {terminator!r} at"
                 raise JSONDecodeError(msg, s, end)
-            _append(terminator)
+            chunks.append(terminator)
             continue
         try:
             esc = s[end]
@@ -148,7 +153,7 @@ def scanstring(s, end, strict=True):
                     uni = 0x10000 + (((uni - 0xd800) << 10) | (uni2 - 0xdc00))
                     end += 6
             char = chr(uni)
-        _append(char)
+        chunks.append(char)
     return "".join(chunks), end
 
 
@@ -156,8 +161,14 @@ WHITESPACE = re.compile(r"[ \t\n\r]*", FLAGS)
 WHITESPACE_STR = " \t\n\r"
 
 
-def JSONObject(s_and_end, strict, scan_once, object_hook, object_pairs_hook,
-               memo=None):
+def JSONObject(
+    s_and_end,
+    strict,
+    scan_once,
+    object_hook,
+    object_pairs_hook,
+    memo=None,
+):
     s, end = s_and_end
     pairs = []
     pairs_append = pairs.append
@@ -256,9 +267,9 @@ def JSONObject(s_and_end, strict, scan_once, object_hook, object_pairs_hook,
     return pairs, end
 
 
-def JSONArray(s_and_end, scan_once):
+def JSONArray(s_and_end: tuple[str, int], scan_once) -> tuple[list[Any], int]:
     s, end = s_and_end
-    values = []
+    values: list[Any] = []
     nextchar = s[end:end + 1]
 
     if nextchar in WHITESPACE_STR:
@@ -269,8 +280,6 @@ def JSONArray(s_and_end, scan_once):
     if nextchar == "]":
         return values, end + 1
 
-    _append = values.append
-
     while True:
         try:
             value, end = scan_once(s, end)
@@ -279,7 +288,7 @@ def JSONArray(s_and_end, scan_once):
             detail = "Expecting value"
             raise JSONDecodeError(detail, s, err.value) from None
 
-        _append(value)
+        values.append(value)
         nextchar = s[end:end + 1]
         if nextchar in WHITESPACE_STR:
             end = WHITESPACE.match(s, end + 1).end()
