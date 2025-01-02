@@ -31,8 +31,8 @@ pip install backlib
 ```python
 from backlib.py313 import json
 
-with open("./aiostdlib.json", mode="w") as file:
-    json.dump(["aiostdlib"], file)
+with open("./backlib.json", mode="w") as file:
+    json.dump(["backlib"], file)
 ```
 
 #### tomllib
@@ -40,7 +40,7 @@ with open("./aiostdlib.json", mode="w") as file:
 ```python
 from backlib.py313 import tomllib
 
-with open("./aiostdlib.toml", mode="rb") as file:
+with open("./backlib.toml", mode="rb") as file:
     data = tomllib.load(file)
 ```
 
