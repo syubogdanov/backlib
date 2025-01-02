@@ -75,7 +75,12 @@ ignore = ["D100", "D104"]
 "backlib/py3*/internal/**" = ["D"]
 
 [tool.ruff.lint.flake8-type-checking]
-exempt-modules = ["typing", "typing_extensions"]
+exempt-modules = [
+    "backlib.py313.internal.stdlib.typing",
+    "backlib.py313.internal.utils.typing",
+    "typing",
+    "typing_extensions",
+]
 
 [tool.ruff.lint.isort]
 lines-after-imports = 2
