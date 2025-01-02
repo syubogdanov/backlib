@@ -1,6 +1,15 @@
+from __future__ import annotations
+
 import re
 
 from math import isnan
+from typing import TYPE_CHECKING, Any, ClassVar
+
+from backlib.py313.internal.stdlib.typing import Self
+
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Iterator
 
 
 ESCAPE = re.compile(r'[\x00-\x1f\\"\b\f\n\r\t]')
@@ -62,12 +71,21 @@ class JSONEncoder:
     * Python 3.13.
     """
 
-    item_separator = ", "
-    key_separator = ": "
+    item_separator: ClassVar[str] = ", "
+    key_separator: ClassVar[str] = ": "
 
-    def __init__(self, *, skipkeys=False, ensure_ascii=True,
-            check_circular=True, allow_nan=True, sort_keys=False,
-            indent=None, separators=None, default=None) -> None:
+    def __init__(
+        self: Self,
+        *,
+        skipkeys: bool = False,
+        ensure_ascii: bool = True,
+        check_circular: bool = True,
+        allow_nan: bool = True,
+        sort_keys: bool = False,
+        indent: int | str | None = None,
+        separators: tuple[str, str] | None = None,
+        default: Callable[..., Any] | None = None,
+    ) -> None:
         """Initialize the object.
 
         See Also
@@ -91,7 +109,7 @@ class JSONEncoder:
         if default is not None:
             self.default = default
 
-    def default(self, o):
+    def default(self: Self, o: Any) -> Any:  # noqa: ANN401
         """Add support for an arbitrary type.
 
         See Also
@@ -105,7 +123,7 @@ class JSONEncoder:
         detail = f"Object of type {o.__class__.__name__} is not JSON serializable"
         raise TypeError(detail)
 
-    def encode(self, o):
+    def encode(self: Self, o: Any) -> str:  # noqa: ANN401
         """Return a JSON string representation of a Python data structure.
 
         See Also
@@ -128,7 +146,7 @@ class JSONEncoder:
             chunks = list(chunks)
         return "".join(chunks)
 
-    def iterencode(self, o):
+    def iterencode(self: Self, o: Any) -> Iterator[str]:  # noqa: ANN401
         """Encode the given object and yield each string representation as available.
 
         See Also
