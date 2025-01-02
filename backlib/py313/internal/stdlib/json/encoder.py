@@ -30,20 +30,16 @@ del i
 
 INFINITY = float("inf")
 
-def encode_basestring(s):
-    """Return a JSON representation of a Python string
-
-    """
-    def replace(match):
+def encode_basestring(s: str) -> str:
+    """Return a JSON representation of a Python string"""
+    def replace(match: re.Match[str]) -> str:
         return ESCAPE_DCT[match.group(0)]
     return '"' + ESCAPE.sub(replace, s) + '"'
 
 
-def encode_basestring_ascii(s):
-    """Return an ASCII-only JSON representation of a Python string
-
-    """
-    def replace(match):
+def encode_basestring_ascii(s: str) -> str:
+    """Return an ASCII-only JSON representation of a Python string"""
+    def replace(match: re.Match[str]) -> str:
         s = match.group(0)
         try:
             return ESCAPE_DCT[s]
@@ -160,7 +156,7 @@ class JSONEncoder:
         markers = {} if self.check_circular else None
         _encoder = encode_basestring_ascii if self.ensure_ascii else encode_basestring
 
-        def floatstr(o, allow_nan=self.allow_nan, _repr=float.__repr__):
+        def floatstr(o: float, *, allow_nan: bool = self.allow_nan) -> str:
             # Check for specials.  Note that this type of test is processor
             # and/or platform-specific, so do tests which don't depend on the
             # internals.
@@ -172,7 +168,8 @@ class JSONEncoder:
             elif o == -INFINITY:
                 text = "-Infinity"
             else:
-                return _repr(o)
+                encoder = float.__repr__
+                return encoder(o)
 
             if not allow_nan:
                 detail = f"Out of range float values are not JSON compliant: {o!r}"
@@ -187,9 +184,16 @@ class JSONEncoder:
             indent = " " * self.indent
 
         _iterencode = _make_iterencode(
-                markers, self.default, _encoder, indent, floatstr,
-                self.key_separator, self.item_separator, self.sort_keys,
-                self.skipkeys)
+            markers,
+            self.default,
+            _encoder,
+            indent,
+            floatstr,
+            self.key_separator,
+            self.item_separator,
+            self.sort_keys,
+            self.skipkeys,
+        )
 
         return _iterencode(o, 0)
 
@@ -203,9 +207,7 @@ def _make_iterencode(
     _item_separator,
     _sort_keys,
     _skipkeys,
-    ## HACK: hand-optimized bytecode; turn globals into locals
-    _intstr=int.__repr__,
-    ):
+):
 
     def _iterencode_list(lst, _current_indent_level: int):
         if not lst:
@@ -244,7 +246,8 @@ def _make_iterencode(
                 # Subclasses of int/float may override __repr__, but we still
                 # want to encode them as integers/floats in JSON. One example
                 # within the standard library is IntEnum.
-                yield buf + _intstr(value)
+                represent = int.__repr__
+                yield buf + represent(value)
             elif isinstance(value, float):
                 # see comment above for int
                 yield buf + _floatstr(value)
@@ -301,7 +304,8 @@ def _make_iterencode(
                 key = "null"
             elif isinstance(key, int):
                 # see comment for int/float in _make_iterencode
-                key = _intstr(key)
+                represent = int.__repr__
+                key = represent(key)
             elif _skipkeys:
                 continue
             else:
@@ -323,7 +327,8 @@ def _make_iterencode(
                 yield "false"
             elif isinstance(value, int):
                 # see comment for int/float in _make_iterencode
-                yield _intstr(value)
+                represent = int.__repr__
+                yield represent(value)
             elif isinstance(value, float):
                 # see comment for int/float in _make_iterencode
                 yield _floatstr(value)
@@ -353,7 +358,8 @@ def _make_iterencode(
             yield "false"
         elif isinstance(o, int):
             # see comment for int/float in _make_iterencode
-            yield _intstr(o)
+            represent = int.__repr__
+            yield represent(o)
         elif isinstance(o, float):
             # see comment for int/float in _make_iterencode
             yield _floatstr(o)
