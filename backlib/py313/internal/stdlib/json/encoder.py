@@ -3,7 +3,7 @@ from __future__ import annotations
 import re
 
 from math import isnan
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import TYPE_CHECKING, Any
 
 from backlib.py313.internal.stdlib.typing import Self
 
@@ -71,8 +71,8 @@ class JSONEncoder:
     * Python 3.13.
     """
 
-    item_separator: ClassVar[str] = ", "
-    key_separator: ClassVar[str] = ": "
+    item_separator: str = ", "
+    key_separator: str = ": "
 
     def __init__(
         self: Self,
