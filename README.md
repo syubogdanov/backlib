@@ -31,8 +31,9 @@ pip install backlib
 ```python
 from backlib.py313 import io
 
-with io.open_code("backlib.py") as file:
-    data = file.read()
+encoding = io.text_encoding(None)
+
+assert encoding == "locale"
 ```
 
 #### json
@@ -40,8 +41,9 @@ with io.open_code("backlib.py") as file:
 ```python
 from backlib.py313 import json
 
-with open("./backlib.json", mode="w") as file:
-    json.dump(["backlib"], file)
+data = json.loads("[\"backlib\"]")
+
+assert data == ["backlib"]
 ```
 
 #### os [SOON]
@@ -49,9 +51,9 @@ with open("./backlib.json", mode="w") as file:
 ```python
 from backlib.py313 import os
 
-if not os.access("backlib.txt", os.R_OK):
-    detail = "Something went wrong..."
-    raise RuntimeError(detail)
+drives = os.listdrives()
+
+assert "C:\\" in drives
 ```
 
 #### pathlib [SOON]
@@ -59,9 +61,9 @@ if not os.access("backlib.txt", os.R_OK):
 ```python
 from backlib.py313 import pathlib
 
-if not pathlib.Path("./backlib.txt").exists():
-    detail = "Something went wrong..."
-    raise RuntimeError(detail)
+path = pathlib.Path.from_uri("file:///etc/hosts")
+
+assert path == pathlib.PosixPath("/etc/hosts")
 ```
 
 #### shutil [SOON]
@@ -69,7 +71,9 @@ if not pathlib.Path("./backlib.txt").exists():
 ```python
 from backlib.py313 import shutil
 
-shutil.rmtree("/tmp/backlib/")
+exe = shutil.which("python")
+
+assert exe == "C:\\Program Files\\Python311\\python.exe"
 ```
 
 #### tarfile [SOON]
@@ -77,9 +81,9 @@ shutil.rmtree("/tmp/backlib/")
 ```python
 from backlib.py313 import tarfile
 
-if not tarfile.is_tarfile("./backlib.tar.gz"):
-    detail = "Something went wrong..."
-    raise RuntimeError(detail)
+is_ok = tarfile.is_tarfile("backlib.tar.gz")
+
+assert is_ok
 ```
 
 #### tomllib
@@ -87,8 +91,9 @@ if not tarfile.is_tarfile("./backlib.tar.gz"):
 ```python
 from backlib.py313 import tomllib
 
-with open("./backlib.toml", mode="rb") as file:
-    data = tomllib.load(file)
+data = tomllib.loads("backlib = \"tomllib\"")
+
+assert data == {"backlib": "tomllib"}
 ```
 
 #### zipfile [SOON]
@@ -96,9 +101,9 @@ with open("./backlib.toml", mode="rb") as file:
 ```python
 from backlib.py313 import zipfile
 
-if not zipfile.is_zipfile("./backlib.zip"):
-    detail = "Something went wrong..."
-    raise RuntimeError(detail)
+is_ok = zipfile.is_zipfile("backlib.zip")
+
+assert is_ok
 ```
 
 ## Documentation
