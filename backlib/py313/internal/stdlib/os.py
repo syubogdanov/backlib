@@ -7,7 +7,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Mapping, MutableMapping
 from typing import Final, Generic, overload
 
-from backlib.py313.internal.stdlib.typing import AnyStr, Self
+from backlib.py313.internal.stdlib.typing import AnyStr, Self, TypeAlias
 
 
 __all__ = [
@@ -15,6 +15,7 @@ __all__ = [
     "SEEK_END",
     "SEEK_SET",
     "PathLike",
+    "error",
     "fspath",
 ]
 
@@ -22,6 +23,9 @@ __all__ = [
 SEEK_SET: Final[int] = 0
 SEEK_CUR: Final[int] = 1
 SEEK_END: Final[int] = 2
+
+
+error: TypeAlias = OSError
 
 
 class PathLike(ABC, Generic[AnyStr]):
