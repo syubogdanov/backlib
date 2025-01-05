@@ -2,7 +2,8 @@
 
 Notes
 -----
-* According to the `os` implementation, only `POSIX` and `Windows NT` are supported.
+* According to the `os` implementation, only `POSIX` and `Windows NT` are supported;
+* Only what is available on both `POSIX` and `Windows NT` is backported.
 
 See Also
 --------
