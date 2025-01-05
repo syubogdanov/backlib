@@ -4,17 +4,25 @@ import sys
 
 from _collections_abc import _check_methods
 from collections.abc import Mapping, MutableMapping
-
-
-GenericAlias = type(list[int])
-
-_names = sys.builtin_module_names
+from typing import Final
 
 
 __all__ = [
     "SEEK_CUR",
     "SEEK_END",
     "SEEK_SET",
+]
+
+
+SEEK_SET: Final[int] = 0
+SEEK_CUR: Final[int] = 1
+SEEK_END: Final[int] = 2
+
+
+# --- --- --- # --- --- --- # --- --- --- # --- --- --- # --- --- --- # --- --- --- # --- --- --- #
+
+
+__all__ += [
     "altsep",
     "curdir",
     "defpath",
@@ -31,6 +39,12 @@ __all__ = [
     "pathsep",
     "sep",
 ]
+
+
+GenericAlias = type(list[int])
+
+_names = sys.builtin_module_names
+
 
 def _exists(name):
     return name in globals()
@@ -182,13 +196,6 @@ if _exists("_have_functions"):
     del _globals
     del _add
 
-
-# Python uses fixed values for the SEEK_ constants; they are mapped
-# to native constants if necessary in posixmodule.c
-# Other possible SEEK values are directly imported from posixmodule.c
-SEEK_SET = 0
-SEEK_CUR = 1
-SEEK_END = 2
 
 # Super directory utilities.
 # (Inspired by Eric Raymond; the doc strings are mostly his)
