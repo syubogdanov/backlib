@@ -19,6 +19,10 @@ mypy:
 ruff:
 	$(VENV) ruff check ./
 
+# Sandbox
+sandbox:
+	$(VENV) python -B -m dev.sandbox
+
 # Tests
 test: unit-tests compatibility-tests
 
