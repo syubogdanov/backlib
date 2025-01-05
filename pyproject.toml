@@ -17,8 +17,14 @@ keywords = [
     "python",
     "backport",
     "stdlib",
+    "io",
     "json",
+    "os",
+    "pathlib",
+    "shutil",
+    "tarfile",
     "tomllib",
+    "zipfile",
 ]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
