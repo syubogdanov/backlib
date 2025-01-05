@@ -1,22 +1,121 @@
-import abc
+from __future__ import annotations
+
 import stat
 import sys
 
-from _collections_abc import _check_methods
+from abc import ABC, abstractmethod
 from collections.abc import Mapping, MutableMapping
-from typing import Final
+from typing import Final, Generic
+
+from backlib.py313.internal.stdlib.typing import AnyStr, Self
 
 
 __all__ = [
     "SEEK_CUR",
     "SEEK_END",
     "SEEK_SET",
+    "PathLike",
+    "fspath",
 ]
 
 
 SEEK_SET: Final[int] = 0
 SEEK_CUR: Final[int] = 1
 SEEK_END: Final[int] = 2
+
+
+class PathLike(ABC, Generic[AnyStr]):
+    """An abstract base for the file system path protocol.
+
+    See Also
+    --------
+    * `os.PathLike`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+
+    __slots__: tuple[str] = ()
+
+    @abstractmethod
+    def __fspath__(self: Self) -> AnyStr:
+        """Return the file system path representation of the object.
+
+        See Also
+        --------
+        * `os.PathLike.__fspath__`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        raise NotImplementedError
+
+    @classmethod
+    def __subclasshook__(cls: type[Self], subclass: type) -> bool:
+        """Check whether subclass is considered a subclass of this `ABC`.
+
+        See Also
+        --------
+        * `os.PathLike.__subclasshook__`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        if cls is not PathLike:
+            return NotImplemented
+
+        if not hasattr(subclass, "__fspath__"):
+            return NotImplemented
+
+        if not callable(subclass.__fspath__):
+            return NotImplemented
+
+        return True
+
+
+def fspath(path: PathLike[AnyStr]) -> AnyStr:
+    """Return the path representation of a path-like object.
+
+    See Also
+    --------
+    * `os.fspath`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    if isinstance(path, (str, bytes)):
+        return path
+
+    try:
+        path_type = type(path)
+        path_repr = path_type.__fspath__(path)
+
+    except AttributeError:
+        if hasattr(path_type, "__fspath__"):
+            raise
+
+        detail = f"expected str, bytes or os.PathLike object, not {path_type.__name__}"
+        raise TypeError(detail) from None
+
+    except TypeError:
+        if path_type.__fspath__ is not None:
+            raise
+
+        detail = f"expected str, bytes or os.PathLike object, not {path_type.__name__}"
+        raise TypeError(detail) from None
+
+    if isinstance(path_repr, (str, bytes)):
+        return path_repr
+
+    actual = type(path_repr).__name__
+    expected = path_type.__name__
+
+    detail = f"expected {expected}.__fspath__() to return str or bytes, not {actual}"
+    raise TypeError(detail)
 
 
 # --- --- --- # --- --- --- # --- --- --- # --- --- --- # --- --- --- # --- --- --- # --- --- --- #
@@ -39,9 +138,6 @@ __all__ += [
     "pathsep",
     "sep",
 ]
-
-
-GenericAlias = type(list[int])
 
 _names = sys.builtin_module_names
 
@@ -1064,64 +1160,6 @@ def fdopen(fd, mode="r", buffering=-1, encoding=None, *args, **kwargs):
     if "b" not in mode:
         encoding = io.text_encoding(encoding)
     return io.open(fd, mode, buffering, encoding, *args, **kwargs)
-
-
-# For testing purposes, make sure the function is available when the C
-# implementation exists.
-def fspath(path):
-    """Return the path representation of a path-like object.
-
-    If str or bytes is passed in, it is returned unchanged. Otherwise the
-    os.PathLike interface is used to get the path representation. If the
-    path representation is not str or bytes, TypeError is raised. If the
-    provided path is not str, bytes, or os.PathLike, TypeError is raised.
-    """
-    if isinstance(path, (str, bytes)):
-        return path
-
-    # Work from the object's type to match method resolution of other magic
-    # methods.
-    path_type = type(path)
-    try:
-        path_repr = path_type.__fspath__(path)
-    except AttributeError:
-        if hasattr(path_type, '__fspath__'):
-            raise
-        else:
-            raise TypeError("expected str, bytes or os.PathLike object, "
-                            "not " + path_type.__name__)
-    except TypeError:
-        if path_type.__fspath__ is None:
-            raise TypeError("expected str, bytes or os.PathLike object, "
-                            "not " + path_type.__name__) from None
-        else:
-            raise
-    if isinstance(path_repr, (str, bytes)):
-        return path_repr
-    else:
-        raise TypeError("expected {}.__fspath__() to return str or bytes, "
-                        "not {}".format(path_type.__name__,
-                                        type(path_repr).__name__))
-
-
-class PathLike(abc.ABC):
-
-    """Abstract base class for implementing the file system path protocol."""
-
-    __slots__ = ()
-
-    @abc.abstractmethod
-    def __fspath__(self):
-        """Return the file system path representation of the object."""
-        raise NotImplementedError
-
-    @classmethod
-    def __subclasshook__(cls, subclass):
-        if cls is PathLike:
-            return _check_methods(subclass, '__fspath__')
-        return NotImplemented
-
-    __class_getitem__ = classmethod(GenericAlias)
 
 
 if name == 'nt':
