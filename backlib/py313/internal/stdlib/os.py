@@ -1,8 +1,10 @@
 import abc
-import sys
 import stat
+import sys
 
 from _collections_abc import _check_methods
+from collections.abc import Mapping, MutableMapping
+
 
 GenericAlias = type(list[int])
 
@@ -85,8 +87,8 @@ else:
     raise ImportError('no os specific module found')
 
 sys.modules['os.path'] = path
-from os.path import (curdir, pardir, sep, pathsep, defpath, extsep, altsep,
-    devnull)
+from os.path import altsep, curdir, defpath, devnull, extsep, pardir, pathsep, sep
+
 
 del _names
 
@@ -689,9 +691,6 @@ def get_exec_path(env=None):
     return path_list.split(pathsep)
 
 
-# Change environ to automatically call putenv() and unsetenv()
-from _collections_abc import MutableMapping, Mapping
-
 class _Environ(MutableMapping):
     def __init__(self, data, encodekey, decodekey, encodevalue, decodevalue):
         self.encodekey = encodekey
@@ -1062,7 +1061,7 @@ def fdopen(fd, mode="r", buffering=-1, encoding=None, *args, **kwargs):
 
 # For testing purposes, make sure the function is available when the C
 # implementation exists.
-def _fspath(path):
+def fspath(path):
     """Return the path representation of a path-like object.
 
     If str or bytes is passed in, it is returned unchanged. Otherwise the
@@ -1096,12 +1095,6 @@ def _fspath(path):
         raise TypeError("expected {}.__fspath__() to return str or bytes, "
                         "not {}".format(path_type.__name__,
                                         type(path_repr).__name__))
-
-# If there is no C implementation, make the pure Python version the
-# implementation as transparently as possible.
-if not _exists('fspath'):
-    fspath = _fspath
-    fspath.__name__ = "fspath"
 
 
 class PathLike(abc.ABC):
