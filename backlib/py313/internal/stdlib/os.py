@@ -28,8 +28,18 @@ __all__ = [
     "SEEK_END",
     "SEEK_SET",
     "PathLike",
+    "altsep",
+    "curdir",
+    "defpath",
+    "devnull",
     "error",
+    "extsep",
     "fspath",
+    "linesep",
+    "name",
+    "pardir",
+    "pathsep",
+    "sep",
 ]
 
 
@@ -44,6 +54,20 @@ SEEK_END: Final[int] = 2
 
 
 error: TypeAlias = OSError
+
+
+curdir: Final[str] = "."
+pardir: Final[str] = ".."
+extsep: Final[str] = "."
+
+name: Final[str] = "posix" if is_posix() else "nt"
+linesep: Final[str] = "\n" if is_posix() else "\r\n"
+
+sep: Final[str] = "/" if is_posix() else "\\"
+pathsep: Final[str] = ":" if is_posix() else ";"
+defpath: Final[str] = "/bin:/usr/bin" if is_posix() else ".;C:\\bin"
+altsep: Final[str | None] = None if is_posix() else "/"
+devnull: Final[str] = "/dev/null" if is_posix() else "nul"
 
 
 class PathLike(ABC, Generic[AnyStr]):
