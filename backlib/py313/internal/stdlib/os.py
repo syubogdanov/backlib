@@ -5,7 +5,7 @@ import sys
 
 from abc import ABC, abstractmethod
 from collections.abc import Mapping, MutableMapping
-from typing import Final, Generic
+from typing import Final, Generic, overload
 
 from backlib.py313.internal.stdlib.typing import AnyStr, Self
 
@@ -36,7 +36,7 @@ class PathLike(ABC, Generic[AnyStr]):
     * Python 3.13.
     """
 
-    __slots__: tuple[str] = ()
+    __slots__: list[str] = []
 
     @abstractmethod
     def __fspath__(self: Self) -> AnyStr:
@@ -76,7 +76,22 @@ class PathLike(ABC, Generic[AnyStr]):
         return True
 
 
+@overload
+def fspath(path: str) -> str:
+    ...
+
+
+@overload
+def fspath(path: bytes) -> bytes:
+    ...
+
+
+@overload
 def fspath(path: PathLike[AnyStr]) -> AnyStr:
+    ...
+
+
+def fspath(path: str | bytes | PathLike[AnyStr]) -> str | bytes | AnyStr:
     """Return the path representation of a path-like object.
 
     See Also
