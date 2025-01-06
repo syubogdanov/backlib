@@ -1,7 +1,12 @@
 import sys
 
+from typing import TypeVar
 
-__all__: list[str] = ["ParamSpec", "Self", "TypeAlias"]
+
+__all__: list[str] = ["AnyStr", "ParamSpec", "Self", "TypeAlias"]
+
+
+AnyStr = TypeVar("AnyStr", str, bytes)
 
 
 if sys.version_info >= (3, 10):

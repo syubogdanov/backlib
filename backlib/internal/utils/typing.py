@@ -3,14 +3,11 @@ from typing import Protocol, TypeVar
 from backlib.internal.typing import Self
 
 
-__all__: list[str] = ["AnyStr", "SupportsRead", "SupportsWrite"]
+__all__: list[str] = ["SupportsRead", "SupportsWrite"]
 
 
 T_co = TypeVar("T_co", covariant=True)
 T_contra = TypeVar("T_contra", contravariant=True)
-
-
-AnyStr = TypeVar("AnyStr", str, bytes)
 
 
 class SupportsRead(Protocol[T_co]):
