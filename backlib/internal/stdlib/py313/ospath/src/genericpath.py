@@ -225,7 +225,7 @@ def islink(path: StrOrBytesPath) -> bool:
     return S_ISLNK(st.st_mode)
 
 
-def isjunction(path: StrOrBytesPath) -> Literal[False]:
+def isjunction(path: StrOrBytesPath) -> bool:
     """Return `True` if `path` refers to an existing directory entry that is a junction.
 
     Notes
