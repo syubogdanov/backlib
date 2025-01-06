@@ -1,12 +1,6 @@
-import sys
-
 from typing import Protocol, TypeVar
 
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
+from backlib.internal.typing import Self
 
 
 __all__: list[str] = ["AnyStr", "SupportsRead", "SupportsWrite"]

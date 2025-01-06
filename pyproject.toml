@@ -82,6 +82,7 @@ ignore = ["D100", "D104"]
 
 [tool.ruff.lint.flake8-type-checking]
 exempt-modules = [
+    "backlib.internal.typing",
     "backlib.internal.utils.typing",
     "typing",
     "typing_extensions",

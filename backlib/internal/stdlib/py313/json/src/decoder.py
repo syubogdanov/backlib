@@ -1,18 +1,12 @@
 from __future__ import annotations
 
 import re
-import sys
 
 from contextlib import suppress
 from typing import TYPE_CHECKING, Any
 
 from backlib.internal.stdlib.py313.json.src import scanner
-
-
-if sys.version_info >= (3, 11):
-    from typing import Self
-else:
-    from typing_extensions import Self
+from backlib.internal.typing import Self
 
 
 if TYPE_CHECKING:
