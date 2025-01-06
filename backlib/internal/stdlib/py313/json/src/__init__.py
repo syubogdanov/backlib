@@ -4,9 +4,9 @@ import codecs
 
 from typing import TYPE_CHECKING, Any
 
-from backlib.py313.internal.stdlib.json.decoder import JSONDecodeError, JSONDecoder
-from backlib.py313.internal.stdlib.json.encoder import JSONEncoder
-from backlib.py313.internal.utils.typing import SupportsRead, SupportsWrite
+from backlib.internal.stdlib.py313.json.src.decoder import JSONDecodeError, JSONDecoder
+from backlib.internal.stdlib.py313.json.src.encoder import JSONEncoder
+from backlib.internal.utils.typing import SupportsRead, SupportsWrite
 
 
 if TYPE_CHECKING:

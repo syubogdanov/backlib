@@ -9,7 +9,7 @@ import string
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Any, BinaryIO, NamedTuple
 
-from backlib.py313.internal.stdlib.tomllib.re import (
+from backlib.internal.stdlib.py313.tomllib.src.re import (
     RE_DATETIME,
     RE_LOCALTIME,
     RE_NUMBER,
@@ -22,7 +22,7 @@ from backlib.py313.internal.stdlib.tomllib.re import (
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
-    from backlib.py313.internal.stdlib.tomllib.types import Key, ParseFloat, Pos
+    from backlib.internal.stdlib.py313.tomllib.src.types import Key, ParseFloat, Pos
 
 
 ASCII_CTRL = frozenset(chr(i) for i in range(32)) | frozenset(chr(127))

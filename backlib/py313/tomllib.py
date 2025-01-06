@@ -1,4 +1,4 @@
-from backlib.py313.internal.stdlib.tomllib import TOMLDecodeError, load, loads
+from backlib.internal.stdlib.py313.tomllib import TOMLDecodeError, load, loads
 
 
 __all__: list[str] = ["TOMLDecodeError", "load", "loads"]

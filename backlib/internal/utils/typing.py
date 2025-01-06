@@ -1,13 +1,22 @@
+import sys
+
 from typing import Protocol, TypeVar
 
-from backlib.py313.internal.stdlib.typing import Self
+
+if sys.version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
 
 
-__all__: list[str] = ["SupportsRead", "SupportsWrite"]
+__all__: list[str] = ["AnyStr", "SupportsRead", "SupportsWrite"]
 
 
 T_co = TypeVar("T_co", covariant=True)
 T_contra = TypeVar("T_contra", contravariant=True)
+
+
+AnyStr = TypeVar("AnyStr", str, bytes)
 
 
 class SupportsRead(Protocol[T_co]):

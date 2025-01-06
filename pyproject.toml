@@ -78,12 +78,11 @@ select = ["ALL"]
 ignore = ["D100", "D104"]
 
 [tool.ruff.lint.extend-per-file-ignores]
-"backlib/py3*/internal/**" = ["D"]
+"backlib/internal/stdlib/py3*/src/**" = ["D"]
 
 [tool.ruff.lint.flake8-type-checking]
 exempt-modules = [
-    "backlib.py313.internal.stdlib.typing",
-    "backlib.py313.internal.utils.typing",
+    "backlib.internal.utils.typing",
     "typing",
     "typing_extensions",
 ]
