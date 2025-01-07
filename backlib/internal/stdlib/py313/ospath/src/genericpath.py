@@ -3,7 +3,7 @@ from __future__ import annotations
 from stat import S_ISDIR, S_ISLNK, S_ISREG
 from typing import TYPE_CHECKING, Literal, overload
 
-from backlib.internal.stdlib.py313 import os
+from backlib.internal.stdlib.py313.os import fspath, fstat, lstat, stat, stat_result
 from backlib.internal.stdlib.py313.ospath.src.typing import FileDescriptorOrPath, StrOrBytesPath
 from backlib.internal.typing import AnyStr
 
@@ -55,7 +55,7 @@ def commonprefix(m: Sequence[AnyStr] | Sequence[PathLike[AnyStr]]) -> Literal[""
     if not m:
         return ""
 
-    paths = tuple(map(os.fspath, m))
+    paths = tuple(map(fspath, m))
 
     p1 = min(paths)
     p2 = max(paths)
@@ -78,7 +78,7 @@ def getatime(filename: FileDescriptorOrPath) -> float:
     -------
     * Python 3.13.
     """
-    return os.stat(filename).st_atime
+    return stat(filename).st_atime
 
 
 def getctime(filename: FileDescriptorOrPath) -> float:
@@ -92,7 +92,7 @@ def getctime(filename: FileDescriptorOrPath) -> float:
     -------
     * Python 3.13.
     """
-    return os.stat(filename).st_ctime
+    return stat(filename).st_ctime
 
 
 def getmtime(filename: FileDescriptorOrPath) -> float:
@@ -106,7 +106,7 @@ def getmtime(filename: FileDescriptorOrPath) -> float:
     -------
     * Python 3.13.
     """
-    return os.stat(filename).st_mtime
+    return stat(filename).st_mtime
 
 
 def getsize(filename: FileDescriptorOrPath) -> int:
@@ -120,10 +120,10 @@ def getsize(filename: FileDescriptorOrPath) -> int:
     -------
     * Python 3.13.
     """
-    return os.stat(filename).st_size
+    return stat(filename).st_size
 
 
-def samestat(s1: os.stat_result, s2: os.stat_result) -> bool:
+def samestat(s1: stat_result, s2: stat_result) -> bool:
     """Return `True` if the stat tuples `stat1` and `stat2` refer to the same file.
 
     See Also
@@ -148,8 +148,8 @@ def samefile(f1: FileDescriptorOrPath, f2: FileDescriptorOrPath) -> bool:
     -------
     * Python 3.13.
     """
-    s1 = os.stat(f1)
-    s2 = os.stat(f2)
+    s1 = stat(f1)
+    s2 = stat(f2)
     return samestat(s1, s2)
 
 
@@ -164,8 +164,8 @@ def sameopenfile(fp1: int, fp2: int) -> bool:
     -------
     * Python 3.13.
     """
-    s1 = os.fstat(fp1)
-    s2 = os.fstat(fp2)
+    s1 = fstat(fp1)
+    s2 = fstat(fp2)
     return samestat(s1, s2)
 
 
@@ -181,7 +181,7 @@ def isdir(s: FileDescriptorOrPath) -> bool:
     * Python 3.13.
     """
     try:
-        st = os.stat(s)
+        st = stat(s)
     except (OSError, ValueError):
         return False
     return S_ISDIR(st.st_mode)
@@ -199,7 +199,7 @@ def isfile(path: FileDescriptorOrPath) -> bool:
     * Python 3.13.
     """
     try:
-        st = os.stat(path)
+        st = stat(path)
     except (OSError, ValueError):
         return False
     return S_ISREG(st.st_mode)
@@ -217,7 +217,7 @@ def islink(path: StrOrBytesPath) -> bool:
     * Python 3.13.
     """
     try:
-        st = os.lstat(path)
+        st = lstat(path)
     except (OSError, ValueError, AttributeError):
         return False
     return S_ISLNK(st.st_mode)
@@ -235,7 +235,7 @@ def exists(path: FileDescriptorOrPath) -> bool:
     * Python 3.13.
     """
     try:
-        os.stat(path)
+        stat(path)
     except (OSError, ValueError):
         return False
     return True
@@ -253,7 +253,7 @@ def lexists(path: StrOrBytesPath) -> bool:
     * Python 3.13.
     """
     try:
-        os.lstat(path)
+        lstat(path)
     except (OSError, ValueError):
         return False
     return True
