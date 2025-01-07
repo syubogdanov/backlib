@@ -11,6 +11,7 @@ from backlib.internal.stdlib.py313.os import (
     lstat,
     stat_result,
 )
+from backlib.internal.stdlib.py313.ospath.src import utils
 from backlib.internal.stdlib.py313.ospath.src.typing import StrOrBytesPath
 from backlib.internal.typing import AnyStr
 
@@ -138,3 +139,29 @@ def isabs(s: AnyStr | PathLike[AnyStr]) -> bool:
 
     prefix = s[:3].replace(altsep, sep)
     return prefix.startswith(colon_sep, 1) or prefix.startswith(double_sep)
+
+
+def splitext(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
+    """Split the pathname `path` into a pair `(root, ext)`.
+
+    See Also
+    --------
+    * `os.path.splitext`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    p = fspath(p)
+
+    if isinstance(p, bytes):
+        sep = b"\\"
+        altsep = b"/"
+        extsep = b"."
+
+    else:
+        sep = "\\"
+        altsep = "/"
+        extsep = "."
+
+    return utils.splitext(p, sep, altsep, extsep)

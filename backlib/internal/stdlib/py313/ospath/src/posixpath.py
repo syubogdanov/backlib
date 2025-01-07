@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import overload
 
 from backlib.internal.stdlib.py313.os import PathLike, fspath
+from backlib.internal.stdlib.py313.ospath.src import utils
 from backlib.internal.stdlib.py313.ospath.src.typing import StrOrBytesPath
 from backlib.internal.typing import AnyStr
 
@@ -97,3 +98,28 @@ def isabs(s: AnyStr | PathLike[AnyStr]) -> bool:
     * Python 3.13.
     """
     raise NotImplementedError
+
+
+def splitext(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
+    """Split the pathname `path` into a pair `(root, ext)`.
+
+    See Also
+    --------
+    * `os.path.splitext`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    p = fspath(p)
+    altsep = None
+
+    if isinstance(p, bytes):
+        sep = b"/"
+        extsep = b"."
+
+    else:
+        sep = "/"
+        extsep = "."
+
+    return utils.splitext(p, sep, altsep, extsep)
