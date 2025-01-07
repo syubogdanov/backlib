@@ -1,4 +1,4 @@
-from backlib.internal.stdlib.py313 import os
+from backlib.internal.stdlib.py313.os import fspath
 from backlib.internal.stdlib.py313.ospath.src.typing import StrOrBytesPath
 
 
@@ -13,7 +13,7 @@ def isjunction(path: StrOrBytesPath) -> bool:
     -------
     * Python 3.13.
     """
-    os.fspath(path)
+    fspath(path)
     return False
 
 
@@ -28,5 +28,5 @@ def isdevdrive(path: StrOrBytesPath) -> bool:
     -------
     * Python 3.13.
     """
-    os.fspath(path)
+    fspath(path)
     return False
