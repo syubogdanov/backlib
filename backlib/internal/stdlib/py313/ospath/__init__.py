@@ -65,7 +65,7 @@ elif is_posix():
     )
 
 else:
-    detail = "..."
+    detail = "The 'backlib.py313.os.path' module is supported only on POSIX and Windows NT"
     raise ImportError(detail)
 
 
