@@ -1,5 +1,10 @@
-from backlib.internal.stdlib.py313.os import fspath
+from __future__ import annotations
+
+from typing import overload
+
+from backlib.internal.stdlib.py313.os import PathLike, fspath
 from backlib.internal.stdlib.py313.ospath.src.typing import StrOrBytesPath
+from backlib.internal.typing import AnyStr
 
 
 __all__: list[str] = [
@@ -54,3 +59,27 @@ def isdevdrive(path: StrOrBytesPath) -> bool:
     """
     fspath(path)
     return False
+
+
+@overload
+def normcase(s: AnyStr) -> AnyStr:
+    ...
+
+
+@overload
+def normcase(s: PathLike[AnyStr]) -> AnyStr:
+    ...
+
+
+def normcase(s: StrOrBytesPath) -> str | bytes:
+    """Normalize the case of a pathname.
+
+    See Also
+    --------
+    * `os.path.normcase`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    raise NotImplementedError
