@@ -1,7 +1,18 @@
-from stat import IO_REPARSE_TAG_MOUNT_POINT
+from __future__ import annotations
 
-from backlib.internal.stdlib.py313.os import fspath, lstat, stat_result
+from stat import IO_REPARSE_TAG_MOUNT_POINT
+from typing import overload
+
+from backlib.internal.stdlib.py313.os import (
+    PathLike,
+    fsdecode,
+    fsencode,
+    fspath,
+    lstat,
+    stat_result,
+)
 from backlib.internal.stdlib.py313.ospath.src.typing import StrOrBytesPath
+from backlib.internal.typing import AnyStr
 
 
 __all__: list[str] = [
@@ -51,7 +62,7 @@ def isjunction(path: StrOrBytesPath) -> bool:
     return bool(st.st_reparse_tag == IO_REPARSE_TAG_MOUNT_POINT)
 
 
-def isdevdrive(path: StrOrBytesPath) -> bool:
+def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Return `True` if pathname `path` is located on a Windows Dev Drive.
 
     Notes
@@ -68,3 +79,33 @@ def isdevdrive(path: StrOrBytesPath) -> bool:
     """
     fspath(path)
     return False
+
+
+@overload
+def normcase(s: AnyStr) -> AnyStr:
+    ...
+
+
+@overload
+def normcase(s: PathLike[AnyStr]) -> AnyStr:
+    ...
+
+
+def normcase(s: StrOrBytesPath) -> str | bytes:
+    """Normalize the case of a pathname.
+
+    See Also
+    --------
+    * `os.path.normcase`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    s = fspath(s)
+
+    if not isinstance(s, bytes):
+        return s.replace("/", "\\").lower()
+
+    filename = fsdecode(s).replace("/", "\\").lower()
+    return fsencode(filename)
