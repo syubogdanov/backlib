@@ -109,3 +109,32 @@ def normcase(s: AnyStr | PathLike[AnyStr]) -> AnyStr:
 
     filename = fsdecode(s).replace("/", "\\").lower()
     return fsencode(filename)
+
+
+def isabs(s: AnyStr | PathLike[AnyStr]) -> bool:
+    """Return `True` if `path` is an absolute pathname.
+
+    See Also
+    --------
+    * `os.path.isabs`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    s = fspath(s)
+
+    if isinstance(s, bytes):
+        sep = b"\\"
+        altsep = b"/"
+        colon_sep = b":\\"
+        double_sep = b"\\\\"
+
+    else:
+        sep = "\\"
+        altsep = "/"
+        colon_sep = ":\\"
+        double_sep = "\\\\"
+
+    prefix = s[:3].replace(altsep, sep)
+    return prefix.startswith(colon_sep, 1) or prefix.startswith(double_sep)

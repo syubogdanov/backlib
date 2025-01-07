@@ -83,3 +83,17 @@ def normcase(s: AnyStr | PathLike[AnyStr]) -> AnyStr:
     * Python 3.13.
     """
     raise NotImplementedError
+
+
+def isabs(s: AnyStr | PathLike[AnyStr]) -> bool:
+    """Return `True` if `path` is an absolute pathname.
+
+    See Also
+    --------
+    * `os.path.isabs`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    raise NotImplementedError
