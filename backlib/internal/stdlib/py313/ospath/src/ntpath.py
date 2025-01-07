@@ -1,3 +1,14 @@
+"""Backports for the `os.path` module on Windows NT.
+
+Notes
+-----
+* `os.path.isreserved` is not implemented as it is not cross-platform.
+
+See Also
+--------
+* `ntpath`.
+"""
+
 from __future__ import annotations
 
 from stat import IO_REPARSE_TAG_MOUNT_POINT
