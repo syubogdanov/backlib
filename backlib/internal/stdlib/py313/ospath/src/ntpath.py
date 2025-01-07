@@ -1,13 +1,11 @@
-from backlib.internal.stdlib.py313.os import fspath
+from stat import IO_REPARSE_TAG_MOUNT_POINT
+
+from backlib.internal.stdlib.py313.os import fspath, lstat, stat_result
 from backlib.internal.stdlib.py313.ospath.src.typing import StrOrBytesPath
 
 
 def isjunction(path: StrOrBytesPath) -> bool:
     """Return `True` if `path` refers to an existing directory entry that is a junction.
-
-    Notes
-    -----
-    * Always returns `False`. It will be fixed in the future.
 
     See Also
     --------
@@ -17,8 +15,16 @@ def isjunction(path: StrOrBytesPath) -> bool:
     -------
     * Python 3.13.
     """
-    fspath(path)
-    return False
+    try:
+        st = lstat(path)
+
+    except (AttributeError, OSError, ValueError):
+        return False
+
+    if not hasattr(stat_result, "st_reparse_tag"):
+        return False
+
+    return bool(st.st_reparse_tag == IO_REPARSE_TAG_MOUNT_POINT)
 
 
 def isdevdrive(path: StrOrBytesPath) -> bool:
