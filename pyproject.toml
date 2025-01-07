@@ -78,7 +78,8 @@ select = ["ALL"]
 ignore = ["D100", "D104"]
 
 [tool.ruff.lint.extend-per-file-ignores]
-"backlib/internal/stdlib/py3*/src/**" = ["D"]
+"backlib/internal/stdlib/py313/json/src/**" = ["D"]
+"backlib/internal/stdlib/py313/tomllib/src/**" = ["D"]
 
 [tool.ruff.lint.flake8-type-checking]
 exempt-modules = [
