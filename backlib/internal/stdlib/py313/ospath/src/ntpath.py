@@ -12,7 +12,7 @@ See Also
 from __future__ import annotations
 
 from stat import IO_REPARSE_TAG_MOUNT_POINT
-from typing import Final, overload
+from typing import Final
 
 from backlib.internal.stdlib.py313.os import (
     PathLike,
@@ -94,16 +94,6 @@ def isdevdrive(path: StrOrBytesPath) -> bool:
     """
     fspath(path)
     return False
-
-
-@overload
-def normcase(s: AnyStr) -> AnyStr:
-    ...
-
-
-@overload
-def normcase(s: PathLike[AnyStr]) -> AnyStr:
-    ...
 
 
 def normcase(s: AnyStr | PathLike[AnyStr]) -> AnyStr:
