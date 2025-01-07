@@ -12,7 +12,7 @@ See Also
 from __future__ import annotations
 
 from stat import IO_REPARSE_TAG_MOUNT_POINT
-from typing import overload
+from typing import Final, overload
 
 from backlib.internal.stdlib.py313.os import (
     PathLike,
@@ -49,6 +49,9 @@ __all__: list[str] = [
     "splitroot",
     "supports_unicode_filenames",
 ]
+
+
+supports_unicode_filenames: Final[bool] = True
 
 
 def isjunction(path: StrOrBytesPath) -> bool:
