@@ -13,6 +13,60 @@ from backlib.internal.stdlib.py313.ospath.src.genericpath import (
     sameopenfile,
     samestat,
 )
+from backlib.internal.utils.sys import is_nt, is_posix
+
+
+if is_nt():
+    from backlib.internal.stdlib.py313.ospath.src.ntpath import (
+        abspath,
+        basename,
+        commonpath,
+        dirname,
+        expanduser,
+        expandvars,
+        isabs,
+        isdevdrive,
+        isjunction,
+        ismount,
+        join,
+        normcase,
+        normpath,
+        realpath,
+        relpath,
+        split,
+        splitdrive,
+        splitext,
+        splitroot,
+        supports_unicode_filenames,
+    )
+
+elif is_posix():
+    from backlib.internal.stdlib.py313.ospath.src.posixpath import (
+        abspath,
+        basename,
+        commonpath,
+        dirname,
+        expanduser,
+        expandvars,
+        isabs,
+        isdevdrive,
+        isjunction,
+        ismount,
+        join,
+        normcase,
+        normpath,
+        realpath,
+        relpath,
+        split,
+        splitdrive,
+        splitext,
+        splitroot,
+        supports_unicode_filenames,
+    )
+
+else:
+    detail = "..."
+    raise ImportError(detail)
 
 
 __all__: list[str] = [
