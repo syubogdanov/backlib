@@ -21,10 +21,8 @@ __all__: list[str] = [
     "getctime",
     "getmtime",
     "getsize",
-    "isdevdrive",
     "isdir",
     "isfile",
-    "isjunction",
     "islink",
     "lexists",
     "samefile",
@@ -225,25 +223,6 @@ def islink(path: StrOrBytesPath) -> bool:
     return S_ISLNK(st.st_mode)
 
 
-def isjunction(path: StrOrBytesPath) -> bool:
-    """Return `True` if `path` refers to an existing directory entry that is a junction.
-
-    Notes
-    -----
-    * Always returns `False`. It will be fixed in the future.
-
-    See Also
-    --------
-    * `os.path.isjunction`.
-
-    Version
-    -------
-    * Python 3.13.
-    """
-    os.fspath(path)
-    return False
-
-
 def exists(path: FileDescriptorOrPath) -> bool:
     """Return `True` if `path` refers to an existing path or an open file descriptor.
 
@@ -278,22 +257,3 @@ def lexists(path: StrOrBytesPath) -> bool:
     except (OSError, ValueError):
         return False
     return True
-
-
-def isdevdrive(path: StrOrBytesPath) -> bool:
-    """Return `True` if pathname `path` is located on a Windows Dev Drive.
-
-    Notes
-    -----
-    * Always returns `False`. It will be fixed in the future.
-
-    See Also
-    --------
-    * `os.path.isdevdrive`.
-
-    Version
-    -------
-    * Python 3.13.
-    """
-    os.fspath(path)
-    return False
