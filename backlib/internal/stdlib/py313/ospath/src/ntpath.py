@@ -62,7 +62,7 @@ def isjunction(path: StrOrBytesPath) -> bool:
     return bool(st.st_reparse_tag == IO_REPARSE_TAG_MOUNT_POINT)
 
 
-def isdevdrive(path: StrOrBytesPath) -> AnyStr:
+def isdevdrive(path: StrOrBytesPath) -> bool:
     """Return `True` if pathname `path` is located on a Windows Dev Drive.
 
     Notes
@@ -91,7 +91,7 @@ def normcase(s: PathLike[AnyStr]) -> AnyStr:
     ...
 
 
-def normcase(s: StrOrBytesPath) -> str | bytes:
+def normcase(s: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Normalize the case of a pathname.
 
     See Also

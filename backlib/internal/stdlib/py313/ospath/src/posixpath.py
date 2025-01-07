@@ -71,7 +71,7 @@ def normcase(s: PathLike[AnyStr]) -> AnyStr:
     ...
 
 
-def normcase(s: StrOrBytesPath) -> str | bytes:
+def normcase(s: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Normalize the case of a pathname.
 
     See Also
