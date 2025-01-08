@@ -1,6 +1,9 @@
 from typing import Any
 
 
+__all__: list[str] = ["check_arg_types"]
+
+
 def check_arg_types(funcname: str, *args: Any) -> None:  # noqa: ANN401
     """Check that all arguments are `str`, `bytes`, or `os.PathLike`."""
     has_str = False
