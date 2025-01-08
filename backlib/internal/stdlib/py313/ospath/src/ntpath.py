@@ -11,9 +11,10 @@ See Also
 
 from __future__ import annotations
 
+from os.path import abspath as py_abspath
 from stat import IO_REPARSE_TAG_MOUNT_POINT
 from string import ascii_letters, digits
-from typing import Final
+from typing import TYPE_CHECKING, Final
 
 from backlib.internal.stdlib.py313.os import (
     PathLike,
@@ -28,6 +29,10 @@ from backlib.internal.stdlib.py313.ospath.src.typing import StrOrBytesPath
 from backlib.internal.stdlib.py313.ospath.src.utils import check_arg_types
 from backlib.internal.typing import AnyStr
 from backlib.internal.utils.lint import techdebt
+
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
 
 
 __all__: list[str] = [
@@ -580,3 +585,18 @@ def expanduser(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
         return fsencode(userhome) + path[i:]
 
     return userhome + path[i:]
+
+
+@techdebt("[!] This function is not a real backport...")
+def abspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Return a normalized absolutized version of the pathname `path`.
+
+    See Also
+    --------
+    * `os.path.abspath`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    return py_abspath(path)  # noqa: PTH100
