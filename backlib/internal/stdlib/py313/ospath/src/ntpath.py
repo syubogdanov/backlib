@@ -12,10 +12,12 @@ See Also
 from __future__ import annotations
 
 from stat import IO_REPARSE_TAG_MOUNT_POINT
+from string import ascii_letters, digits
 from typing import Final
 
 from backlib.internal.stdlib.py313.os import (
     PathLike,
+    environ,
     fsdecode,
     fsencode,
     fspath,
@@ -296,3 +298,116 @@ def dirname(p: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """
     head, _ = split(p)
     return head
+
+
+@techdebt("This function should be refactored...")
+def expandvars(path: AnyStr | PathLike[AnyStr]) -> AnyStr:  # noqa: C901, PLR0912, PLR0915
+    """Return the argument with environment variables expanded.
+
+    See Also
+    --------
+    * `os.path.expandvars`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    path = fspath(path)
+    if isinstance(path, bytes):
+        if b"$" not in path and b"%" not in path:
+            return path
+        varchars = bytes(ascii_letters + digits + "_-", "ascii")
+        quote = b"'"
+        percent = b"%"
+        brace = b"{"
+        rbrace = b"}"
+        dollar = b"$"
+    else:
+        if "$" not in path and "%" not in path:
+            return path
+        varchars = ascii_letters + digits + "_-"
+        quote = "'"
+        percent = "%"
+        brace = "{"
+        rbrace = "}"
+        dollar = "$"
+    res = path[:0]
+    index = 0
+    pathlen = len(path)
+    while index < pathlen:
+        c = path[index:index+1]
+        if c == quote:   # no expansion within single quotes
+            path = path[index + 1:]
+            pathlen = len(path)
+            try:
+                index = path.index(c)
+                res += c + path[:index + 1]
+            except ValueError:
+                res += c + path
+                index = pathlen - 1
+        elif c == percent:  # variable or '%'
+            if path[index + 1:index + 2] == percent:
+                res += c
+                index += 1
+            else:
+                path = path[index+1:]
+                pathlen = len(path)
+                try:
+                    index = path.index(percent)
+                except ValueError:
+                    res += percent + path
+                    index = pathlen - 1
+                else:
+                    var = path[:index]
+                    try:
+                        if isinstance(var, bytes):  # 'os.environb' is not supported on Windows
+                            value = fsencode(environ[fsdecode(var)])
+                        else:
+                            value = environ[var]
+                    except KeyError:
+                        value = percent + var + percent
+                    res += value
+        elif c == dollar:  # variable or '$$'
+            if path[index + 1:index + 2] == dollar:
+                res += c
+                index += 1
+            elif path[index + 1:index + 2] == brace:
+                path = path[index+2:]
+                pathlen = len(path)
+                try:
+                    index = path.index(rbrace)
+                except ValueError:
+                    res += dollar + brace + path
+                    index = pathlen - 1
+                else:
+                    var = path[:index]
+                    try:
+                        if isinstance(var, bytes):  # 'os.environb' is not supported on Windows
+                            value = fsencode(environ[fsdecode(var)])
+                        else:
+                            value = environ[var]
+                    except KeyError:
+                        value = dollar + brace + var + rbrace
+                    res += value
+            else:
+                var = path[:0]
+                index += 1
+                c = path[index:index + 1]
+                while c and c in varchars:
+                    var += c
+                    index += 1
+                    c = path[index:index + 1]
+                try:
+                    if isinstance(var, bytes):  # 'os.environb' is not supported on Windows
+                        value = fsencode(environ[fsdecode(var)])
+                    else:
+                        value = environ[var]
+                except KeyError:
+                    value = dollar + var
+                res += value
+                if c:
+                    index -= 1
+        else:
+            res += c
+        index += 1
+    return res
