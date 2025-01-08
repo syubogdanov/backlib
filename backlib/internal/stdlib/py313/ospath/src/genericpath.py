@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from stat import S_ISDIR, S_ISLNK, S_ISREG
-from typing import TYPE_CHECKING, Literal, overload
+from typing import TYPE_CHECKING, Literal
 
 from backlib.internal.stdlib.py313.os import fspath, fstat, lstat, stat, stat_result
 from backlib.internal.typing import AnyStr
@@ -30,17 +30,7 @@ __all__: list[str] = [
 ]
 
 
-@overload
-def commonprefix(m: Sequence[AnyStr]) -> Literal[""] | AnyStr:
-    ...
-
-
-@overload
-def commonprefix(m: Sequence[PathLike[AnyStr]]) -> Literal[""] | AnyStr:
-    ...
-
-
-def commonprefix(m: Sequence[AnyStr] | Sequence[PathLike[AnyStr]]) -> Literal[""] | AnyStr:
+def commonprefix(m: Sequence[AnyStr | PathLike[AnyStr]]) -> Literal[""] | AnyStr:
     """Return the longest path prefix that is a prefix of all paths.
 
     See Also
