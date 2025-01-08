@@ -51,10 +51,20 @@ assert data == ["backlib"]
 ```python
 from backlib.py313 import os
 
-drives = os.listdrives()
+fd: int = ...
+is_blocking = os.get_blocking(fd)
 
-assert "C:\\" in drives
+assert is_blocking
 ```
+
+#### os.path [SOON]
+
+```python
+from backlib.py313 import os
+
+is_ok = os.path.isjunction("C:/Users/backlib/")
+
+assert is_ok
 
 #### pathlib [SOON]
 
