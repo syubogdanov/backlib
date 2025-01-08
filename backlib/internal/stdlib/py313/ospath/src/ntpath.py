@@ -527,3 +527,56 @@ def join(path: AnyStr | PathLike[AnyStr], *paths: AnyStr | PathLike[AnyStr]) -> 
     except (TypeError, AttributeError, BytesWarning):
         check_arg_types("join", path, *paths)
         raise
+
+
+@techdebt("This function should be refactored...")
+def expanduser(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Replace an initial component of `~` or `~user` by that user's home directory.
+
+    See Also
+    --------
+    * `os.path.expanduser`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    path = fspath(path)
+    if isinstance(path, bytes):
+        seps = b"\\/"
+        tilde = b"~"
+    else:
+        seps = "\\/"
+        tilde = "~"
+    if not path.startswith(tilde):
+        return path
+    i, n = 1, len(path)
+    while i < n and path[i] not in seps:
+        i += 1
+
+    if "USERPROFILE" in environ:
+        userhome = environ["USERPROFILE"]
+    elif "HOMEPATH" not in environ:
+        return path
+    else:
+        drive = environ.get("HOMEDRIVE", "")
+        userhome = join(drive, environ["HOMEPATH"])
+
+    if i != 1: #~user
+        target_user = fsdecode(path[1:i]) if isinstance(path, bytes) else path[1:i]
+        current_user = environ.get("USERNAME")
+
+        if target_user != current_user:
+            # Try to guess user home directory.  By default all user
+            # profile directories are located in the same place and are
+            # named by corresponding usernames.  If userhome isn't a
+            # normal profile directory, this guess is likely wrong,
+            # so we bail out.
+            if current_user != basename(userhome):
+                return path
+            userhome = join(dirname(userhome), target_user)
+
+    if isinstance(path, bytes):
+        return fsencode(userhome) + path[i:]
+
+    return userhome + path[i:]
