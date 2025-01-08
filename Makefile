@@ -14,10 +14,10 @@ docker:
 lint: ruff mypy
 
 mypy:
-	$(VENV) mypy ./
+	$(VENV) mypy ./$(LIBRARY)/
 
 ruff:
-	$(VENV) ruff check ./
+	$(VENV) ruff check ./$(LIBRARY)/
 
 # Tests
 test: unit-tests compatibility-tests
