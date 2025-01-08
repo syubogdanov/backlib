@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from backlib.internal.stdlib.py313.os import PathLike, fspath
-from backlib.internal.stdlib.py313.ospath.src.typing import StrOrBytesPath
 from backlib.internal.typing import AnyStr
 
 
@@ -29,7 +28,7 @@ __all__: list[str] = [
 ]
 
 
-def isjunction(path: StrOrBytesPath) -> bool:
+def isjunction(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if `path` refers to an existing directory entry that is a junction.
 
     See Also
@@ -44,7 +43,7 @@ def isjunction(path: StrOrBytesPath) -> bool:
     return False
 
 
-def isdevdrive(path: StrOrBytesPath) -> bool:
+def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if pathname `path` is located on a Windows Dev Drive.
 
     See Also

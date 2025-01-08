@@ -1,4 +1,4 @@
-from os import (
+from backlib.internal.stdlib.py313.os.src import (
     PathLike,
     environ,
     fsdecode,

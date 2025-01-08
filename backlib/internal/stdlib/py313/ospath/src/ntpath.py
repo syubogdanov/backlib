@@ -25,7 +25,6 @@ from backlib.internal.stdlib.py313.os import (
     lstat,
     stat_result,
 )
-from backlib.internal.stdlib.py313.ospath.src.typing import StrOrBytesPath
 from backlib.internal.stdlib.py313.ospath.src.utils import check_arg_types
 from backlib.internal.typing import AnyStr
 from backlib.internal.utils.lint import techdebt
@@ -62,7 +61,7 @@ __all__: list[str] = [
 supports_unicode_filenames: Final[bool] = True
 
 
-def isjunction(path: StrOrBytesPath) -> bool:
+def isjunction(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if `path` refers to an existing directory entry that is a junction.
 
     See Also
@@ -86,7 +85,7 @@ def isjunction(path: StrOrBytesPath) -> bool:
 
 
 @techdebt("See the 'Notes' section...")
-def isdevdrive(path: StrOrBytesPath) -> bool:
+def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if pathname `path` is located on a Windows Dev Drive.
 
     Notes

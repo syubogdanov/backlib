@@ -4,7 +4,6 @@ from stat import S_ISDIR, S_ISLNK, S_ISREG
 from typing import TYPE_CHECKING, Literal, overload
 
 from backlib.internal.stdlib.py313.os import fspath, fstat, lstat, stat, stat_result
-from backlib.internal.stdlib.py313.ospath.src.typing import FileDescriptorOrPath, StrOrBytesPath
 from backlib.internal.typing import AnyStr
 
 
@@ -67,7 +66,7 @@ def commonprefix(m: Sequence[AnyStr] | Sequence[PathLike[AnyStr]]) -> Literal[""
     return p1
 
 
-def getatime(filename: FileDescriptorOrPath) -> float:
+def getatime(filename: int | AnyStr | PathLike[AnyStr]) -> float:
     """Return the time of last access of `path`.
 
     See Also
@@ -81,7 +80,7 @@ def getatime(filename: FileDescriptorOrPath) -> float:
     return stat(filename).st_atime
 
 
-def getctime(filename: FileDescriptorOrPath) -> float:
+def getctime(filename: int | AnyStr | PathLike[AnyStr]) -> float:
     """Return the system's ctime which is the creation time for `path`.
 
     See Also
@@ -95,7 +94,7 @@ def getctime(filename: FileDescriptorOrPath) -> float:
     return stat(filename).st_ctime
 
 
-def getmtime(filename: FileDescriptorOrPath) -> float:
+def getmtime(filename: int | AnyStr | PathLike[AnyStr]) -> float:
     """Return the time of last modification of `path`.
 
     See Also
@@ -109,7 +108,7 @@ def getmtime(filename: FileDescriptorOrPath) -> float:
     return stat(filename).st_mtime
 
 
-def getsize(filename: FileDescriptorOrPath) -> int:
+def getsize(filename: int | AnyStr | PathLike[AnyStr]) -> int:
     """Return the size, in bytes, of `path`.
 
     See Also
@@ -137,7 +136,7 @@ def samestat(s1: stat_result, s2: stat_result) -> bool:
     return s1.st_ino == s2.st_ino and s1.st_dev == s2.st_dev
 
 
-def samefile(f1: FileDescriptorOrPath, f2: FileDescriptorOrPath) -> bool:
+def samefile(f1: int | AnyStr | PathLike[AnyStr], f2: int | AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if both pathname arguments refer to the same file or directory.
 
     See Also
@@ -169,7 +168,7 @@ def sameopenfile(fp1: int, fp2: int) -> bool:
     return samestat(s1, s2)
 
 
-def isdir(s: FileDescriptorOrPath) -> bool:
+def isdir(s: int | AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if `path` is an existing directory.
 
     See Also
@@ -187,7 +186,7 @@ def isdir(s: FileDescriptorOrPath) -> bool:
     return S_ISDIR(st.st_mode)
 
 
-def isfile(path: FileDescriptorOrPath) -> bool:
+def isfile(path: int | AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if `path` is an existing regular file.
 
     See Also
@@ -205,7 +204,7 @@ def isfile(path: FileDescriptorOrPath) -> bool:
     return S_ISREG(st.st_mode)
 
 
-def islink(path: StrOrBytesPath) -> bool:
+def islink(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if `path` refers to an existing directory entry that is a symbolic link.
 
     See Also
@@ -223,7 +222,7 @@ def islink(path: StrOrBytesPath) -> bool:
     return S_ISLNK(st.st_mode)
 
 
-def exists(path: FileDescriptorOrPath) -> bool:
+def exists(path: int | AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if `path` refers to an existing path or an open file descriptor.
 
     See Also
@@ -241,7 +240,7 @@ def exists(path: FileDescriptorOrPath) -> bool:
     return True
 
 
-def lexists(path: StrOrBytesPath) -> bool:
+def lexists(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if `path` refers to an existing path, including broken symbolic links.
 
     See Also
