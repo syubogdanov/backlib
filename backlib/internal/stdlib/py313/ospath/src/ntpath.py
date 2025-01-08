@@ -24,7 +24,6 @@ from backlib.internal.stdlib.py313.os import (
     lstat,
     stat_result,
 )
-from backlib.internal.stdlib.py313.ospath.src import utils
 from backlib.internal.stdlib.py313.ospath.src.typing import StrOrBytesPath
 from backlib.internal.typing import AnyStr
 from backlib.internal.utils.lint import techdebt
@@ -172,7 +171,21 @@ def splitext(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
         altsep = "/"
         extsep = "."
 
-    return utils.splitext(p, sep, altsep, extsep)
+    sep_index = max(p.rfind(sep), p.rfind(altsep))
+    extsep_index = p.rfind(extsep)
+
+    if extsep_index <= sep_index:
+        return (p, p[:0])
+
+    starts_with_extseps = all(
+        p[index] == extsep
+        for index in range(sep_index + 1, extsep_index + 1)
+    )
+
+    if starts_with_extseps:
+        return (p, p[:0])
+
+    return (p[:extsep_index], p[extsep_index:])
 
 
 @techdebt("This function should be refactored...")

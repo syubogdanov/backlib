@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from backlib.internal.stdlib.py313.os import PathLike, fspath
-from backlib.internal.stdlib.py313.ospath.src import utils
 from backlib.internal.stdlib.py313.ospath.src.typing import StrOrBytesPath
 from backlib.internal.typing import AnyStr
 
@@ -76,11 +75,23 @@ def splitext(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
     if isinstance(p, bytes):
         sep = b"/"
         extsep = b"."
-        altsep = None
 
     else:
         sep = "/"
         extsep = "."
-        altsep = None
 
-    return utils.splitext(p, sep, altsep, extsep)
+    sep_index = p.rfind(sep)
+    extsep_index = p.rfind(extsep)
+
+    if extsep_index <= sep_index:
+        return (p, p[:0])
+
+    starts_with_extseps = all(
+        p[index] == extsep
+        for index in range(sep_index + 1, extsep_index + 1)
+    )
+
+    if starts_with_extseps:
+        return (p, p[:0])
+
+    return (p[:extsep_index], p[extsep_index:])
