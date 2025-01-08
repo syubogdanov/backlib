@@ -25,7 +25,7 @@ from backlib.internal.stdlib.py313.os import (
 from backlib.internal.stdlib.py313.ospath.src import utils
 from backlib.internal.stdlib.py313.ospath.src.typing import StrOrBytesPath
 from backlib.internal.typing import AnyStr
-from backlib.internal.utils.lint import todo
+from backlib.internal.utils.lint import techdebt
 
 
 __all__: list[str] = [
@@ -78,7 +78,7 @@ def isjunction(path: StrOrBytesPath) -> bool:
     return bool(st.st_reparse_tag == IO_REPARSE_TAG_MOUNT_POINT)
 
 
-@todo("See the 'Notes' section...")
+@techdebt("See the 'Notes' section...")
 def isdevdrive(path: StrOrBytesPath) -> bool:
     """Return `True` if pathname `path` is located on a Windows Dev Drive.
 
@@ -173,7 +173,7 @@ def splitext(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
     return utils.splitext(p, sep, altsep, extsep)
 
 
-@todo("This function should be refactored...")
+@techdebt("This function should be refactored...")
 def splitroot(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:  # noqa: PLR0911
     """Split the pathname `path` into a 3-item tuple `(drive, root, tail)`.
 
