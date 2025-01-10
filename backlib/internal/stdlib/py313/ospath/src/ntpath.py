@@ -23,7 +23,6 @@ from backlib.internal.stdlib.py313.os import (
     fsencode,
     fspath,
     lstat,
-    stat_result,
 )
 from backlib.internal.stdlib.py313.ospath.src.utils import check_arg_types
 from backlib.internal.typing import AnyStr
@@ -745,8 +744,14 @@ def relpath(
         raise
 
 
-def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr:
+@techdebt("See the 'Notes' section...")
+def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr:  # noqa: ARG001
     """Return the canonical path of the specified filename.
+
+    Notes
+    -----
+    * The `strict` parameter is always ignored. It will be fixed in the future;
+    * The function is just an alias to `abspath`. It will be fixed in the future.
 
     See Also
     --------
@@ -756,3 +761,4 @@ def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr
     -------
     * Python 3.13.
     """
+    return abspath(path)
