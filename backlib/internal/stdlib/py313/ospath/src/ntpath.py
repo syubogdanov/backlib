@@ -78,9 +78,6 @@ def isjunction(path: AnyStr | PathLike[AnyStr]) -> bool:
     except (AttributeError, OSError, ValueError):
         return False
 
-    if not hasattr(stat_result, "st_reparse_tag"):
-        return False
-
     return bool(st.st_reparse_tag == IO_REPARSE_TAG_MOUNT_POINT)
 
 
@@ -599,3 +596,163 @@ def abspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     * Python 3.13.
     """
     return py_abspath(path)  # noqa: PTH100
+
+
+@techdebt("This function should be refactored...")
+def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
+    """Return the longest common sub-path of each pathname in the iterable paths.
+
+    See Also
+    --------
+    * `os.path.commonpath`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    fspaths = tuple(map(fspath, paths))
+    if not fspaths:
+        detail = "commonpath() arg is an empty iterable"
+        raise ValueError(detail)
+
+    if isinstance(fspaths[0], bytes):
+        sep = b"\\"
+        altsep = b"/"
+        curdir = b"."
+    else:
+        sep = "\\"
+        altsep = "/"
+        curdir = "."
+
+    try:
+        drivesplits = [splitroot(p.replace(altsep, sep).lower()) for p in fspaths]
+        split_paths = [p.split(sep) for _, _, p in drivesplits]
+
+        # Check that all drive letters or UNC paths match. The check is made only
+        # now otherwise type errors for mixing strings and bytes would not be
+        # caught.
+        if len({d for d, _, _ in drivesplits}) != 1:
+            detail = "Paths don't have the same drive"
+            raise ValueError(detail)
+
+        drive, root, path = splitroot(fspaths[0].replace(altsep, sep))
+        if len({r for _, r, _ in drivesplits}) != 1:
+            if drive:
+                detail = "Can't mix absolute and relative paths"
+                raise ValueError(detail)
+            detail = "Can't mix rooted and not-rooted paths"
+            raise ValueError(detail)
+
+        common = path.split(sep)
+        common = [c for c in common if c and c != curdir]
+
+        split_paths = [[c for c in s if c and c != curdir] for s in split_paths]
+        s1 = min(split_paths)
+        s2 = max(split_paths)
+        for i, c in enumerate(s1):
+            if c != s2[i]:
+                common = common[:i]
+                break
+        else:
+            common = common[:len(s1)]
+
+        return drive + root + sep.join(common)
+    except (TypeError, AttributeError):
+        check_arg_types("commonpath", *fspaths)
+        raise
+
+
+def ismount(path: AnyStr | PathLike[AnyStr]) -> bool:
+    """Return `True` if pathname `path` is a mount point.
+
+    See Also
+    --------
+    * `os.path.ismount`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    path = fspath(path)
+
+    sep = b"\\" if isinstance(path, bytes) else "\\"
+    altsep = b"/" if isinstance(path, bytes) else "/"
+
+    path = abspath(path)
+    drive, root, tail = splitroot(path)
+
+    if drive.startswith((sep, altsep)):
+        return not tail
+
+    return bool(root and not tail)
+
+
+@techdebt("This function should be refactored...")
+def relpath(
+    path: AnyStr | PathLike[AnyStr],
+    start: AnyStr | PathLike[AnyStr] | None = None,
+) -> AnyStr:
+    """Return a relative filepath to `path`.
+
+    See Also
+    --------
+    * `os.path.relpath`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    path = fspath(path)
+    if not path:
+        detail = "no path specified"
+        raise ValueError(detail)
+
+    if isinstance(path, bytes):
+        sep = b"\\"
+        curdir = b"."
+        pardir = b".."
+    else:
+        sep = "\\"
+        curdir = "."
+        pardir = ".."
+
+    start = curdir if start is None else fspath(start)
+
+    try:
+        start_abs = abspath(start)
+        path_abs = abspath(path)
+        start_drive, _, start_rest = splitroot(start_abs)
+        path_drive, _, path_rest = splitroot(path_abs)
+        if normcase(start_drive) != normcase(path_drive):
+            detail = f"path is on mount {path_drive!r}, start on mount {start_drive!r}"
+            raise ValueError(detail)  # noqa: TRY301
+
+        start_list = start_rest.split(sep) if start_rest else []
+        path_list = path_rest.split(sep) if path_rest else []
+        # Work out how much of the filepath is shared by start and path.
+        i = 0
+        for e1, e2 in zip(start_list, path_list):
+            if normcase(e1) != normcase(e2):
+                break
+            i += 1
+
+        rel_list = [pardir] * (len(start_list)-i) + path_list[i:]
+        if not rel_list:
+            return curdir
+        return sep.join(rel_list)
+    except (TypeError, ValueError, AttributeError, BytesWarning, DeprecationWarning):
+        check_arg_types("relpath", path, start)
+        raise
+
+
+def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr:
+    """Return the canonical path of the specified filename.
+
+    See Also
+    --------
+    * `os.path.realpath`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
