@@ -77,6 +77,9 @@ def isjunction(path: AnyStr | PathLike[AnyStr]) -> bool:
     except (AttributeError, OSError, ValueError):
         return False
 
+    if not hasattr(st, "st_reparse_tag"):
+        return False
+
     return bool(st.st_reparse_tag == IO_REPARSE_TAG_MOUNT_POINT)
 
 
