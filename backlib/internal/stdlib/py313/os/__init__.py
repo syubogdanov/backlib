@@ -5,6 +5,8 @@ from backlib.internal.stdlib.py313.os.src import (
     fsencode,
     fspath,
     fstat,
+    getcwd,
+    getcwdb,
     lstat,
     stat,
     stat_result,

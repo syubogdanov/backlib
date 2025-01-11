@@ -5,6 +5,8 @@ from os import environ as environ
 from os import fsdecode as fsdecode
 from os import fsencode as fsencode
 from os import fstat as fstat
+from os import getcwd as getcwd
+from os import getcwdb as getcwdb
 from os import lstat as lstat
 from os import stat as stat
 from os import stat_result as stat_result

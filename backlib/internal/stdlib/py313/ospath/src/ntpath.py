@@ -195,7 +195,7 @@ def splitroot(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:  #
 
     See Also
     --------
-    * `os.path.splitdrive`.
+    * `os.path.splitroot`.
 
     Version
     -------
