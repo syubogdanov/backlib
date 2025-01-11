@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from stat import S_ISDIR, S_ISLNK, S_ISREG
 from typing import TYPE_CHECKING, Literal
 
 from backlib.internal.stdlib.py313.os import fspath, fstat, lstat, stat, stat_result
+from backlib.internal.stdlib.py313.stat import S_ISDIR, S_ISLNK, S_ISREG
 from backlib.internal.typing import AnyStr
 
 

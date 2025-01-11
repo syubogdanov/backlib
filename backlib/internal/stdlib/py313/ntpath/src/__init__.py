@@ -15,10 +15,10 @@ Version
 
 from __future__ import annotations
 
-from stat import S_ISDIR, S_ISLNK, S_ISREG
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Final, Literal
 
 from backlib.internal.stdlib.py313.os import fspath, fstat, lstat, stat, stat_result
+from backlib.internal.stdlib.py313.stat import S_ISDIR, S_ISLNK, S_ISREG
 from backlib.internal.typing import AnyStr
 
 
@@ -63,6 +63,9 @@ __all__: list[str] = [
     "splitroot",
     "supports_unicode_filenames",
 ]
+
+
+supports_unicode_filenames: Final[bool] = True
 
 
 def commonprefix(m: Sequence[AnyStr | PathLike[AnyStr]]) -> Literal[""] | AnyStr:
