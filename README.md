@@ -107,6 +107,14 @@ exe = shutil.which("python")
 assert exe == "C:\\Program Files\\Python311\\python.exe"
 ```
 
+#### stat
+
+```python
+from backlib.py313 import stat
+
+...
+```
+
 #### tarfile [SOON]
 
 ```python
