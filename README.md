@@ -48,7 +48,13 @@ assert data == ["backlib"]
 
 #### ntpath [SOON]
 
-...
+```python
+from backlib.py313 import ntpath
+
+is_ok = ntpath.isjunction("C:/Users/backlib/")
+
+assert is_ok
+```
 
 #### os [SOON]
 
@@ -83,7 +89,13 @@ assert path == pathlib.PosixPath("/etc/hosts")
 
 #### posixpath [SOON]
 
-...
+```python
+from backlib.py313 import posixpath
+
+is_ok = posixpath.isjunction("C:/Users/backlib/")
+
+assert is_ok
+```
 
 #### shutil [SOON]
 
