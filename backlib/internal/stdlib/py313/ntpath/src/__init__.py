@@ -1,3 +1,18 @@
+"""Backport of the `ntpath` module.
+
+Notes
+-----
+* `ntpath.isreserved` is not implemented.
+
+See Also
+--------
+* `ntpath`.
+
+Version
+-------
+* Python 3.13.
+"""
+
 from __future__ import annotations
 
 from stat import S_ISDIR, S_ISLNK, S_ISREG
@@ -14,19 +29,39 @@ if TYPE_CHECKING:
 
 
 __all__: list[str] = [
+    "abspath",
+    "basename",
+    "commonpath",
     "commonprefix",
+    "dirname",
     "exists",
+    "expanduser",
+    "expandvars",
     "getatime",
     "getctime",
     "getmtime",
     "getsize",
+    "isabs",
+    "isdevdrive",
     "isdir",
     "isfile",
+    "isjunction",
     "islink",
+    "ismount",
+    "join",
     "lexists",
+    "normcase",
+    "normpath",
+    "realpath",
+    "relpath",
     "samefile",
     "sameopenfile",
     "samestat",
+    "split",
+    "splitdrive",
+    "splitext",
+    "splitroot",
+    "supports_unicode_filenames",
 ]
 
 
