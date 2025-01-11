@@ -1,4 +1,4 @@
-from backlib.internal.stdlib.py313.ospath.src import (
+from backlib.internal.stdlib.py313.ntpath.src import (
     abspath,
     basename,
     commonpath,
@@ -71,7 +71,7 @@ __all__: list[str] = [
     "supports_unicode_filenames",
 ]
 
-__backlib__: str = "backlib.py313.os.path"
+__backlib__: str = "backlib.py313.ntpath"
 
 
 abspath.__module__ = __backlib__

@@ -46,6 +46,10 @@ data = json.loads("[\"backlib\"]")
 assert data == ["backlib"]
 ```
 
+#### ntpath [SOON]
+
+...
+
 #### os [SOON]
 
 ```python
@@ -76,6 +80,10 @@ path = pathlib.Path.from_uri("file:///etc/hosts")
 
 assert path == pathlib.PosixPath("/etc/hosts")
 ```
+
+#### posixpath [SOON]
+
+...
 
 #### shutil [SOON]
 
