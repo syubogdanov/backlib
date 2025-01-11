@@ -10,4 +10,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.0] - 2025-01-03
 
 * Added `backlib.py313.json`;
+* Added `backlib.py313.stat`;
 * Added `backlib.py313.tomllib`.

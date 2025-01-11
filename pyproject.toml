@@ -24,6 +24,7 @@ keywords = [
     "pathlib",
     "posixpath",
     "shutil",
+    "stat",
     "tarfile",
     "tomllib",
     "zipfile",
