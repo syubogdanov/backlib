@@ -61,7 +61,7 @@ from backlib.py313 import os
 #### os.path [SOON]
 
 ```python
-from backlib.py313 import os
+from backlib.py313 import ospath
 
 ...
 ```
