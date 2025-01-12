@@ -76,7 +76,7 @@ from backlib.internal.stdlib.py313.os.src import (
     makedirs,
     mkdir,
     name,
-    open,
+    open,  # noqa: A004
     pardir,
     path,
     pathsep,
@@ -102,7 +102,6 @@ from backlib.internal.stdlib.py313.os.src import (
     spawnve,
     stat,
     stat_result,
-    statvfs_result,
     strerror,
     supports_bytes_environ,
     supports_dir_fd,
@@ -116,7 +115,6 @@ from backlib.internal.stdlib.py313.os.src import (
     times_result,
     truncate,
     umask,
-    uname_result,
     unlink,
     unsetenv,
     urandom,
@@ -232,7 +230,6 @@ __all__: list[str] = [
     "spawnve",
     "stat",
     "stat_result",
-    "statvfs_result",
     "strerror",
     "supports_bytes_environ",
     "supports_dir_fd",
@@ -246,7 +243,6 @@ __all__: list[str] = [
     "times_result",
     "truncate",
     "umask",
-    "uname_result",
     "unlink",
     "unsetenv",
     "urandom",
@@ -260,8 +256,18 @@ __all__: list[str] = [
 __backlib__: str = "backlib.py313.os"
 
 
+environ.__module__ = __backlib__
+environb.__module__ = __backlib__
+
+# `os.error` is an alias to `OSError`
+# error.__module__ = __backlib__  # noqa: ERA001
+
 DirEntry.__module__ = __backlib__
 PathLike.__module__ = __backlib__
+stat_result.__module__ = __backlib__
+terminal_size.__module__ = __backlib__
+times_result.__module__ = __backlib__
+
 _exit.__module__ = __backlib__
 abort.__module__ = __backlib__
 access.__module__ = __backlib__
@@ -273,8 +279,6 @@ cpu_count.__module__ = __backlib__
 device_encoding.__module__ = __backlib__
 dup.__module__ = __backlib__
 dup2.__module__ = __backlib__
-environ.__module__ = __backlib__
-environb.__module__ = __backlib__
 execl.__module__ = __backlib__
 execle.__module__ = __backlib__
 execlp.__module__ = __backlib__
@@ -283,7 +287,6 @@ execv.__module__ = __backlib__
 execve.__module__ = __backlib__
 execvp.__module__ = __backlib__
 execvpe.__module__ = __backlib__
-extsep.__module__ = __backlib__
 fchmod.__module__ = __backlib__
 fdopen.__module__ = __backlib__
 fsdecode.__module__ = __backlib__
@@ -311,7 +314,6 @@ lseek.__module__ = __backlib__
 lstat.__module__ = __backlib__
 makedirs.__module__ = __backlib__
 mkdir.__module__ = __backlib__
-name.__module__ = __backlib__
 open.__module__ = __backlib__
 pipe.__module__ = __backlib__
 popen.__module__ = __backlib__
@@ -333,17 +335,12 @@ spawnle.__module__ = __backlib__
 spawnv.__module__ = __backlib__
 spawnve.__module__ = __backlib__
 stat.__module__ = __backlib__
-stat_result.__module__ = __backlib__
-statvfs_result.__module__ = __backlib__
 strerror.__module__ = __backlib__
 symlink.__module__ = __backlib__
 system.__module__ = __backlib__
-terminal_size.__module__ = __backlib__
 times.__module__ = __backlib__
-times_result.__module__ = __backlib__
 truncate.__module__ = __backlib__
 umask.__module__ = __backlib__
-uname_result.__module__ = __backlib__
 unlink.__module__ = __backlib__
 unsetenv.__module__ = __backlib__
 urandom.__module__ = __backlib__
@@ -352,6 +349,3 @@ waitpid.__module__ = __backlib__
 waitstatus_to_exitcode.__module__ = __backlib__
 walk.__module__ = __backlib__
 write.__module__ = __backlib__
-
-# `os.error` is an alias to `OSError`
-# error.__module__ = __backlib__  # noqa: ERA001
