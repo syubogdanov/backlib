@@ -1,18 +1,3 @@
-"""Backport of the `ntpath` module.
-
-Notes
------
-* `ntpath.isreserved` is not implemented.
-
-See Also
---------
-* `ntpath`.
-
-Version
--------
-* Python 3.13.
-"""
-
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Final, Literal
@@ -48,6 +33,7 @@ __all__: list[str] = [
     "isjunction",
     "islink",
     "ismount",
+    "isreserved",
     "join",
     "lexists",
     "normcase",

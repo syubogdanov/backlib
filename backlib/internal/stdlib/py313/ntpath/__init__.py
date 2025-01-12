@@ -18,6 +18,7 @@ from backlib.internal.stdlib.py313.ntpath.src import (
     isjunction,
     islink,
     ismount,
+    isreserved,
     join,
     lexists,
     normcase,
@@ -55,6 +56,7 @@ __all__: list[str] = [
     "isjunction",
     "islink",
     "ismount",
+    "isreserved",
     "join",
     "lexists",
     "normcase",
@@ -93,6 +95,7 @@ isfile.__module__ = __backlib__
 isjunction.__module__ = __backlib__
 islink.__module__ = __backlib__
 ismount.__module__ = __backlib__
+isreserved.__module__ = __backlib__
 join.__module__ = __backlib__
 lexists.__module__ = __backlib__
 normcase.__module__ = __backlib__
@@ -106,6 +109,3 @@ split.__module__ = __backlib__
 splitdrive.__module__ = __backlib__
 splitext.__module__ = __backlib__
 splitroot.__module__ = __backlib__
-
-# NOTE: 'bool' object has no attribute '__module__'
-# supports_unicode_filenames.__module__ = __backlib__  # noqa: ERA001

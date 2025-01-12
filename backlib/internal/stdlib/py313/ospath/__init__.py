@@ -18,6 +18,7 @@ from backlib.internal.stdlib.py313.ospath.src import (
     isjunction,
     islink,
     ismount,
+    isreserved,
     join,
     lexists,
     normcase,
@@ -55,6 +56,7 @@ __all__: list[str] = [
     "isjunction",
     "islink",
     "ismount",
+    "isreserved",
     "join",
     "lexists",
     "normcase",
@@ -106,6 +108,3 @@ split.__module__ = __backlib__
 splitdrive.__module__ = __backlib__
 splitext.__module__ = __backlib__
 splitroot.__module__ = __backlib__
-
-# NOTE: 'bool' object has no attribute '__module__'
-# supports_unicode_filenames.__module__ = __backlib__  # noqa: ERA001

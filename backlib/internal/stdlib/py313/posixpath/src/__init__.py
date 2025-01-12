@@ -33,6 +33,7 @@ __all__: list[str] = [
     "isjunction",
     "islink",
     "ismount",
+    "isreserved",
     "join",
     "lexists",
     "normcase",
@@ -266,3 +267,22 @@ def lexists(path: AnyStr | PathLike[AnyStr]) -> bool:
     except (OSError, ValueError):
         return False
     return True
+
+
+def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:
+    """Return `True` if `path` is a reserved pathname on the current system.
+
+    Notes
+    -----
+    * The standard library module does not have this function.
+
+    See Also
+    --------
+    * `os.path.isreserved`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    path = fspath(path)
+    return False

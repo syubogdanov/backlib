@@ -21,6 +21,7 @@ from backlib.internal.stdlib.py313.ntpath import isfile as nt_isfile
 from backlib.internal.stdlib.py313.ntpath import isjunction as nt_isjunction
 from backlib.internal.stdlib.py313.ntpath import islink as nt_islink
 from backlib.internal.stdlib.py313.ntpath import ismount as nt_ismount
+from backlib.internal.stdlib.py313.ntpath import isreserved as nt_isreserved
 from backlib.internal.stdlib.py313.ntpath import join as nt_join
 from backlib.internal.stdlib.py313.ntpath import lexists as nt_lexists
 from backlib.internal.stdlib.py313.ntpath import normcase as nt_normcase
@@ -56,6 +57,7 @@ from backlib.internal.stdlib.py313.posixpath import isfile as posix_isfile
 from backlib.internal.stdlib.py313.posixpath import isjunction as posix_isjunction
 from backlib.internal.stdlib.py313.posixpath import islink as posix_islink
 from backlib.internal.stdlib.py313.posixpath import ismount as posix_ismount
+from backlib.internal.stdlib.py313.posixpath import isreserved as posix_isreserved
 from backlib.internal.stdlib.py313.posixpath import join as posix_join
 from backlib.internal.stdlib.py313.posixpath import lexists as posix_lexists
 from backlib.internal.stdlib.py313.posixpath import normcase as posix_normcase
@@ -102,6 +104,7 @@ __all__: list[str] = [
     "isjunction",
     "islink",
     "ismount",
+    "isreserved",
     "join",
     "lexists",
     "normcase",
@@ -610,3 +613,18 @@ def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr
     """
     os_realpath = nt_realpath if is_nt() else posix_realpath
     return os_realpath(path)
+
+
+def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:
+    """Return `True` if `path` is a reserved pathname on the current system.
+
+    See Also
+    --------
+    * `os.path.isreserved`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    os_isreserved = nt_isreserved if is_nt() else posix_isreserved
+    return os_isreserved(path)
