@@ -31,9 +31,7 @@ pip install backlib
 ```python
 from backlib.py313 import io
 
-encoding = io.text_encoding(None)
-
-assert encoding == "locale"
+...
 ```
 
 #### json
@@ -41,9 +39,7 @@ assert encoding == "locale"
 ```python
 from backlib.py313 import json
 
-data = json.loads("[\"backlib\"]")
-
-assert data == ["backlib"]
+...
 ```
 
 #### ntpath [SOON]
@@ -51,9 +47,7 @@ assert data == ["backlib"]
 ```python
 from backlib.py313 import ntpath
 
-is_ok = ntpath.isjunction("C:/Users/backlib/")
-
-assert is_ok
+...
 ```
 
 #### os [SOON]
@@ -61,10 +55,7 @@ assert is_ok
 ```python
 from backlib.py313 import os
 
-fd: int = ...
-is_blocking = os.get_blocking(fd)
-
-assert is_blocking
+...
 ```
 
 #### os.path [SOON]
@@ -72,9 +63,7 @@ assert is_blocking
 ```python
 from backlib.py313 import os
 
-is_ok = os.path.isjunction("C:/Users/backlib/")
-
-assert is_ok
+...
 ```
 
 #### pathlib [SOON]
@@ -82,9 +71,7 @@ assert is_ok
 ```python
 from backlib.py313 import pathlib
 
-path = pathlib.Path.from_uri("file:///etc/hosts")
-
-assert path == pathlib.PosixPath("/etc/hosts")
+...
 ```
 
 #### posixpath [SOON]
@@ -92,9 +79,7 @@ assert path == pathlib.PosixPath("/etc/hosts")
 ```python
 from backlib.py313 import posixpath
 
-is_ok = posixpath.isjunction("C:/Users/backlib/")
-
-assert is_ok
+...
 ```
 
 #### shutil [SOON]
@@ -102,9 +87,7 @@ assert is_ok
 ```python
 from backlib.py313 import shutil
 
-exe = shutil.which("python")
-
-assert exe == "C:\\Program Files\\Python311\\python.exe"
+...
 ```
 
 #### stat
@@ -120,9 +103,7 @@ from backlib.py313 import stat
 ```python
 from backlib.py313 import tarfile
 
-is_ok = tarfile.is_tarfile("backlib.tar.gz")
-
-assert is_ok
+...
 ```
 
 #### tomllib
@@ -130,9 +111,7 @@ assert is_ok
 ```python
 from backlib.py313 import tomllib
 
-data = tomllib.loads("backlib = \"tomllib\"")
-
-assert data == {"backlib": "tomllib"}
+...
 ```
 
 #### zipfile [SOON]
@@ -140,9 +119,7 @@ assert data == {"backlib": "tomllib"}
 ```python
 from backlib.py313 import zipfile
 
-is_ok = zipfile.is_zipfile("backlib.zip")
-
-assert is_ok
+...
 ```
 
 ## Documentation
