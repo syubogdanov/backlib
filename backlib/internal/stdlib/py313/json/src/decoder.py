@@ -276,7 +276,7 @@ def JSONArray(  # noqa: C901, N802
     nextchar = s[end:end + 1]
 
     if nextchar in WHITESPACE_STR:
-        end = WHITESPACE.match(s, end + 1).end()
+        end = WHITESPACE.match(s, end + 1).end()  # type: ignore[union-attr]
         nextchar = s[end:end + 1]
 
     # Look-ahead for trivial empty array
@@ -294,7 +294,7 @@ def JSONArray(  # noqa: C901, N802
         values.append(value)
         nextchar = s[end:end + 1]
         if nextchar in WHITESPACE_STR:
-            end = WHITESPACE.match(s, end + 1).end()
+            end = WHITESPACE.match(s, end + 1).end()  # type: ignore[union-attr]
             nextchar = s[end:end + 1]
         end += 1
 
@@ -310,7 +310,7 @@ def JSONArray(  # noqa: C901, N802
             if s[end] in WHITESPACE_STR:
                 end += 1
                 if s[end] in WHITESPACE_STR:
-                    end = WHITESPACE.match(s, end + 1).end()
+                    end = WHITESPACE.match(s, end + 1).end()  # type: ignore[union-attr]
             nextchar = s[end:end + 1]
         except IndexError:
             pass
