@@ -274,7 +274,8 @@ def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:
 
     Notes
     -----
-    * The standard library module does not have this function.
+    * The standard library module does not have this function;
+    * `False` is always returned.
 
     See Also
     --------

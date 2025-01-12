@@ -618,6 +618,10 @@ def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr
 def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if `path` is a reserved pathname on the current system.
 
+    Notes
+    -----
+    * On POSIX `False` is always returned.
+
     See Also
     --------
     * `os.path.isreserved`.
