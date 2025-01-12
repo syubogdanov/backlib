@@ -165,12 +165,12 @@ def JSONObject(
     s_and_end: tuple[str, int],
     strict: bool,
     scan_once: Callable[[str, int], tuple[Any, int]],
-    object_hook,
-    object_pairs_hook,
+    object_hook: Callable[[dict[str, Any]], Any] | None,
+    object_pairs_hook: Callable[[list[tuple[str, Any]]], Any] | None,
     memo: dict[str, str] | None =None,
-):
+) -> Any:
     s, end = s_and_end
-    pairs = []
+    pairs: list[tuple[str, Any]] = []
     pairs_append = pairs.append
     # Backwards compatibility
     if memo is None:
@@ -182,17 +182,19 @@ def JSONObject(
     # Normally we expect nextchar == '"'
     if nextchar != '"':
         if nextchar in WHITESPACE_STR:
-            end = WHITESPACE.match(s, end).end()
+            end = WHITESPACE.match(s, end).end()  # type: ignore[union-attr]
             nextchar = s[end:end + 1]
         # Trivial empty object
         if nextchar == "}":
             if object_pairs_hook is not None:
                 result = object_pairs_hook(pairs)
                 return result, end + 1
-            pairs = {}
+
             if object_hook is not None:
-                pairs = object_hook(pairs)
-            return pairs, end + 1
+                return (object_hook({}), end + 1)
+
+            return ({}, end + 1)
+
         if nextchar != '"':
             detail = "Expecting property name enclosed in double quotes"
             raise JSONDecodeError(detail, s, end)
@@ -260,11 +262,12 @@ def JSONObject(
         result = object_pairs_hook(pairs)
         return result, end
 
-    pairs = dict(pairs)
-    if object_hook is not None:
-        pairs = object_hook(pairs)
+    as_dict = dict(pairs)
 
-    return pairs, end
+    if object_hook is not None:
+        return (object_hook(as_dict), end)
+
+    return (as_dict, end)
 
 
 def JSONArray(  # noqa: C901, N802
