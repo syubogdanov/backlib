@@ -325,9 +325,10 @@ from os import getcwdb as getcwdb
 from os import lstat as lstat
 from os import stat as stat
 from os import stat_result as stat_result
-from typing import Generic, TypeVar
+from typing import Final, Generic, TypeVar
 
-from backlib.internal.typing import AnyStr, Self
+from backlib.internal.typing import AnyStr, Self, TypeAlias
+from backlib.internal.utils.sys import is_nt, is_posix
 
 
 __all__: list[str] = [
@@ -458,7 +459,33 @@ __all__: list[str] = [
 ]
 
 
+if not is_nt() and not is_posix():
+    detail = "no os specific module found"
+    raise ImportError(detail)
+
+
 AnyStr_co = TypeVar("AnyStr_co", str, bytes, covariant=True)
+
+
+SEEK_SET: Final[int] = 0
+SEEK_CUR: Final[int] = 1
+SEEK_END: Final[int] = 2
+
+error: TypeAlias = OSError
+
+curdir: Final[str] = "."
+pardir: Final[str] = ".."
+extsep: Final[str] = "."
+
+name: Final[str] = "posix" if is_posix() else "nt"
+linesep: Final[str] = "\n" if is_posix() else "\r\n"
+
+sep: Final[str] = "/" if is_posix() else "\\"
+pathsep: Final[str] = ":" if is_posix() else ";"
+altsep: Final[str | None] = None if is_posix() else "/"
+
+defpath: Final[str] = "/bin:/usr/bin" if is_posix() else ".;C:\\bin"
+devnull: Final[str] = "/dev/null" if is_posix() else "nul"
 
 
 class PathLike(ABC, Generic[AnyStr_co]):
