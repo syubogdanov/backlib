@@ -370,7 +370,6 @@ __all__: list[str] = [
     "environ",
     "environb",
     "error",
-    "errorEX_OK",
     "execl",
     "execle",
     "execlp",
