@@ -18,7 +18,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Final, Literal
 
 from backlib.internal.stdlib.py313.os import fspath, fstat, lstat, stat, stat_result
-from backlib.internal.stdlib.py313.stat import S_ISDIR, S_ISLNK, S_ISREG
+from backlib.internal.stdlib.py313.stat import IO_REPARSE_TAG_MOUNT_POINT, S_ISDIR, S_ISLNK, S_ISREG
 from backlib.internal.typing import AnyStr
 
 
@@ -284,3 +284,23 @@ def lexists(path: AnyStr | PathLike[AnyStr]) -> bool:
     except (OSError, ValueError):
         return False
     return True
+
+
+def isjunction(path: AnyStr | PathLike[AnyStr]) -> bool:
+    """Return `True` if `path` refers to an existing directory entry that is a junction.
+
+    See Also
+    --------
+    * `ntpath.isjunction`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    try:
+        st = lstat(path)
+
+    except (AttributeError, OSError, ValueError):
+        return False
+
+    return bool(st.st_reparse_tag == IO_REPARSE_TAG_MOUNT_POINT)
