@@ -104,7 +104,7 @@ def fspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
         raise TypeError(detail) from None
 
     if isinstance(path_repr, (str, bytes)):
-        return path_repr
+        return path_repr  # type: ignore[return-value]
 
     detail = (
         f"expected {path_type.__name__}.__fspath__() to return str or bytes, "
