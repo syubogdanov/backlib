@@ -1,4 +1,4 @@
-"""Backport of the `ntpath` module.
+"""Backport of the `stat` module.
 
 Notes
 -----
