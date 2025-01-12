@@ -187,20 +187,20 @@ class JSONEncoder:
             indent = " " * self.indent
 
         _iterencode = _make_iterencode(
-            markers,
-            self.default,
-            _encoder,
-            indent,
-            floatstr,
-            self.key_separator,
-            self.item_separator,
-            self.sort_keys,
-            self.skipkeys,
+            markers=markers,
+            _default=self.default,
+            _encoder=_encoder,
+            _indent=indent,
+            _floatstr=floatstr,
+            _key_separator=self.key_separator,
+            _item_separator=self.item_separator,
+            _sort_keys=self.sort_keys,
+            _skipkeys=self.skipkeys,
         )
 
         return _iterencode(o, 0)
 
-def _make_iterencode(
+def _make_iterencode(  # noqa: C901, PLR0915
     markers: dict[int, Any] | None,
     _default: Callable[[Any], Any],
     _encoder: Callable[[str], str],
@@ -208,6 +208,7 @@ def _make_iterencode(
     _floatstr: Callable[[float], str],
     _key_separator: str,
     _item_separator: str,
+    *,
     _sort_keys: bool,
     _skipkeys: bool,
 ) -> Callable[[Any, int], Iterator[str]]:
@@ -270,7 +271,7 @@ def _make_iterencode(
         if markers is not None:
             del markers[markerid]
 
-    def _iterencode_dict(dct: dict[Any, Any], _current_indent_level: int) -> Iterator[str]:
+    def _iterencode_dict(dct: dict[Any, Any], _current_indent_level: int) -> Iterator[str]:  # noqa: C901, PLR0912, PLR0915
         if not dct:
             yield "{}"
             return
@@ -298,17 +299,17 @@ def _make_iterencode(
             # also allow them.  Many encoders seem to do something like this.
             elif isinstance(key, float):
                 # see comment for int/float in _make_iterencode
-                key = _floatstr(key)
+                key = _floatstr(key)  # noqa: PLW2901
             elif key is True:
-                key = "true"
+                key = "true"  # noqa: PLW2901
             elif key is False:
-                key = "false"
+                key = "false"  # noqa: PLW2901
             elif key is None:
-                key = "null"
+                key = "null"  # noqa: PLW2901
             elif isinstance(key, int):
                 # see comment for int/float in _make_iterencode
                 represent = int.__repr__
-                key = represent(key)
+                key = represent(key)  # noqa: PLW2901
             elif _skipkeys:
                 continue
             else:
@@ -350,7 +351,7 @@ def _make_iterencode(
         if markers is not None:
             del markers[markerid]
 
-    def _iterencode(o: Any, _current_indent_level: int) -> Iterator[str]:
+    def _iterencode(o: Any, _current_indent_level: int) -> Iterator[str]:  # noqa: ANN401, C901
         if isinstance(o, str):
             yield _encoder(o)
         elif o is None:
