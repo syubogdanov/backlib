@@ -103,7 +103,7 @@ def fspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
         detail = f"expected str, bytes or os.PathLike object, not {path_type.__name__}"
         raise TypeError(detail) from None
 
-    if not isinstance(path_repr, (str, bytes)):
+    if isinstance(path_repr, (str, bytes)):
         return path_repr
 
     detail = (
