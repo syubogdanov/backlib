@@ -201,18 +201,18 @@ class JSONEncoder:
         return _iterencode(o, 0)
 
 def _make_iterencode(
-    markers,
-    _default,
-    _encoder,
-    _indent,
-    _floatstr,
-    _key_separator,
-    _item_separator,
-    _sort_keys,
-    _skipkeys,
-):
+    markers: dict[int, Any] | None,
+    _default: Callable[[Any], Any],
+    _encoder: Callable[[str], str],
+    _indent: str | None,
+    _floatstr: Callable[[float], str],
+    _key_separator: str,
+    _item_separator: str,
+    _sort_keys: bool,
+    _skipkeys: bool,
+) -> Callable[[Any, int], Iterator[str]]:
 
-    def _iterencode_list(lst, _current_indent_level: int):
+    def _iterencode_list(lst: list[Any] | tuple[Any], _current_indent_level: int) -> Iterator[str]:  # noqa: C901, PLR0912
         if not lst:
             yield "[]"
             return
@@ -265,12 +265,12 @@ def _make_iterencode(
                 yield from chunks
         if newline_indent is not None:
             _current_indent_level -= 1
-            yield "\n" + _indent * _current_indent_level
+            yield "\n" + _indent * _current_indent_level  # type: ignore[operator]
         yield "]"
         if markers is not None:
             del markers[markerid]
 
-    def _iterencode_dict(dct, _current_indent_level: int):
+    def _iterencode_dict(dct: dict[Any, Any], _current_indent_level: int) -> Iterator[str]:
         if not dct:
             yield "{}"
             return
@@ -345,12 +345,12 @@ def _make_iterencode(
                 yield from chunks
         if newline_indent is not None:
             _current_indent_level -= 1
-            yield "\n" + _indent * _current_indent_level
+            yield "\n" + _indent * _current_indent_level  # type: ignore[operator]
         yield "}"
         if markers is not None:
             del markers[markerid]
 
-    def _iterencode(o, _current_indent_level: int):
+    def _iterencode(o: Any, _current_indent_level: int) -> Iterator[str]:
         if isinstance(o, str):
             yield _encoder(o)
         elif o is None:

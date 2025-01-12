@@ -162,12 +162,12 @@ WHITESPACE_STR = " \t\n\r"
 
 
 def JSONObject(
-    s_and_end,
-    strict,
-    scan_once,
+    s_and_end: tuple[str, int],
+    strict: bool,
+    scan_once: Callable[[str, int], tuple[Any, int]],
     object_hook,
     object_pairs_hook,
-    memo=None,
+    memo: dict[str, str] | None =None,
 ):
     s, end = s_and_end
     pairs = []
@@ -203,7 +203,7 @@ def JSONObject(
         # To skip some function call overhead we optimize the fast paths where
         # the JSON key separator is ": " or just ":".
         if s[end:end + 1] != ":":
-            end = WHITESPACE.match(s, end).end()
+            end = WHITESPACE.match(s, end).end()  # type: ignore[union-attr]
             if s[end:end + 1] != ":":
                 detail = "Expecting ':' delimiter"
                 raise JSONDecodeError(detail, s, end)
@@ -213,7 +213,7 @@ def JSONObject(
             if s[end] in WHITESPACE_STR:
                 end += 1
                 if s[end] in WHITESPACE_STR:
-                    end = WHITESPACE.match(s, end + 1).end()
+                    end = WHITESPACE.match(s, end + 1).end()  # type: ignore[union-attr]
         except IndexError:
             pass
 
@@ -229,7 +229,7 @@ def JSONObject(
         try:
             nextchar = s[end]
             if nextchar in WHITESPACE_STR:
-                end = WHITESPACE.match(s, end + 1).end()
+                end = WHITESPACE.match(s, end + 1).end()  # type: ignore[union-attr]
                 nextchar = s[end]
 
         except IndexError:
@@ -245,7 +245,7 @@ def JSONObject(
             raise JSONDecodeError(detail, s, end - 1)
 
         comma_idx = end - 1
-        end = WHITESPACE.match(s, end).end()
+        end = WHITESPACE.match(s, end).end()  # type: ignore[union-attr]
         nextchar = s[end:end + 1]
         end += 1
         if nextchar != '"':
@@ -377,8 +377,8 @@ class JSONDecoder:
         -------
         * Python 3.13.
         """
-        obj, end = self.raw_decode(s, idx=WHITESPACE.match(s, 0).end())
-        end = WHITESPACE.match(s, end).end()
+        obj, end = self.raw_decode(s, idx=WHITESPACE.match(s, 0).end())  # type: ignore[union-attr]
+        end = WHITESPACE.match(s, end).end()  # type: ignore[union-attr]
 
         if end != len(s):
             detail = "Extra data"
