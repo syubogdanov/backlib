@@ -12,6 +12,9 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Iterator
 
 
+# mypy: disable-error-code="no-untyped-def"
+
+
 ESCAPE = re.compile(r'[\x00-\x1f\\"\b\f\n\r\t]')
 ESCAPE_ASCII = re.compile(r'([\\"]|[^\ -~])')
 HAS_UTF8 = re.compile(b"[\x80-\xff]")
@@ -103,7 +106,7 @@ class JSONEncoder:
         elif indent is not None:
             self.item_separator = ","
         if default is not None:
-            self.default = default
+            self.default = default  # type: ignore[method-assign]
 
     def default(self: Self, o: Any) -> Any:  # noqa: ANN401
         """Add support for an arbitrary type.
@@ -137,9 +140,9 @@ class JSONEncoder:
         # This doesn't pass the iterator directly to ''.join() because the
         # exceptions aren't as detailed.  The list call should be roughly
         # equivalent to the PySequence_Fast that ''.join() would do.
-        chunks = self.iterencode(o, _one_shot=True)
+        chunks = self.iterencode(o)
         if not isinstance(chunks, (list, tuple)):
-            chunks = list(chunks)
+            chunks = list(chunks)  # type: ignore[assignment]
         return "".join(chunks)
 
     def iterencode(self: Self, o: Any) -> Iterator[str]:  # noqa: ANN401
@@ -153,7 +156,7 @@ class JSONEncoder:
         -------
         * Python 3.13.
         """
-        markers = {} if self.check_circular else None
+        markers: dict[int, Any] | None = {} if self.check_circular else None
         _encoder = encode_basestring_ascii if self.ensure_ascii else encode_basestring
 
         def floatstr(o: float, *, allow_nan: bool = self.allow_nan) -> str:

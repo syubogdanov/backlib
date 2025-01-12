@@ -13,7 +13,7 @@ NUMBER_RE = re.compile(
 )
 
 
-def make_scanner(context) -> Callable[[str, int], tuple[Any, int]]:  # noqa: C901
+def make_scanner(context) -> Callable[[str, int], tuple[Any, int]]:  # type: ignore[no-untyped-def] # noqa: ANN001, C901
     parse_object = context.parse_object
     parse_array = context.parse_array
     parse_string = context.parse_string

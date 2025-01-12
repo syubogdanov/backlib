@@ -100,7 +100,7 @@ def _decode_uXXXX(s: str, pos: int) -> int:  # noqa: N802
     raise JSONDecodeError(detail, s, pos)
 
 
-def scanstring(s: str, end: int, strict: bool = True) -> str:
+def scanstring(s: str, end: int, strict: bool = True) -> tuple[str, int]:
     """Scan the string s for a JSON string. End is the index of the
     character in s after the quote that started the JSON string.
     Unescapes all valid JSON string escape sequences and raises ValueError
@@ -154,7 +154,7 @@ def scanstring(s: str, end: int, strict: bool = True) -> str:
                     end += 6
             char = chr(uni)
         chunks.append(char)
-    return "".join(chunks), end
+    return ("".join(chunks), end)
 
 
 WHITESPACE = re.compile(r"[ \t\n\r]*", FLAGS)
@@ -267,7 +267,10 @@ def JSONObject(
     return pairs, end
 
 
-def JSONArray(s_and_end: tuple[str, int], scan_once) -> tuple[list[Any], int]:
+def JSONArray(  # noqa: C901, N802
+    s_and_end: tuple[str, int],
+    scan_once: Callable[[str, int], tuple[Any, int]],
+) -> tuple[list[Any], int]:
     s, end = s_and_end
     values: list[Any] = []
     nextchar = s[end:end + 1]
@@ -360,7 +363,7 @@ class JSONDecoder:
         self.parse_object = JSONObject
         self.parse_array = JSONArray
         self.parse_string = scanstring
-        self.memo = {}
+        self.memo: dict[str, str] = {}
         self.scan_once = scanner.make_scanner(self)
 
     def decode(self: Self, s: str) -> Any:  # noqa: ANN401
