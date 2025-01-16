@@ -315,17 +315,18 @@ Version
 
 from __future__ import annotations
 
+import os as py_os
+
 from abc import ABC, abstractmethod
-from os import environ, execv, execve, execvp, execvpe, spawnv
 from sys import getfilesystemencodeerrors, getfilesystemencoding
-from typing import Final, Generic, TypeVar, overload
+from typing import Final, Generic, TypeVar
 
 from backlib.internal.typing import AnyStr, Self, TypeAlias
+from backlib.internal.utils.lint import techdebt
 from backlib.internal.utils.sys import is_nt, is_posix
 
 
 __all__: list[str] = [
-    "EX_OK",
     "F_OK",
     "O_APPEND",
     "O_CREAT",
@@ -465,6 +466,23 @@ SEEK_SET: Final[int] = 0
 SEEK_CUR: Final[int] = 1
 SEEK_END: Final[int] = 2
 
+F_OK: Final[int] = techdebt(py_os.F_OK)
+R_OK: Final[int] = techdebt(py_os.R_OK)
+W_OK: Final[int] = techdebt(py_os.W_OK)
+X_OK: Final[int] = techdebt(py_os.X_OK)
+
+O_APPEND: Final[int] = techdebt(py_os.O_APPEND)
+O_CREAT: Final[int] = techdebt(py_os.O_CREAT)
+O_EXCL: Final[int] = techdebt(py_os.O_EXCL)
+O_RDONLY: Final[int] = techdebt(py_os.O_RDONLY)
+O_RDWR: Final[int] = techdebt(py_os.O_RDWR)
+O_TRUNC: Final[int] = techdebt(py_os.O_TRUNC)
+O_WRONLY: Final[int] = techdebt(py_os.O_WRONLY)
+
+P_NOWAIT: Final[int] = techdebt(py_os.P_NOWAIT)
+P_NOWAITO: Final[int] = techdebt(py_os.P_NOWAITO)
+P_WAIT: Final[int] = techdebt(py_os.P_WAIT)
+
 error: TypeAlias = OSError
 
 curdir: Final[str] = "."
@@ -577,30 +595,6 @@ def fspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     raise TypeError(detail)
 
 
-@overload
-def getenv(key: str) -> str | None:
-    ...
-
-
-@overload
-def getenv(key: str, default: T) -> str | T:
-    ...
-
-
-def getenv(key: str, default: T | None = None) -> str | T | None:
-    """Get the value of the environment variable `key` as a string, if exists, otherwise `default`.
-
-    See Also
-    --------
-    * `os.getenv`.
-
-    Version
-    -------
-    * Python 3.13.
-    """
-    return environ.get(key, default)
-
-
 def fsencode(filename: AnyStr | PathLike[AnyStr]) -> bytes:
     """Encode path-like `filename` to the filesystem encoding and error handler.
 
@@ -643,17 +637,3 @@ def fsdecode(filename: AnyStr | PathLike[AnyStr]) -> str:
     errors = getfilesystemencodeerrors()
 
     return filename.decode(encoding, errors)
-
-
-def spawnl(mode: int, file: AnyStr | PathLike[AnyStr], *args: AnyStr | PathLike[AnyStr]) -> int:
-    """Execute `file` with arguments from `args` in a subprocess.
-
-    See Also
-    --------
-    * `os.spawnl`.
-
-    Version
-    -------
-    * Python 3.13.
-    """
-    return spawnv(mode, file, args)  # noqa: S606

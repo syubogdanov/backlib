@@ -331,7 +331,7 @@ def S_ISSOCK(mode: int) -> bool:
     return S_IFMT(mode) == S_IFSOCK
 
 
-@techdebt("[?] Always returns `False`")
+@techdebt
 def S_ISDOOR(mode: int) -> bool:  # noqa: ARG001
     """Return `True` if the mode is from a door.
 
@@ -342,11 +342,15 @@ def S_ISDOOR(mode: int) -> bool:  # noqa: ARG001
     Version
     -------
     * Python 3.13.
+
+    Technical Debt
+    --------------
+    * Always returns `False`.
     """
     return False
 
 
-@techdebt("[?] Always returns `False`")
+@techdebt
 def S_ISPORT(mode: int) -> bool:  # noqa: ARG001
     """Return `True` if the mode is from an event port.
 
@@ -357,11 +361,15 @@ def S_ISPORT(mode: int) -> bool:  # noqa: ARG001
     Version
     -------
     * Python 3.13.
+
+    Technical Debt
+    --------------
+    * Always returns `False`.
     """
     return False
 
 
-@techdebt("[?] Always returns `False`")
+@techdebt
 def S_ISWHT(mode: int) -> bool:  # noqa: ARG001
     """Return `True` if the mode is from a whiteout.
 
@@ -372,6 +380,10 @@ def S_ISWHT(mode: int) -> bool:  # noqa: ARG001
     Version
     -------
     * Python 3.13.
+
+    Technical Debt
+    --------------
+    * Always returns `False`.
     """
     return False
 

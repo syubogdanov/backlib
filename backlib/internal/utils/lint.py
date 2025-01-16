@@ -1,4 +1,3 @@
-from collections.abc import Callable
 from typing import TypeVar
 
 
@@ -8,6 +7,6 @@ __all__: list[str] = ["techdebt"]
 T = TypeVar("T")
 
 
-def techdebt(comment: str) -> Callable[[T], T]:  # noqa: ARG001
+def techdebt(object_: T) -> T:
     """Mark an object as a technical debt."""
-    return lambda obj: obj
+    return object_

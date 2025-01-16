@@ -1,5 +1,4 @@
 from backlib.internal.stdlib.py313.os.src import (
-    EX_OK,
     F_OK,
     O_APPEND,
     O_CREAT,
@@ -126,7 +125,6 @@ from backlib.internal.stdlib.py313.os.src import (
 
 
 __all__: list[str] = [
-    "EX_OK",
     "F_OK",
     "O_APPEND",
     "O_CREAT",
