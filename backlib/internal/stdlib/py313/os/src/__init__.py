@@ -34,6 +34,7 @@ Notes
     - `EX_NOINPUT`;
     - `EX_NOPERM`;
     - `EX_NOUSER`;
+    - `EX_OK`;
     - `EX_OSERR`;
     - `EX_OSFILE`;
     - `EX_PROTOCOL`;
