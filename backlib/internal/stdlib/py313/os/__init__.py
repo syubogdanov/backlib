@@ -15,7 +15,6 @@ from backlib.internal.stdlib.py313.os.src import (
     SEEK_CUR,
     SEEK_END,
     SEEK_SET,
-    TMP_MAX,
     W_OK,
     X_OK,
     DirEntry,
@@ -258,9 +257,6 @@ __backlib__: str = "backlib.py313.os"
 
 environ.__module__ = __backlib__
 environb.__module__ = __backlib__
-
-# `os.error` is an alias to `OSError`
-# error.__module__ = __backlib__  # noqa: ERA001
 
 DirEntry.__module__ = __backlib__
 PathLike.__module__ = __backlib__

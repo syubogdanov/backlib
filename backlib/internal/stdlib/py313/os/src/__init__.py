@@ -316,16 +316,9 @@ Version
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from os import environ as environ
-from os import fsdecode as fsdecode
-from os import fsencode as fsencode
-from os import fstat as fstat
-from os import getcwd as getcwd
-from os import getcwdb as getcwdb
-from os import lstat as lstat
-from os import stat as stat
-from os import stat_result as stat_result
-from typing import Final, Generic, TypeVar
+from os import environ, execv, execve, execvp, execvpe, spawnv
+from sys import getfilesystemencodeerrors, getfilesystemencoding
+from typing import Final, Generic, TypeVar, overload
 
 from backlib.internal.typing import AnyStr, Self, TypeAlias
 from backlib.internal.utils.sys import is_nt, is_posix
@@ -348,7 +341,6 @@ __all__: list[str] = [
     "SEEK_CUR",
     "SEEK_END",
     "SEEK_SET",
-    "TMP_MAX",
     "W_OK",
     "X_OK",
     "DirEntry",
@@ -466,6 +458,8 @@ if not is_nt() and not is_posix():
 
 AnyStr_co = TypeVar("AnyStr_co", str, bytes, covariant=True)
 
+T = TypeVar("T")
+
 
 SEEK_SET: Final[int] = 0
 SEEK_CUR: Final[int] = 1
@@ -581,3 +575,85 @@ def fspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
         f"not {type(path_repr).__name__}"
     )
     raise TypeError(detail)
+
+
+@overload
+def getenv(key: str) -> str | None:
+    ...
+
+
+@overload
+def getenv(key: str, default: T) -> str | T:
+    ...
+
+
+def getenv(key: str, default: T | None = None) -> str | T | None:
+    """Get the value of the environment variable `key` as a string, if exists, otherwise `default`.
+
+    See Also
+    --------
+    * `os.getenv`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    return environ.get(key, default)
+
+
+def fsencode(filename: AnyStr | PathLike[AnyStr]) -> bytes:
+    """Encode path-like `filename` to the filesystem encoding and error handler.
+
+    See Also
+    --------
+    * `os.fsencode`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    filename = fspath(filename)
+
+    if isinstance(filename, bytes):
+        return filename
+
+    encoding = getfilesystemencoding()
+    errors = getfilesystemencodeerrors()
+
+    return filename.encode(encoding, errors)
+
+
+def fsdecode(filename: AnyStr | PathLike[AnyStr]) -> str:
+    """Decode the path-like `filename` from the filesystem encoding and error handler.
+
+    See Also
+    --------
+    * `os.fsdecode`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    filename = fspath(filename)
+
+    if isinstance(filename, str):
+        return filename
+
+    encoding = getfilesystemencoding()
+    errors = getfilesystemencodeerrors()
+
+    return filename.decode(encoding, errors)
+
+
+def spawnl(mode: int, file: AnyStr | PathLike[AnyStr], *args: AnyStr | PathLike[AnyStr]) -> int:
+    """Execute `file` with arguments from `args` in a subprocess.
+
+    See Also
+    --------
+    * `os.spawnl`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    return spawnv(mode, file, args)  # noqa: S606
