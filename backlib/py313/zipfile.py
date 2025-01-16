@@ -1,5 +1,28 @@
-__all__: list[str] = []
+from backlib.internal.stdlib.py313.zipfile import (
+    ZIP_BZIP2,
+    ZIP_DEFLATED,
+    ZIP_LZMA,
+    ZIP_STORED,
+    BadZipFile,
+    LargeZipFile,
+    Path,
+    PyZipFile,
+    ZipFile,
+    ZipInfo,
+    is_zipfile,
+)
 
 
-_detail = "The 'backlib.py313.zipfile' is being developed"
-raise NotImplementedError(_detail)
+__all__: list[str] = [
+    "ZIP_BZIP2",
+    "ZIP_DEFLATED",
+    "ZIP_LZMA",
+    "ZIP_STORED",
+    "BadZipFile",
+    "LargeZipFile",
+    "Path",
+    "PyZipFile",
+    "ZipFile",
+    "ZipInfo",
+    "is_zipfile",
+]

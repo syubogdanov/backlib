@@ -1,5 +1,20 @@
-__all__: list[str] = []
+from backlib.internal.stdlib.py313.pathlib import (
+    Path,
+    PosixPath,
+    PurePath,
+    PurePosixPath,
+    PureWindowsPath,
+    UnsupportedOperation,
+    WindowsPath,
+)
 
 
-_detail = "The 'backlib.py313.pathlib' is being developed"
-raise NotImplementedError(_detail)
+__all__: list[str] = [
+    "Path",
+    "PosixPath",
+    "PurePath",
+    "PurePosixPath",
+    "PureWindowsPath",
+    "UnsupportedOperation",
+    "WindowsPath",
+]
