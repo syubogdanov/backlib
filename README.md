@@ -39,7 +39,9 @@ from backlib.py313 import io
 ```python
 from backlib.py313 import json
 
-...
+data = json.loads("{\"backlib\": \"pypi\"}")
+
+assert data == {"backlib": "pypi"}
 ```
 
 #### ntpath [SOON]
@@ -111,7 +113,9 @@ from backlib.py313 import tarfile
 ```python
 from backlib.py313 import tomllib
 
-...
+data = tomllib.loads("\"backlib\" = \"pypi\"")
+
+assert data == {"backlib": "pypi"}
 ```
 
 #### zipfile [SOON]
