@@ -1,18 +1,3 @@
-"""Backport of the `stat` module.
-
-Notes
------
-* `S_IFDOOR`, `S_IFPORT` or `S_IFWHT` are defined as `0`.
-
-See Also
---------
-* `stat`.
-
-Version
--------
-* Python 3.13.
-"""
-
 from typing import Final
 
 from backlib.internal.utils.lint import techdebt
@@ -134,9 +119,9 @@ S_IFIFO: Final[int]  = 0o010000
 S_IFLNK: Final[int]  = 0o120000
 S_IFSOCK: Final[int] = 0o140000
 
-S_IFDOOR: Final[int] = 0
-S_IFPORT: Final[int] = 0
-S_IFWHT: Final[int] = 0
+S_IFDOOR: Final[int] = techdebt(0)
+S_IFPORT: Final[int] = techdebt(0)
+S_IFWHT: Final[int] = techdebt(0)
 
 S_ISUID: Final[int] = 0o4000
 S_ISGID: Final[int] = 0o2000
