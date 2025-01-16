@@ -97,7 +97,7 @@ from backlib.py313 import shutil
 ```python
 from backlib.py313 import stat
 
-...
+assert stat.SF_SYNTHETIC == 0xC0000000
 ```
 
 #### tarfile [SOON]
