@@ -7,6 +7,6 @@ __all__: list[str] = ["techdebt"]
 T = TypeVar("T")
 
 
-def techdebt(object_: T) -> T:
+def techdebt(debt: T) -> T:
     """Mark an object as a technical debt."""
-    return object_
+    return debt
