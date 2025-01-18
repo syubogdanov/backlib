@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os as py_os
 
+from contextlib import suppress
 from typing import Final
 
 from backlib.internal.typing import TypeAlias
@@ -26,6 +27,8 @@ __all__: list[str] = [
     "W_OK",
     "X_OK",
     "altsep",
+    "close",
+    "closerange",
     "curdir",
     "defpath",
     "devnull",
@@ -82,6 +85,41 @@ O_RDONLY: Final[int] = techdebt(py_os.O_RDONLY)
 O_RDWR: Final[int] = techdebt(py_os.O_RDWR)
 O_TRUNC: Final[int] = techdebt(py_os.O_TRUNC)
 O_WRONLY: Final[int] = techdebt(py_os.O_WRONLY)
+
+
+@techdebt
+def close(fd: int) -> None:
+    """Close file descriptor `fd`.
+
+    See Also
+    --------
+    * `os.close`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.close(fd)
+
+
+def closerange(fd_low: int, fd_high: int, /) -> None:
+    """Close all descriptors from `fd_low` (inclusive) to `fd_high` (exclusive), ignoring errors.
+
+    See Also
+    --------
+    * `os.closerange`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    for fd in range(fd_low, fd_high):
+        with suppress(OSError):
+            close(fd)
 
 
 @techdebt

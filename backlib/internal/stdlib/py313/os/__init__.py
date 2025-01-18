@@ -14,6 +14,8 @@ from backlib.internal.stdlib.py313.os.src import (
     W_OK,
     X_OK,
     altsep,
+    close,
+    closerange,
     curdir,
     defpath,
     devnull,
@@ -45,6 +47,8 @@ __all__: list[str] = [
     "W_OK",
     "X_OK",
     "altsep",
+    "close",
+    "closerange",
     "curdir",
     "defpath",
     "devnull",
@@ -62,5 +66,7 @@ __all__: list[str] = [
 __backlib__: str = "backlib.py313.os"
 
 
+close.__module__ = __backlib__
+closerange.__module__ = __backlib__
 read.__module__ = __backlib__
 write.__module__ = __backlib__
