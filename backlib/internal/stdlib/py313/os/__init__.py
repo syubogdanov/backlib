@@ -21,12 +21,15 @@ from backlib.internal.stdlib.py313.os.src import (
     devnull,
     error,
     extsep,
+    get_inheritable,
     linesep,
     name,
     pardir,
     pathsep,
     read,
     sep,
+    set_inheritable,
+    strerror,
     write,
 )
 
@@ -54,12 +57,15 @@ __all__: list[str] = [
     "devnull",
     "error",
     "extsep",
+    "get_inheritable",
     "linesep",
     "name",
     "pardir",
     "pathsep",
     "read",
     "sep",
+    "set_inheritable",
+    "strerror",
     "write",
 ]
 
@@ -68,5 +74,8 @@ __backlib__: str = "backlib.py313.os"
 
 close.__module__ = __backlib__
 closerange.__module__ = __backlib__
+get_inheritable.__module__ = __backlib__
 read.__module__ = __backlib__
+set_inheritable.__module__ = __backlib__
+strerror.__module__ = __backlib__
 write.__module__ = __backlib__

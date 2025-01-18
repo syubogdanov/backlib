@@ -40,6 +40,7 @@ __all__: list[str] = [
     "pathsep",
     "read",
     "sep",
+    "strerror",
     "write",
 ]
 
@@ -123,6 +124,25 @@ def closerange(fd_low: int, fd_high: int, /) -> None:
 
 
 @techdebt
+def get_inheritable(fd: int, /) -> bool:
+    """Get the 'inheritable' flag of the specified file descriptor (a boolean).
+
+    See Also
+    --------
+    * `os.get_inheritable`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.get_inheritable(fd)
+
+
+@techdebt
 def read(fd: int, length: int, /) -> bytes:
     """Read at most `length` bytes from file descriptor `fd`.
 
@@ -139,6 +159,44 @@ def read(fd: int, length: int, /) -> bytes:
     * This function is not a real backport.
     """
     return py_os.read(fd, length)
+
+
+@techdebt
+def set_inheritable(fd: int, inheritable: bool, /) -> None:  # noqa: FBT001
+    """Set the 'inheritable' flag of the specified file descriptor.
+
+    See Also
+    --------
+    * `os.set_inheritable`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.set_inheritable(fd, inheritable)
+
+
+@techdebt
+def strerror(code: int, /) -> str:
+    """Return the error message corresponding to the error code in `code`.
+
+    See Also
+    --------
+    * `os.strerror`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.strerror(code)
 
 
 @techdebt
