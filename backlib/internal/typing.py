@@ -1,12 +1,21 @@
 import sys
 
-from typing import TypeVar
+from abc import abstractmethod
+from typing import Protocol, TypeVar
 
 
-__all__: list[str] = ["AnyStr", "ParamSpec", "Self", "TypeAlias"]
+__all__: list[str] = ["AnyStr", "Buffer", "ParamSpec", "Self", "TypeAlias"]
 
 
 AnyStr = TypeVar("AnyStr", str, bytes)
+
+
+class Buffer(Protocol):
+    """An object that provides the `__buffer__` method."""
+
+    @abstractmethod
+    def __buffer__(self, flags: int, /) -> memoryview:
+        """Request the buffer from an object."""
 
 
 if sys.version_info >= (3, 10):

@@ -23,7 +23,9 @@ from backlib.internal.stdlib.py313.os import (
     name,
     pardir,
     pathsep,
+    read,
     sep,
+    write,
 )
 
 
@@ -52,5 +54,7 @@ __all__: list[str] = [
     "name",
     "pardir",
     "pathsep",
+    "read",
     "sep",
+    "write",
 ]

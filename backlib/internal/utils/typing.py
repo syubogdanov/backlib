@@ -1,13 +1,24 @@
 from typing import Protocol, TypeVar
 
-from backlib.internal.typing import Self
+from backlib.internal.typing import Buffer, Self, TypeAlias
 
 
-__all__: list[str] = ["SupportsRead", "SupportsWrite"]
+__all__: list[str] = [
+    "ReadOnlyBuffer",
+    "ReadableBuffer",
+    "SupportsRead",
+    "SupportsWrite",
+    "WriteableBuffer",
+]
 
 
 T_co = TypeVar("T_co", covariant=True)
 T_contra = TypeVar("T_contra", contravariant=True)
+
+
+ReadableBuffer: TypeAlias = Buffer
+ReadOnlyBuffer: TypeAlias = Buffer
+WriteableBuffer: TypeAlias = Buffer
 
 
 class SupportsRead(Protocol[T_co]):

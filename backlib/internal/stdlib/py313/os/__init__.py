@@ -23,7 +23,9 @@ from backlib.internal.stdlib.py313.os.src import (
     name,
     pardir,
     pathsep,
+    read,
     sep,
+    write,
 )
 
 
@@ -52,5 +54,13 @@ __all__: list[str] = [
     "name",
     "pardir",
     "pathsep",
+    "read",
     "sep",
+    "write",
 ]
+
+__backlib__: str = "backlib.py313.os"
+
+
+read.__module__ = __backlib__
+write.__module__ = __backlib__

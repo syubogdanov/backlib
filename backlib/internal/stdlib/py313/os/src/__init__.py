@@ -7,6 +7,7 @@ from typing import Final
 from backlib.internal.typing import TypeAlias
 from backlib.internal.utils.lint import techdebt
 from backlib.internal.utils.sys import is_nt, is_posix
+from backlib.internal.utils.typing import ReadableBuffer
 
 
 __all__: list[str] = [
@@ -34,7 +35,9 @@ __all__: list[str] = [
     "name",
     "pardir",
     "pathsep",
+    "read",
     "sep",
+    "write",
 ]
 
 
@@ -79,3 +82,41 @@ O_RDONLY: Final[int] = techdebt(py_os.O_RDONLY)
 O_RDWR: Final[int] = techdebt(py_os.O_RDWR)
 O_TRUNC: Final[int] = techdebt(py_os.O_TRUNC)
 O_WRONLY: Final[int] = techdebt(py_os.O_WRONLY)
+
+
+@techdebt
+def read(fd: int, length: int, /) -> bytes:
+    """Read at most `length` bytes from file descriptor `fd`.
+
+    See Also
+    --------
+    * `os.read`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.read(fd, length)
+
+
+@techdebt
+def write(fd: int, data: ReadableBuffer, /) -> int:
+    """Write the bytestring in `data` to file descriptor `fd`.
+
+    See Also
+    --------
+    * `os.write`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.write(fd, data)
