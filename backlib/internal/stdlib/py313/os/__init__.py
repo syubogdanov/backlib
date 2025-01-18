@@ -13,6 +13,7 @@ from backlib.internal.stdlib.py313.os.src import (
     SEEK_SET,
     W_OK,
     X_OK,
+    PathLike,
     altsep,
     close,
     closerange,
@@ -25,7 +26,9 @@ from backlib.internal.stdlib.py313.os.src import (
     get_inheritable,
     getcwd,
     getcwdb,
+    isatty,
     linesep,
+    lseek,
     name,
     pardir,
     pathsep,
@@ -52,6 +55,7 @@ __all__: list[str] = [
     "SEEK_SET",
     "W_OK",
     "X_OK",
+    "PathLike",
     "altsep",
     "close",
     "closerange",
@@ -64,7 +68,9 @@ __all__: list[str] = [
     "get_inheritable",
     "getcwd",
     "getcwdb",
+    "isatty",
     "linesep",
+    "lseek",
     "name",
     "pardir",
     "pathsep",
@@ -78,12 +84,16 @@ __all__: list[str] = [
 __backlib__: str = "backlib.py313.os"
 
 
+PathLike.__module__ = __backlib__
+
 close.__module__ = __backlib__
 closerange.__module__ = __backlib__
 ftruncate.__module__ = __backlib__
 get_inheritable.__module__ = __backlib__
 getcwd.__module__ = __backlib__
 getcwdb.__module__ = __backlib__
+isatty.__module__ = __backlib__
+lseek.__module__ = __backlib__
 read.__module__ = __backlib__
 set_inheritable.__module__ = __backlib__
 strerror.__module__ = __backlib__

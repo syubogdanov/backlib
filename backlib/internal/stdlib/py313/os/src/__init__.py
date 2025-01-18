@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import os as py_os
 
+from abc import ABC, abstractmethod
 from contextlib import suppress
-from typing import Final
+from typing import Final, Generic, TypeVar
 
-from backlib.internal.typing import TypeAlias
+from backlib.internal.typing import Self, TypeAlias
 from backlib.internal.utils.lint import techdebt
 from backlib.internal.utils.sys import is_nt, is_posix
 from backlib.internal.utils.typing import ReadableBuffer
@@ -38,7 +39,9 @@ __all__: list[str] = [
     "get_inheritable",
     "getcwd",
     "getcwdb",
+    "isatty",
     "linesep",
+    "lseek",
     "name",
     "pardir",
     "pathsep",
@@ -52,6 +55,9 @@ __all__: list[str] = [
 if not is_nt() and not is_posix():
     detail = "no os specific module found"
     raise ImportError(detail)
+
+
+AnyStr_co = TypeVar("AnyStr_co", bytes, str, covariant=True)
 
 
 error: TypeAlias = OSError
@@ -90,6 +96,57 @@ O_RDONLY: Final[int] = techdebt(py_os.O_RDONLY)
 O_RDWR: Final[int] = techdebt(py_os.O_RDWR)
 O_TRUNC: Final[int] = techdebt(py_os.O_TRUNC)
 O_WRONLY: Final[int] = techdebt(py_os.O_WRONLY)
+
+
+class PathLike(ABC, Generic[AnyStr_co]):
+    """An abstract base class for objects representing a file system path.
+
+    See Also
+    --------
+    * `os.PathLike`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+
+    __slots__: tuple[str, ...] = ()
+
+    @abstractmethod
+    def __fspath__(self: Self) -> AnyStr_co:
+        """Return the file system path representation of the object.
+
+        See Also
+        --------
+        * `os.PathLike.__fspath__`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+
+    @classmethod
+    def __subclasshook__(cls: type[Self], subclass: type) -> bool:
+        """Check if subclasses implement the `__fspath__` method.
+
+        See Also
+        --------
+        * `os.PathLike.__subclasshook__`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        if cls is not PathLike:
+            return NotImplemented
+
+        if not hasattr(subclass, "__fspath__"):
+            return NotImplemented
+
+        if not callable(subclass.__fspath__):
+            return NotImplemented
+
+        return True
 
 
 @techdebt
@@ -201,6 +258,44 @@ def getcwdb() -> bytes:
     * This function is not a real backport.
     """
     return py_os.getcwdb()  # noqa: PTH109
+
+
+@techdebt
+def isatty(fd: int, /) -> bool:
+    """Check if the file descriptor `fd` is open and connected to a tty(-like) device.
+
+    See Also
+    --------
+    * `os.isatty`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.isatty(fd)
+
+
+@techdebt
+def lseek(fd: int, position: int, whence: int, /) -> int:
+    """Set the current position of file descriptor `fd` to position `pos`, modified by `whence`.
+
+    See Also
+    --------
+    * `os.lseek`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.lseek(fd, position, whence)
 
 
 @techdebt
