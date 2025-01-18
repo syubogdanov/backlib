@@ -34,6 +34,10 @@ __all__: list[str] = [
     "devnull",
     "error",
     "extsep",
+    "ftruncate",
+    "get_inheritable",
+    "getcwd",
+    "getcwdb",
     "linesep",
     "name",
     "pardir",
@@ -124,6 +128,25 @@ def closerange(fd_low: int, fd_high: int, /) -> None:
 
 
 @techdebt
+def ftruncate(fd: int, length: int, /) -> None:
+    """Truncate the file corresponding to file descriptor `fd`.
+
+    See Also
+    --------
+    * `os.ftruncate`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.ftruncate(fd, length)
+
+
+@techdebt
 def get_inheritable(fd: int, /) -> bool:
     """Get the 'inheritable' flag of the specified file descriptor (a boolean).
 
@@ -140,6 +163,44 @@ def get_inheritable(fd: int, /) -> bool:
     * This function is not a real backport.
     """
     return py_os.get_inheritable(fd)
+
+
+@techdebt
+def getcwd() -> str:
+    """Return a string representing the current working directory.
+
+    See Also
+    --------
+    * `os.getcwd`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.getcwd()  # noqa: PTH109
+
+
+@techdebt
+def getcwdb() -> bytes:
+    """Return a bytestring representing the current working directory.
+
+    See Also
+    --------
+    * `os.getcwdb`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.getcwdb()  # noqa: PTH109
 
 
 @techdebt
