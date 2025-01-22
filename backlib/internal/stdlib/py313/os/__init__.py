@@ -22,6 +22,9 @@ from backlib.internal.stdlib.py313.os.src import (
     devnull,
     error,
     extsep,
+    fsdecode,
+    fsencode,
+    fspath,
     ftruncate,
     get_inheritable,
     getcwd,
@@ -64,6 +67,9 @@ __all__: list[str] = [
     "devnull",
     "error",
     "extsep",
+    "fsdecode",
+    "fsencode",
+    "fspath",
     "ftruncate",
     "get_inheritable",
     "getcwd",
@@ -88,6 +94,9 @@ PathLike.__module__ = __backlib__
 
 close.__module__ = __backlib__
 closerange.__module__ = __backlib__
+fsdecode.__module__ = __backlib__
+fsencode.__module__ = __backlib__
+fspath.__module__ = __backlib__
 ftruncate.__module__ = __backlib__
 get_inheritable.__module__ = __backlib__
 getcwd.__module__ = __backlib__

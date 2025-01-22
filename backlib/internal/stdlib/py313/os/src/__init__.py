@@ -4,9 +4,10 @@ import os as py_os
 
 from abc import ABC, abstractmethod
 from contextlib import suppress
+from sys import getfilesystemencodeerrors, getfilesystemencoding
 from typing import Final, Generic, TypeVar
 
-from backlib.internal.typing import Self, TypeAlias
+from backlib.internal.typing import AnyStr, Self, TypeAlias
 from backlib.internal.utils.lint import techdebt
 from backlib.internal.utils.sys import is_nt, is_posix
 from backlib.internal.utils.typing import ReadableBuffer
@@ -372,3 +373,66 @@ def write(fd: int, data: ReadableBuffer, /) -> int:
     * This function is not a real backport.
     """
     return py_os.write(fd, data)
+
+
+@techdebt
+def fspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Return the file system representation of the path.
+
+    See Also
+    --------
+    * `os.fspath`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.fspath(path)
+
+
+def fsencode(filename: AnyStr | PathLike[AnyStr]) -> bytes:
+    """Encode path-like `filename` to the filesystem encoding and error handler.
+
+    See Also
+    --------
+    * `os.fsencode`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    filename = fspath(filename)
+
+    if isinstance(filename, bytes):
+        return filename
+
+    encoding = getfilesystemencoding()
+    errors = getfilesystemencodeerrors()
+
+    return filename.encode(encoding, errors)
+
+
+def fsdecode(filename: AnyStr | PathLike[AnyStr]) -> str:
+    """Decode the path-like `filename` from the filesystem encoding and error handler.
+
+    See Also
+    --------
+    * `os.fsdecode`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    filename = fspath(filename)
+
+    if isinstance(filename, str):
+        return filename
+
+    encoding = getfilesystemencoding()
+    errors = getfilesystemencodeerrors()
+
+    return filename.decode(encoding, errors)
