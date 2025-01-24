@@ -5,11 +5,11 @@ import os as py_os
 from abc import ABC, abstractmethod
 from contextlib import suppress
 from sys import getfilesystemencodeerrors, getfilesystemencoding
-from typing import Final, Generic, TypeVar
+from typing import Final, Generic, NamedTuple, TypeVar
 
 from backlib.internal.typing import AnyStr, Self, TypeAlias
 from backlib.internal.utils.lint import techdebt
-from backlib.internal.utils.sys import is_nt, is_posix
+from backlib.internal.utils.sys import STDOUT_FILENO, is_nt, is_posix
 from backlib.internal.utils.typing import ReadableBuffer
 
 
@@ -28,7 +28,9 @@ __all__: list[str] = [
     "SEEK_SET",
     "W_OK",
     "X_OK",
+    "access",
     "altsep",
+    "chdir",
     "close",
     "closerange",
     "curdir",
@@ -38,10 +40,13 @@ __all__: list[str] = [
     "extsep",
     "ftruncate",
     "get_inheritable",
+    "get_terminal_size",
     "getcwd",
     "getcwdb",
     "isatty",
     "linesep",
+    "link",
+    "link",
     "lseek",
     "name",
     "pardir",
@@ -49,6 +54,7 @@ __all__: list[str] = [
     "read",
     "sep",
     "strerror",
+    "terminal_size",
     "write",
 ]
 
@@ -97,6 +103,22 @@ O_RDONLY: Final[int] = techdebt(py_os.O_RDONLY)
 O_RDWR: Final[int] = techdebt(py_os.O_RDWR)
 O_TRUNC: Final[int] = techdebt(py_os.O_TRUNC)
 O_WRONLY: Final[int] = techdebt(py_os.O_WRONLY)
+
+
+class terminal_size(NamedTuple):  # noqa: N801
+    """A subclass of tuple, holding `(columns, lines)` of the terminal window size.
+
+    See Also
+    --------
+    * `os.terminal_size`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+
+    columns: int
+    lines: int
 
 
 class PathLike(ABC, Generic[AnyStr_co]):
@@ -148,6 +170,57 @@ class PathLike(ABC, Generic[AnyStr_co]):
             return NotImplemented
 
         return True
+
+
+@techdebt
+def access(
+    path: int | AnyStr | PathLike[AnyStr],
+    mode: int,
+    *,
+    dir_fd: int | None = None,
+    effective_ids: bool = False,
+    follow_symlinks: bool = True,
+) -> bool:
+    """Use the real uid/gid to test for access to `path`.
+
+    See Also
+    --------
+    * `os.access`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.access(
+        path=path,
+        mode=mode,
+        dir_fd=dir_fd,
+        effective_ids=effective_ids,
+        follow_symlinks=follow_symlinks,
+    )
+
+
+@techdebt
+def chdir(path: int | AnyStr | PathLike[AnyStr]) -> None:
+    """Change the current working directory to path.
+
+    See Also
+    --------
+    * `os.chdir`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.chdir(path)
 
 
 @techdebt
@@ -224,6 +297,26 @@ def get_inheritable(fd: int, /) -> bool:
 
 
 @techdebt
+def get_terminal_size(fd: int = STDOUT_FILENO, /) -> terminal_size:
+    """Return the size of the terminal window as `(columns, lines)`.
+
+    See Also
+    --------
+    * `os.get_terminal_size`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    py_terminal_size = py_os.get_terminal_size(fd)
+    return terminal_size(*py_terminal_size)
+
+
+@techdebt
 def getcwd() -> str:
     """Return a string representing the current working directory.
 
@@ -281,6 +374,38 @@ def isatty(fd: int, /) -> bool:
 
 
 @techdebt
+def link(
+    src: AnyStr | PathLike[AnyStr],
+    dst: AnyStr | PathLike[AnyStr],
+    *,
+    src_dir_fd: int | None = None,
+    dst_dir_fd: int | None = None,
+    follow_symlinks: bool = True,
+) -> None:
+    """Create a hard link pointing to `src` named `dst`.
+
+    See Also
+    --------
+    * `os.link`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.link(
+        src=src,
+        dst=dst,
+        src_dir_fd=src_dir_fd,
+        dst_dir_fd=dst_dir_fd,
+        follow_symlinks=follow_symlinks,
+    )
+
+
+@techdebt
 def lseek(fd: int, position: int, whence: int, /) -> int:
     """Set the current position of file descriptor `fd` to position `pos`, modified by `whence`.
 
@@ -300,6 +425,25 @@ def lseek(fd: int, position: int, whence: int, /) -> int:
 
 
 @techdebt
+def mkdir(path: AnyStr | PathLike[AnyStr], mode: int = 0o777, *, dir_fd: int | None = None) -> None:
+    """Create a directory named `path` with numeric mode `mode`.
+
+    See Also
+    --------
+    * `os.mkdir`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.mkdir(path, mode, dir_fd=dir_fd)  # noqa: PTH102
+
+
+@techdebt
 def read(fd: int, length: int, /) -> bytes:
     """Read at most `length` bytes from file descriptor `fd`.
 
@@ -316,6 +460,25 @@ def read(fd: int, length: int, /) -> bytes:
     * This function is not a real backport.
     """
     return py_os.read(fd, length)
+
+
+@techdebt
+def readlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> AnyStr:
+    """Return a string representing the path to which the symbolic link points.
+
+    See Also
+    --------
+    * `os.readlink`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.readlink(path, dir_fd=dir_fd)  # noqa: PTH115
 
 
 @techdebt
