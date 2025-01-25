@@ -44,9 +44,11 @@ from backlib.internal.stdlib.py313.os import (
     readlink,
     rename,
     replace,
+    rmdir,
     sep,
     set_inheritable,
     strerror,
+    symlink,
     terminal_size,
     write,
 )
@@ -98,9 +100,11 @@ __all__: list[str] = [
     "readlink",
     "rename",
     "replace",
+    "rmdir",
     "sep",
     "set_inheritable",
     "strerror",
+    "symlink",
     "terminal_size",
     "write",
 ]

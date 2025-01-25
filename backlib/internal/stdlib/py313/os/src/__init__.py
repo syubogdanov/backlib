@@ -59,9 +59,11 @@ __all__: list[str] = [
     "readlink",
     "rename",
     "replace",
+    "rmdir",
     "sep",
     "set_inheritable",
     "strerror",
+    "symlink",
     "terminal_size",
     "write",
 ]
@@ -266,6 +268,69 @@ def closerange(fd_low: int, fd_high: int, /) -> None:
             close(fd)
 
 
+def fsdecode(filename: AnyStr | PathLike[AnyStr]) -> str:
+    """Decode the path-like `filename` from the filesystem encoding and error handler.
+
+    See Also
+    --------
+    * `os.fsdecode`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    filename = fspath(filename)
+
+    if isinstance(filename, str):
+        return filename
+
+    encoding = getfilesystemencoding()
+    errors = getfilesystemencodeerrors()
+
+    return filename.decode(encoding, errors)
+
+
+def fsencode(filename: AnyStr | PathLike[AnyStr]) -> bytes:
+    """Encode path-like `filename` to the filesystem encoding and error handler.
+
+    See Also
+    --------
+    * `os.fsencode`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    filename = fspath(filename)
+
+    if isinstance(filename, bytes):
+        return filename
+
+    encoding = getfilesystemencoding()
+    errors = getfilesystemencodeerrors()
+
+    return filename.encode(encoding, errors)
+
+
+@techdebt
+def fspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Return the file system representation of the path.
+
+    See Also
+    --------
+    * `os.fspath`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.fspath(path)
+
+
 @techdebt
 def ftruncate(fd: int, length: int, /) -> None:
     """Truncate the file corresponding to file descriptor `fd`.
@@ -280,7 +345,7 @@ def ftruncate(fd: int, length: int, /) -> None:
 
     Technical Debt
     --------------
-    * This function is only available on UNIX;
+    * This function is available on UNIX, not POSIX;
     * This function is not a real backport.
     """
     return py_os.ftruncate(fd, length)
@@ -319,7 +384,7 @@ def get_terminal_size(fd: int = STDOUT_FILENO, /) -> terminal_size:
 
     Technical Debt
     --------------
-    * This function is only available on UNIX;
+    * This function is available on UNIX, not POSIX;
     * This function is not a real backport.
     """
     py_terminal_size = py_os.get_terminal_size(fd)
@@ -404,7 +469,7 @@ def link(
 
     Technical Debt
     --------------
-    * This function is only available on UNIX;
+    * This function is available on UNIX, not POSIX;
     * This function is not a real backport.
     """
     return py_os.link(
@@ -487,7 +552,7 @@ def readlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> A
 
     Technical Debt
     --------------
-    * This function is only available on UNIX;
+    * This function is available on UNIX, not POSIX;
     * This function is not a real backport.
     """
     return py_os.readlink(path, dir_fd=dir_fd)  # noqa: PTH115
@@ -526,7 +591,7 @@ def replace(
     src_dir_fd: int | None = None,
     dst_dir_fd: int | None = None,
 ) -> None:
-    """Rename the file or directory src to dst.
+    """Rename the file or directory `src` to `dst`.
 
     See Also
     --------
@@ -541,6 +606,25 @@ def replace(
     * This function is not a real backport.
     """
     return py_os.replace(src, dst, src_dir_fd=src_dir_fd, dst_dir_fd=dst_dir_fd)  # noqa: PTH105
+
+
+@techdebt
+def rmdir(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> None:
+    """Remove (delete) the directory `path`.
+
+    See Also
+    --------
+    * `os.rmdir`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.rmdir(path, dir_fd=dir_fd)  # noqa: PTH106
 
 
 @techdebt
@@ -560,6 +644,32 @@ def set_inheritable(fd: int, inheritable: bool, /) -> None:  # noqa: FBT001
     * This function is not a real backport.
     """
     return py_os.set_inheritable(fd, inheritable)
+
+
+@techdebt
+def symlink(
+    src: AnyStr | PathLike[AnyStr],
+    dst: AnyStr | PathLike[AnyStr],
+    target_is_directory: bool = False,  # noqa: FBT001, FBT002
+    *,
+    dir_fd: int | None = None,
+) -> None:
+    """Create a symbolic link pointing to `src` named `dst`.
+
+    See Also
+    --------
+    * `os.symlink`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is available on UNIX, not POSIX;
+    * This funciton is not a real backport.
+    """
+    return py_os.symlink(src, dst, target_is_directory, dir_fd=dir_fd)
 
 
 @techdebt
@@ -598,66 +708,3 @@ def write(fd: int, data: ReadableBuffer, /) -> int:
     * This function is not a real backport.
     """
     return py_os.write(fd, data)
-
-
-@techdebt
-def fspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
-    """Return the file system representation of the path.
-
-    See Also
-    --------
-    * `os.fspath`.
-
-    Version
-    -------
-    * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
-    """
-    return py_os.fspath(path)
-
-
-def fsencode(filename: AnyStr | PathLike[AnyStr]) -> bytes:
-    """Encode path-like `filename` to the filesystem encoding and error handler.
-
-    See Also
-    --------
-    * `os.fsencode`.
-
-    Version
-    -------
-    * Python 3.13.
-    """
-    filename = fspath(filename)
-
-    if isinstance(filename, bytes):
-        return filename
-
-    encoding = getfilesystemencoding()
-    errors = getfilesystemencodeerrors()
-
-    return filename.encode(encoding, errors)
-
-
-def fsdecode(filename: AnyStr | PathLike[AnyStr]) -> str:
-    """Decode the path-like `filename` from the filesystem encoding and error handler.
-
-    See Also
-    --------
-    * `os.fsdecode`.
-
-    Version
-    -------
-    * Python 3.13.
-    """
-    filename = fspath(filename)
-
-    if isinstance(filename, str):
-        return filename
-
-    encoding = getfilesystemencoding()
-    errors = getfilesystemencodeerrors()
-
-    return filename.decode(encoding, errors)

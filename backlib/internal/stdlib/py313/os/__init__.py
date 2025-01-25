@@ -44,9 +44,11 @@ from backlib.internal.stdlib.py313.os.src import (
     readlink,
     rename,
     replace,
+    rmdir,
     sep,
     set_inheritable,
     strerror,
+    symlink,
     terminal_size,
     write,
 )
@@ -98,9 +100,11 @@ __all__: list[str] = [
     "readlink",
     "rename",
     "replace",
+    "rmdir",
     "sep",
     "set_inheritable",
     "strerror",
+    "symlink",
     "terminal_size",
     "write",
 ]
@@ -132,6 +136,8 @@ read.__module__ = __backlib__
 readlink.__module__ = __backlib__
 rename.__module__ = __backlib__
 replace.__module__ = __backlib__
+rmdir.__module__ = __backlib__
 set_inheritable.__module__ = __backlib__
 strerror.__module__ = __backlib__
+symlink.__module__ = __backlib__
 write.__module__ = __backlib__
