@@ -117,6 +117,7 @@ O_TRUNC: Final[int] = techdebt(py_os.O_TRUNC)
 O_WRONLY: Final[int] = techdebt(py_os.O_WRONLY)
 
 
+@techdebt
 class terminal_size(NamedTuple):  # noqa: N801
     """A subclass of tuple, holding `(columns, lines)` of the terminal window size.
 
@@ -127,6 +128,10 @@ class terminal_size(NamedTuple):  # noqa: N801
     Version
     -------
     * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This class is a `NamedTuple`, not `structeq[int]`
     """
 
     columns: int
