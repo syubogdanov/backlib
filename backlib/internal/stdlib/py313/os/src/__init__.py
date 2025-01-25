@@ -42,6 +42,7 @@ __all__: list[str] = [
     "fsdecode",
     "fsencode",
     "fspath",
+    "fstat",
     "ftruncate",
     "get_inheritable",
     "get_terminal_size",
@@ -51,6 +52,7 @@ __all__: list[str] = [
     "linesep",
     "link",
     "lseek",
+    "lstat",
     "mkdir",
     "name",
     "open",
@@ -63,6 +65,8 @@ __all__: list[str] = [
     "rmdir",
     "sep",
     "set_inheritable",
+    "stat",
+    "stat_result",
     "strerror",
     "symlink",
     "terminal_size",
@@ -118,6 +122,65 @@ O_WRONLY: Final[int] = techdebt(py_os.O_WRONLY)
 
 
 @techdebt
+class stat_result(NamedTuple):  # noqa: N801
+    """Object whose attributes correspond roughly to the members of the `stat` structure.
+
+    See Also
+    --------
+    * `os.stat_result`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * All the attributes should have docstrings;
+    * This class is a `NamedTuple`, not `structeq[float]`.
+    """
+
+    st_mode: int
+    st_ino: int
+    st_dev: int
+    st_nlink: int
+    st_uid: int
+    st_gid: int
+    st_size: int
+
+    st_atime: float
+    st_mtime: float
+    st_ctime: float
+
+    st_atime_ns: int
+    st_mtime_ns: int
+    st_ctime_ns: int
+
+    st_birthtime: float
+    st_birthtime_ns: int
+
+    # Unix
+    st_blocks: int
+    st_blksize: int
+    st_rdev: int
+    st_flags: int
+
+    # FreeBSD
+    st_gen: int
+
+    # Solaris
+    st_fstype: str
+
+    # macOS
+    st_rsize: int
+    st_creator: int
+    st_type: int
+
+    # Windows
+    st_file_attributes: int
+    st_reparse_tag: int
+
+
+@techdebt
 class terminal_size(NamedTuple):  # noqa: N801
     """A subclass of tuple, holding `(columns, lines)` of the terminal window size.
 
@@ -131,7 +194,8 @@ class terminal_size(NamedTuple):  # noqa: N801
 
     Technical Debt
     --------------
-    * This class is a `NamedTuple`, not `structeq[int]`
+    * All the attributes should have docstrings;
+    * This class is a `NamedTuple`, not `structeq[int]`.
     """
 
     columns: int
@@ -338,6 +402,20 @@ def fspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return py_os.fspath(path)
 
 
+def fstat(fd: int) -> stat_result:
+    """Get the status of the file descriptor `fd`.
+
+    See Also
+    --------
+    * `os.fstat`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    return stat(fd)
+
+
 @techdebt
 def ftruncate(fd: int, length: int, /) -> None:
     """Truncate the file corresponding to file descriptor `fd`.
@@ -352,7 +430,7 @@ def ftruncate(fd: int, length: int, /) -> None:
 
     Technical Debt
     --------------
-    * This function is available on UNIX, not POSIX;
+    * This function is available on Unix, not POSIX;
     * This function is not a real backport.
     """
     return py_os.ftruncate(fd, length)
@@ -391,7 +469,7 @@ def get_terminal_size(fd: int = STDOUT_FILENO, /) -> terminal_size:
 
     Technical Debt
     --------------
-    * This function is available on UNIX, not POSIX;
+    * This function is available on Unix, not POSIX;
     * This function is not a real backport.
     """
     py_terminal_size = py_os.get_terminal_size(fd)
@@ -476,7 +554,7 @@ def link(
 
     Technical Debt
     --------------
-    * This function is available on UNIX, not POSIX;
+    * This function is available on Unix, not POSIX;
     * This function is not a real backport.
     """
     return py_os.link(
@@ -505,6 +583,20 @@ def lseek(fd: int, position: int, whence: int, /) -> int:
     * This function is not a real backport.
     """
     return py_os.lseek(fd, position, whence)
+
+
+def lstat(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> stat_result:
+    """Perform the equivalent of an `lstat()` system call on the given path.
+
+    See Also
+    --------
+    * `os.lstat`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    return stat(path, dir_fd=dir_fd, follow_symlinks=False)
 
 
 @techdebt
@@ -584,7 +676,7 @@ def readlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> A
 
     Technical Debt
     --------------
-    * This function is available on UNIX, not POSIX;
+    * This function is available on Unix, not POSIX;
     * This function is not a real backport.
     """
     return py_os.readlink(path, dir_fd=dir_fd)  # noqa: PTH115
@@ -679,6 +771,98 @@ def set_inheritable(fd: int, inheritable: bool, /) -> None:  # noqa: FBT001
 
 
 @techdebt
+def stat(
+    path: int | AnyStr | PathLike[AnyStr],
+    *,
+    dir_fd: int | None = None,
+    follow_symlinks: bool = True,
+) -> stat_result:
+    """Get the status of a file or a file descriptor.
+
+    Notes
+    -----
+    * If `st_birthtime` is not available, then `st_ctime` is set;
+    * If `st_birthtime_ns` is not available, then `st_ctime_ns` is set;
+    * If `st_blocks` is not available, then `st_size / 512` is set;
+    * If `st_blksize` is not available, then `512` is set;
+    * If `st_rdev` is not available, then `...` is set;
+    * If `st_flags` is not available, then `...` is set;
+    * If `st_gen` is not available, then `...` is set;
+    * If `st_fstype` is not available, then `...` is set;
+    * If `st_rsize` is not available, then `st_size` is set;
+    * If `st_creator` is not available, then `...` is set;
+    * If `st_type` is not available, then `...` is set;
+    * If `st_file_attributes` is not available, then `...` is set;
+    * If `st_reparse_tag` is not available, then `...` is set.
+
+    See Also
+    --------
+    * `os.stat`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    py_stat_result = py_os.stat(path, dir_fd=dir_fd, follow_symlinks=follow_symlinks)  # noqa: PTH116
+
+    default_st_birthtime = py_stat_result.st_ctime
+    default_st_birthtime_ns = py_stat_result.st_ctime_ns
+
+    default_st_blocks = py_stat_result.st_size / 512
+    default_st_blksize = 512  # bytes
+    default_st_rdev = ...
+    default_st_flags = ...
+
+    default_st_gen = ...
+
+    default_st_fstype = ...
+
+    default_st_rsize = py_stat_result.st_size
+    default_st_creator = ...
+    default_st_type = ...
+
+    default_st_file_attributes = ...
+    default_st_reparse_tag = ...
+
+    return stat_result(
+        st_mode=py_stat_result.st_mode,
+        st_ino=py_stat_result.st_ino,
+        st_dev=py_stat_result.st_dev,
+        st_nlink=py_stat_result.st_nlink,
+        st_uid=py_stat_result.st_uid,
+        st_gid=py_stat_result.st_gid,
+        st_size=py_stat_result.st_size,
+        st_atime=py_stat_result.st_atime,
+        st_mtime=py_stat_result.st_mtime,
+        st_ctime=py_stat_result.st_ctime,
+        st_atime_ns=py_stat_result.st_atime_ns,
+        st_mtime_ns=py_stat_result.st_mtime_ns,
+        st_ctime_ns=py_stat_result.st_ctime_ns,
+        st_birthtime=getattr(py_stat_result, "st_birthtime", default_st_birthtime),
+        st_birthtime_ns=getattr(py_stat_result, "st_birthtime_ns", default_st_birthtime_ns),
+        st_blocks=getattr(py_stat_result, "st_blocks", default_st_blocks),
+        st_blksize=getattr(py_stat_result, "st_blksize", default_st_blksize),
+        st_rdev=getattr(py_stat_result, "st_rdev", default_st_rdev),
+        st_flags=getattr(py_stat_result, "st_flags", default_st_flags),
+        st_gen=getattr(py_stat_result, "st_gen", default_st_gen),
+        st_fstype=getattr(py_stat_result, "st_fstype", default_st_fstype),
+        st_rsize=getattr(py_stat_result, "st_rsize", default_st_rsize),
+        st_creator=getattr(py_stat_result, "st_creator", default_st_creator),
+        st_type=getattr(py_stat_result, "st_type", default_st_type),
+        st_file_attributes=getattr(
+            py_stat_result,
+            "st_file_attributes",
+            default_st_file_attributes,
+        ),
+        st_reparse_tag=getattr(py_stat_result, "st_reparse_tag", default_st_reparse_tag),
+    )
+
+
+@techdebt
 def symlink(
     src: AnyStr | PathLike[AnyStr],
     dst: AnyStr | PathLike[AnyStr],
@@ -698,7 +882,7 @@ def symlink(
 
     Technical Debt
     --------------
-    * This function is available on UNIX, not POSIX;
+    * This function is available on Unix, not POSIX;
     * This funciton is not a real backport.
     """
     return py_os.symlink(src, dst, target_is_directory, dir_fd=dir_fd)

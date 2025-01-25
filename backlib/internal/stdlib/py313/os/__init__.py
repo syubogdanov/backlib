@@ -27,6 +27,7 @@ from backlib.internal.stdlib.py313.os.src import (
     fsdecode,
     fsencode,
     fspath,
+    fstat,
     ftruncate,
     get_inheritable,
     get_terminal_size,
@@ -36,6 +37,7 @@ from backlib.internal.stdlib.py313.os.src import (
     linesep,
     link,
     lseek,
+    lstat,
     mkdir,
     name,
     open,  # noqa: A004
@@ -48,6 +50,8 @@ from backlib.internal.stdlib.py313.os.src import (
     rmdir,
     sep,
     set_inheritable,
+    stat,
+    stat_result,
     strerror,
     symlink,
     terminal_size,
@@ -85,6 +89,7 @@ __all__: list[str] = [
     "fsdecode",
     "fsencode",
     "fspath",
+    "fstat",
     "ftruncate",
     "get_inheritable",
     "get_terminal_size",
@@ -94,6 +99,7 @@ __all__: list[str] = [
     "linesep",
     "link",
     "lseek",
+    "lstat",
     "mkdir",
     "name",
     "open",
@@ -106,6 +112,8 @@ __all__: list[str] = [
     "rmdir",
     "sep",
     "set_inheritable",
+    "stat",
+    "stat_result",
     "strerror",
     "symlink",
     "terminal_size",
@@ -118,6 +126,7 @@ __backlib__: str = "backlib.py313.os"
 
 PathLike.__module__ = __backlib__
 
+stat_result.__module__ = __backlib__
 terminal_size.__module__ = __backlib__
 
 access.__module__ = __backlib__
@@ -127,6 +136,7 @@ closerange.__module__ = __backlib__
 fsdecode.__module__ = __backlib__
 fsencode.__module__ = __backlib__
 fspath.__module__ = __backlib__
+fstat.__module__ = __backlib__
 ftruncate.__module__ = __backlib__
 get_inheritable.__module__ = __backlib__
 get_terminal_size.__module__ = __backlib__
@@ -135,6 +145,7 @@ getcwdb.__module__ = __backlib__
 isatty.__module__ = __backlib__
 link.__module__ = __backlib__
 lseek.__module__ = __backlib__
+lstat.__module__ = __backlib__
 mkdir.__module__ = __backlib__
 open.__module__ = __backlib__
 read.__module__ = __backlib__
@@ -143,6 +154,7 @@ rename.__module__ = __backlib__
 replace.__module__ = __backlib__
 rmdir.__module__ = __backlib__
 set_inheritable.__module__ = __backlib__
+stat.__module__ = __backlib__
 strerror.__module__ = __backlib__
 symlink.__module__ = __backlib__
 unlink.__module__ = __backlib__

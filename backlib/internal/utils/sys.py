@@ -32,7 +32,7 @@ def is_posix() -> bool:
 @cache
 @techdebt
 def is_unix() -> bool:
-    """Check if the platform is `UNIX`.
+    """Check if the platform is `Unix`.
 
     Tecnical Debt
     -------------
