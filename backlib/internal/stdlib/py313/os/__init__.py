@@ -38,6 +38,7 @@ from backlib.internal.stdlib.py313.os.src import (
     lseek,
     mkdir,
     name,
+    open,  # noqa: A004
     pardir,
     pathsep,
     read,
@@ -50,6 +51,7 @@ from backlib.internal.stdlib.py313.os.src import (
     strerror,
     symlink,
     terminal_size,
+    unlink,
     write,
 )
 
@@ -94,6 +96,7 @@ __all__: list[str] = [
     "lseek",
     "mkdir",
     "name",
+    "open",
     "pardir",
     "pathsep",
     "read",
@@ -106,6 +109,7 @@ __all__: list[str] = [
     "strerror",
     "symlink",
     "terminal_size",
+    "unlink",
     "write",
 ]
 
@@ -132,6 +136,7 @@ isatty.__module__ = __backlib__
 link.__module__ = __backlib__
 lseek.__module__ = __backlib__
 mkdir.__module__ = __backlib__
+open.__module__ = __backlib__
 read.__module__ = __backlib__
 readlink.__module__ = __backlib__
 rename.__module__ = __backlib__
@@ -140,4 +145,5 @@ rmdir.__module__ = __backlib__
 set_inheritable.__module__ = __backlib__
 strerror.__module__ = __backlib__
 symlink.__module__ = __backlib__
+unlink.__module__ = __backlib__
 write.__module__ = __backlib__

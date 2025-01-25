@@ -53,6 +53,7 @@ __all__: list[str] = [
     "lseek",
     "mkdir",
     "name",
+    "open",
     "pardir",
     "pathsep",
     "read",
@@ -65,6 +66,7 @@ __all__: list[str] = [
     "strerror",
     "symlink",
     "terminal_size",
+    "unlink",
     "write",
 ]
 
@@ -520,6 +522,31 @@ def mkdir(path: AnyStr | PathLike[AnyStr], mode: int = 0o777, *, dir_fd: int | N
 
 
 @techdebt
+def open(  # noqa: A001
+    path: AnyStr | PathLike[AnyStr],
+    flags: int,
+    mode: int = 0o777,
+    *,
+    dir_fd: int | None = None,
+) -> int:
+    """Open the file `path` and set various `flags` and possibly its `mode`.
+
+    See Also
+    --------
+    * `os.open`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.open(path, flags, mode, dir_fd=dir_fd)
+
+
+@techdebt
 def read(fd: int, length: int, /) -> bytes:
     """Read at most `length` bytes from file descriptor `fd`.
 
@@ -689,6 +716,25 @@ def strerror(code: int, /) -> str:
     * This function is not a real backport.
     """
     return py_os.strerror(code)
+
+
+@techdebt
+def unlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> None:
+    """Remove (delete) the file path.
+
+    See Also
+    --------
+    * `os.unlink`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.unlink(path, dir_fd=dir_fd)  # noqa: PTH108
 
 
 @techdebt

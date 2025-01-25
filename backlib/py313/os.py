@@ -38,6 +38,7 @@ from backlib.internal.stdlib.py313.os import (
     lseek,
     mkdir,
     name,
+    open,  # noqa: A004
     pardir,
     pathsep,
     read,
@@ -50,6 +51,7 @@ from backlib.internal.stdlib.py313.os import (
     strerror,
     symlink,
     terminal_size,
+    unlink,
     write,
 )
 
@@ -94,6 +96,7 @@ __all__: list[str] = [
     "lseek",
     "mkdir",
     "name",
+    "open",
     "pardir",
     "pathsep",
     "read",
@@ -106,5 +109,6 @@ __all__: list[str] = [
     "strerror",
     "symlink",
     "terminal_size",
+    "unlink",
     "write",
 ]
