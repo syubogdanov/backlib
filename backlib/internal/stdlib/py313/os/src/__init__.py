@@ -71,7 +71,7 @@ __all__: list[str] = [
 ]
 
 
-if not is_nt() and not is_unix():
+if not is_nt() and not techdebt(is_unix()):
     detail = "no os specific module found"
     raise ImportError(detail)
 
