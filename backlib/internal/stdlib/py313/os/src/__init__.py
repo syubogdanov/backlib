@@ -813,7 +813,7 @@ def stat(
     default_st_birthtime_ns = py_stat_result.st_ctime_ns
 
     default_st_blocks = py_stat_result.st_size / 512
-    default_st_blksize = 512  # bytes
+    default_st_blksize = 512
     default_st_rdev = ...
     default_st_flags = ...
 
