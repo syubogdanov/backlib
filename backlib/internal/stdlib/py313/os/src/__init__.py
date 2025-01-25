@@ -9,7 +9,7 @@ from typing import Final, Generic, NamedTuple, TypeVar
 
 from backlib.internal.typing import AnyStr, Self, TypeAlias
 from backlib.internal.utils.lint import techdebt
-from backlib.internal.utils.sys import STDOUT_FILENO, is_nt, is_posix
+from backlib.internal.utils.sys import STDOUT_FILENO, is_nt, is_posix, is_unix
 from backlib.internal.utils.typing import ReadableBuffer
 
 
@@ -28,6 +28,7 @@ __all__: list[str] = [
     "SEEK_SET",
     "W_OK",
     "X_OK",
+    "PathLike",
     "access",
     "altsep",
     "chdir",
@@ -38,6 +39,9 @@ __all__: list[str] = [
     "devnull",
     "error",
     "extsep",
+    "fsdecode",
+    "fsencode",
+    "fspath",
     "ftruncate",
     "get_inheritable",
     "get_terminal_size",
@@ -46,20 +50,24 @@ __all__: list[str] = [
     "isatty",
     "linesep",
     "link",
-    "link",
     "lseek",
+    "mkdir",
     "name",
     "pardir",
     "pathsep",
     "read",
+    "readlink",
+    "rename",
+    "replace",
     "sep",
+    "set_inheritable",
     "strerror",
     "terminal_size",
     "write",
 ]
 
 
-if not is_nt() and not is_posix():
+if not is_nt() and not is_unix():
     detail = "no os specific module found"
     raise ImportError(detail)
 
@@ -272,6 +280,7 @@ def ftruncate(fd: int, length: int, /) -> None:
 
     Technical Debt
     --------------
+    * This function is only available on UNIX;
     * This function is not a real backport.
     """
     return py_os.ftruncate(fd, length)
@@ -310,6 +319,7 @@ def get_terminal_size(fd: int = STDOUT_FILENO, /) -> terminal_size:
 
     Technical Debt
     --------------
+    * This function is only available on UNIX;
     * This function is not a real backport.
     """
     py_terminal_size = py_os.get_terminal_size(fd)
@@ -394,6 +404,7 @@ def link(
 
     Technical Debt
     --------------
+    * This function is only available on UNIX;
     * This function is not a real backport.
     """
     return py_os.link(
@@ -476,9 +487,60 @@ def readlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> A
 
     Technical Debt
     --------------
+    * This function is only available on UNIX;
     * This function is not a real backport.
     """
     return py_os.readlink(path, dir_fd=dir_fd)  # noqa: PTH115
+
+
+@techdebt
+def rename(
+    src: AnyStr | PathLike[AnyStr],
+    dst: AnyStr | PathLike[AnyStr],
+    *,
+    src_dir_fd: int | None = None,
+    dst_dir_fd: int | None = None,
+) -> None:
+    """Rename the file or directory `src` to `dst`.
+
+    See Also
+    --------
+    * `os.rename`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.rename(src, dst, src_dir_fd=src_dir_fd, dst_dir_fd=dst_dir_fd)  # noqa: PTH104
+
+
+@techdebt
+def replace(
+    src: AnyStr | PathLike[AnyStr],
+    dst: AnyStr | PathLike[AnyStr],
+    *,
+    src_dir_fd: int | None = None,
+    dst_dir_fd: int | None = None,
+) -> None:
+    """Rename the file or directory src to dst.
+
+    See Also
+    --------
+    * `os.replace`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function is not a real backport.
+    """
+    return py_os.replace(src, dst, src_dir_fd=src_dir_fd, dst_dir_fd=dst_dir_fd)  # noqa: PTH105
 
 
 @techdebt

@@ -42,6 +42,8 @@ from backlib.internal.stdlib.py313.os.src import (
     pathsep,
     read,
     readlink,
+    rename,
+    replace,
     sep,
     set_inheritable,
     strerror,
@@ -94,6 +96,8 @@ __all__: list[str] = [
     "pathsep",
     "read",
     "readlink",
+    "rename",
+    "replace",
     "sep",
     "set_inheritable",
     "strerror",
@@ -126,6 +130,8 @@ lseek.__module__ = __backlib__
 mkdir.__module__ = __backlib__
 read.__module__ = __backlib__
 readlink.__module__ = __backlib__
+rename.__module__ = __backlib__
+replace.__module__ = __backlib__
 set_inheritable.__module__ = __backlib__
 strerror.__module__ = __backlib__
 write.__module__ = __backlib__
