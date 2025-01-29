@@ -810,23 +810,43 @@ def stat(
     py_stat_result = py_os.stat(path, dir_fd=dir_fd, follow_symlinks=follow_symlinks)  # noqa: PTH116
 
     default_st_birthtime = py_stat_result.st_ctime
+    st_birthtime = getattr(py_stat_result, "st_birthtime", default_st_birthtime)
+
     default_st_birthtime_ns = py_stat_result.st_ctime_ns
+    st_birthtime_ns = getattr(py_stat_result, "st_birthtime_ns", default_st_birthtime_ns)
 
     default_st_blocks = py_stat_result.st_size / 512
+    st_blocks = getattr(py_stat_result, "st_blocks", default_st_blocks)
+
     default_st_blksize = 512
+    st_blksize = getattr(py_stat_result, "st_blksize", default_st_blksize)
+
     default_st_rdev = ...
+    st_rdev = getattr(py_stat_result, "st_rdev", default_st_rdev)
+
     default_st_flags = ...
+    st_flags = getattr(py_stat_result, "st_flags", default_st_flags)
 
     default_st_gen = ...
+    st_gen = getattr(py_stat_result, "st_gen", default_st_gen)
 
     default_st_fstype = ...
+    st_fstype = getattr(py_stat_result, "st_fstype", default_st_fstype)
 
     default_st_rsize = py_stat_result.st_size
+    st_rsize = getattr(py_stat_result, "st_rsize", default_st_rsize)
+
     default_st_creator = ...
+    st_creator = getattr(py_stat_result, "st_creator", default_st_creator)
+
     default_st_type = ...
+    st_type = getattr(py_stat_result, "st_type", default_st_type)
 
     default_st_file_attributes = ...
+    st_file_attributes = getattr(py_stat_result, "st_file_attributes", default_st_file_attributes)
+
     default_st_reparse_tag = ...
+    st_reparse_tag = getattr(py_stat_result, "st_reparse_tag", default_st_reparse_tag)
 
     return stat_result(
         st_mode=py_stat_result.st_mode,
@@ -842,23 +862,19 @@ def stat(
         st_atime_ns=py_stat_result.st_atime_ns,
         st_mtime_ns=py_stat_result.st_mtime_ns,
         st_ctime_ns=py_stat_result.st_ctime_ns,
-        st_birthtime=getattr(py_stat_result, "st_birthtime", default_st_birthtime),
-        st_birthtime_ns=getattr(py_stat_result, "st_birthtime_ns", default_st_birthtime_ns),
-        st_blocks=getattr(py_stat_result, "st_blocks", default_st_blocks),
-        st_blksize=getattr(py_stat_result, "st_blksize", default_st_blksize),
-        st_rdev=getattr(py_stat_result, "st_rdev", default_st_rdev),
-        st_flags=getattr(py_stat_result, "st_flags", default_st_flags),
-        st_gen=getattr(py_stat_result, "st_gen", default_st_gen),
-        st_fstype=getattr(py_stat_result, "st_fstype", default_st_fstype),
-        st_rsize=getattr(py_stat_result, "st_rsize", default_st_rsize),
-        st_creator=getattr(py_stat_result, "st_creator", default_st_creator),
-        st_type=getattr(py_stat_result, "st_type", default_st_type),
-        st_file_attributes=getattr(
-            py_stat_result,
-            "st_file_attributes",
-            default_st_file_attributes,
-        ),
-        st_reparse_tag=getattr(py_stat_result, "st_reparse_tag", default_st_reparse_tag),
+        st_birthtime=st_birthtime,
+        st_birthtime_ns=st_birthtime_ns,
+        st_blocks=st_blocks,
+        st_blksize=st_blksize,
+        st_rdev=st_rdev,
+        st_flags=st_flags,
+        st_gen=st_gen,
+        st_fstype=st_fstype,
+        st_rsize=st_rsize,
+        st_creator=st_creator,
+        st_type=st_type,
+        st_file_attributes=st_file_attributes,
+        st_reparse_tag=st_reparse_tag,
     )
 
 
