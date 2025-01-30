@@ -28,6 +28,8 @@ pip install backlib
 
 #### io [SOON]
 
+For more, see the [documentation][github/docs/io].
+
 ```python
 from backlib.py313 import io
 
@@ -35,6 +37,8 @@ from backlib.py313 import io
 ```
 
 #### json
+
+For more, see the [documentation][github/docs/json].
 
 ```python
 from backlib.py313 import json
@@ -46,21 +50,29 @@ assert data == {"backlib": "pypi"}
 
 #### ntpath [SOON]
 
+For more, see the [documentation][github/docs/ntpath].
+
 ```python
 from backlib.py313 import ntpath
 
 ...
 ```
 
-#### os [SOON]
+#### os [UNRELEASED]
+
+For more, see the [documentation][github/docs/os].
 
 ```python
 from backlib.py313 import os
 
-...
+st = os.stat("./pyproject.toml")
+
+assert st.st_birthtime_ns > 0
 ```
 
 #### os.path [SOON]
+
+For more, see the [documentation][github/docs/os.path].
 
 ```python
 from backlib.py313 import ospath
@@ -70,6 +82,8 @@ from backlib.py313 import ospath
 
 #### pathlib [SOON]
 
+For more, see the [documentation][github/docs/pathlib].
+
 ```python
 from backlib.py313 import pathlib
 
@@ -77,6 +91,8 @@ from backlib.py313 import pathlib
 ```
 
 #### posixpath [SOON]
+
+For more, see the [documentation][github/docs/posixpath].
 
 ```python
 from backlib.py313 import posixpath
@@ -86,6 +102,8 @@ from backlib.py313 import posixpath
 
 #### shutil [SOON]
 
+For more, see the [documentation][github/docs/shutil].
+
 ```python
 from backlib.py313 import shutil
 
@@ -93,6 +111,8 @@ from backlib.py313 import shutil
 ```
 
 #### stat
+
+For more, see the [documentation][github/docs/stat].
 
 ```python
 from backlib.py313 import stat
@@ -102,6 +122,8 @@ assert stat.SF_SYNTHETIC == 0xC0000000
 
 #### tarfile [SOON]
 
+For more, see the [documentation][github/docs/tarfile].
+
 ```python
 from backlib.py313 import tarfile
 
@@ -109,6 +131,8 @@ from backlib.py313 import tarfile
 ```
 
 #### tomllib
+
+For more, see the [documentation][github/docs/tomllib].
 
 ```python
 from backlib.py313 import tomllib
@@ -120,17 +144,13 @@ assert data == {"backlib": "pypi"}
 
 #### zipfile [SOON]
 
+For more, see the [documentation][github/docs/zipfile].
+
 ```python
 from backlib.py313 import zipfile
 
 ...
 ```
-
-## Documentation
-
-The `backlib` API is the same as the standard library, so you can refer to the official documentation:
-
-* [Python 3.13][docs/3.13]
 
 ## License
 
@@ -138,8 +158,18 @@ MIT License, Copyright (c) 2025 Sergei Bogdanov. See [LICENSE][github/license] f
 
 <!-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- -->
 
-[docs/3.13]: https://docs.python.org/3.13/library/index.html
-
+[github/docs/io]: https://github.com/syubogdanov/backlib/tree/main/docs/io.md
+[github/docs/json]: https://github.com/syubogdanov/backlib/tree/main/docs/json.md
+[github/docs/ntpath]: https://github.com/syubogdanov/backlib/tree/main/docs/ntpath.md
+[github/docs/os]: https://github.com/syubogdanov/backlib/tree/main/docs/os.md
+[github/docs/os.path]: https://github.com/syubogdanov/backlib/tree/main/docs/os.path.md
+[github/docs/pathlib]: https://github.com/syubogdanov/backlib/tree/main/docs/pathlib.md
+[github/docs/posixpath]: https://github.com/syubogdanov/backlib/tree/main/docs/posixpath.md
+[github/docs/shutil]: https://github.com/syubogdanov/backlib/tree/main/docs/shutil.md
+[github/docs/stat]: https://github.com/syubogdanov/backlib/tree/main/docs/stat.md
+[github/docs/tarfile]: https://github.com/syubogdanov/backlib/tree/main/docs/tarfile.md
+[github/docs/tomllib]: https://github.com/syubogdanov/backlib/tree/main/docs/tomllib.md
+[github/docs/zipfile]: https://github.com/syubogdanov/backlib/tree/main/docs/zipfile.md
 [github/license]: https://github.com/syubogdanov/backlib/tree/main/LICENSE
 
 [pypi/homepage]: https://pypi.org/project/backlib/
