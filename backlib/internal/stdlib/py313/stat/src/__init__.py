@@ -1,6 +1,6 @@
 from typing import Final
 
-from backlib.internal.utils.lint import techdebt
+from backlib.internal.linters.decorators import techdebt
 
 
 __all__: list[str] = [
@@ -373,7 +373,6 @@ def S_ISWHT(mode: int) -> bool:  # noqa: ARG001
     return False
 
 
-techdebt("[=] This table looks sloppy")
 _filemode_table = (
     # File type chars according to:
     # http://en.wikibooks.org/wiki/C_Programming/POSIX_Reference/sys/stat.h

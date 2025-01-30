@@ -7,8 +7,8 @@ from contextlib import suppress
 from sys import getfilesystemencodeerrors, getfilesystemencoding
 from typing import Final, Generic, NamedTuple, TypeVar
 
+from backlib.internal.linters.decorators import techdebt
 from backlib.internal.typing import AnyStr, Self, TypeAlias
-from backlib.internal.utils.lint import techdebt
 from backlib.internal.utils.sys import STDOUT_FILENO, is_nt, is_posix, is_unix
 from backlib.internal.utils.typing import ReadableBuffer
 
