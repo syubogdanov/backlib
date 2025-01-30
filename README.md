@@ -58,7 +58,7 @@ from backlib.py313 import ntpath
 ...
 ```
 
-#### os [UNRELEASED]
+#### os [SOON]
 
 For more, see the [documentation][github/docs/os].
 
