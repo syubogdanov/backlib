@@ -3,7 +3,16 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Final, Literal
 
 from backlib.internal.linters.decorators import techdebt
-from backlib.internal.stdlib.py313.os import PathLike, fspath, fstat, lstat, stat, stat_result
+from backlib.internal.stdlib.py313.os import (
+    PathLike,
+    fsdecode,
+    fsencode,
+    fspath,
+    fstat,
+    lstat,
+    stat,
+    stat_result,
+)
 from backlib.internal.stdlib.py313.stat import IO_REPARSE_TAG_MOUNT_POINT, S_ISDIR, S_ISLNK, S_ISREG
 from backlib.internal.typing import AnyStr
 
@@ -331,3 +340,27 @@ def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:  # noqa: ARG001
     * The functionality has been reduced.
     """
     return False
+
+
+@techdebt
+def normcase(s: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Normalize the case of a pathname.
+
+    See Also
+    --------
+    * `ntpath.normcase`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The functionality has been reduced.
+    """
+    s = fspath(s)
+
+    if not isinstance(s, bytes):
+        return s.replace("/", "\\").lower()
+
+    return fsencode(fsdecode(s).replace("/", "\\").lower())

@@ -317,3 +317,17 @@ def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:  # noqa: ARG001
     * Python 3.13.
     """
     return False
+
+
+def normcase(s: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Normalize the case of a pathname.
+
+    See Also
+    --------
+    * `posixpath.normcase`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    return fspath(s)
