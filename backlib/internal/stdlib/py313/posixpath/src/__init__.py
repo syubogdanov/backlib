@@ -287,3 +287,33 @@ def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:
     """
     path = fspath(path)
     return False
+
+
+def isabs(s: AnyStr | PathLike[AnyStr]) -> bool:
+    """Return `True` if `path` is an absolute pathname.
+
+    See Also
+    --------
+    * `posixpath.isabs`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    s = fspath(s)
+    sep = b"/" if isinstance(s, bytes) else "/"
+    return s.startswith(sep)
+
+
+def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:  # noqa: ARG001
+    """Return `True` if pathname `path` is located on a Windows Dev Drive.
+
+    See Also
+    --------
+    * `posixpath.isdevdrive`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    return False

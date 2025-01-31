@@ -4,6 +4,7 @@ import os as py_os
 
 from abc import ABC, abstractmethod
 from contextlib import suppress
+from math import ceil
 from sys import getfilesystemencodeerrors, getfilesystemencoding
 from typing import Final, Generic, NamedTuple, TypeVar
 
@@ -809,7 +810,7 @@ def stat(
         st_ctime_ns=py_stat_result.st_ctime_ns,
         st_birthtime=getattr(py_stat_result, "st_birthtime", py_stat_result.st_ctime),
         st_birthtime_ns=getattr(py_stat_result, "st_birthtime_ns", py_stat_result.st_ctime_ns),
-        st_blocks=getattr(py_stat_result, "st_blocks", py_stat_result.st_size / 512),
+        st_blocks=getattr(py_stat_result, "st_blocks", ceil(py_stat_result.st_size / 512)),
         st_blksize=getattr(py_stat_result, "st_blksize", 512),
         st_rdev=getattr(py_stat_result, "st_rdev", 0),
         st_flags=getattr(py_stat_result, "st_flags", 0),

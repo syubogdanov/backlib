@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Final, Literal
 
-from backlib.internal.stdlib.py313.os import fspath, fstat, lstat, stat, stat_result
+from backlib.internal.linters.decorators import techdebt
+from backlib.internal.stdlib.py313.os import PathLike, fspath, fstat, lstat, stat, stat_result
 from backlib.internal.stdlib.py313.stat import IO_REPARSE_TAG_MOUNT_POINT, S_ISDIR, S_ISLNK, S_ISREG
 from backlib.internal.typing import AnyStr
 
@@ -288,3 +289,45 @@ def isjunction(path: AnyStr | PathLike[AnyStr]) -> bool:
     except (OSError, ValueError):
         return False
     return st.st_reparse_tag == IO_REPARSE_TAG_MOUNT_POINT
+
+
+@techdebt
+def isabs(s: AnyStr | PathLike[AnyStr]) -> bool:
+    """Return `True` if `path` is an absolute pathname.
+
+    See Also
+    --------
+    * `ntpath.isabs`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    s = fspath(s)
+
+    sep = b"\\" if isinstance(s, bytes) else "\\"
+    altsep = b"/" if isinstance(s, bytes) else "/"
+    colon_sep = b":\\" if isinstance(s, bytes) else ":\\"
+    double_sep = b"\\\\" if isinstance(s, bytes) else "\\\\"
+
+    prefix = s[:3].replace(altsep, sep)
+    return prefix.startswith(colon_sep, 1) or prefix.startswith(double_sep)
+
+
+@techdebt
+def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:  # noqa: ARG001
+    """Return `True` if pathname `path` is located on a Windows Dev Drive.
+
+    See Also
+    --------
+    * `ntpath.isdevdrive`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The functionality has been reduced.
+    """
+    return False
