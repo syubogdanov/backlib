@@ -305,7 +305,7 @@ def isabs(s: AnyStr | PathLike[AnyStr]) -> bool:
     return s.startswith(sep)
 
 
-def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:  # noqa: ARG001
+def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if pathname `path` is located on a Windows Dev Drive.
 
     See Also
@@ -316,6 +316,7 @@ def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:  # noqa: ARG001
     -------
     * Python 3.13.
     """
+    fspath(path)
     return False
 
 

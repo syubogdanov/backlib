@@ -324,7 +324,7 @@ def isabs(s: AnyStr | PathLike[AnyStr]) -> bool:
 
 
 @techdebt
-def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:  # noqa: ARG001
+def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if pathname `path` is located on a Windows Dev Drive.
 
     See Also
@@ -339,6 +339,7 @@ def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:  # noqa: ARG001
     --------------
     * The functionality has been reduced.
     """
+    fspath(path)
     return False
 
 
