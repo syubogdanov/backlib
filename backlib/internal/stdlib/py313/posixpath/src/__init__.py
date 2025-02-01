@@ -352,13 +352,8 @@ def splitext(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
     """
     p = fspath(p)
 
-    if isinstance(p, bytes):
-        sep = b"/"
-        extsep = b"."
-
-    else:
-        sep = "/"
-        extsep = "."
+    sep = b"/" if isinstance(p, bytes) else "/"
+    extsep = b"." if isinstance(p, bytes) else "."
 
     sep_index = p.rfind(sep)
     extsep_index = p.rfind(extsep)
@@ -491,3 +486,49 @@ def dirname(p: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """
     head, _ = split(p)
     return head
+
+
+def normpath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Normalize a pathname by collapsing redundant separators and up-level references.
+
+    See Also
+    --------
+    * `posixpath.normpath`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    path = fspath(path)
+
+    sep = b"/" if isinstance(path, bytes) else "/"
+    dot = b"." if isinstance(path, bytes) else "."
+    dotdot = b".." if isinstance(path, bytes) else ".."
+
+    if not path:
+        return dot
+
+    _, root, tail = splitroot(path)
+    components: list[AnyStr] = []
+
+    for component in tail.split(sep):
+        if not component or component == dot:
+            continue
+
+        if component != dotdot:
+            components.append(component)
+            continue
+
+        if not root and not components:
+            components.append(component)
+            continue
+
+        if components and components[-1] == dotdot:
+            components.append(component)
+            continue
+
+        if components:
+            components.pop()
+
+    path = root + sep.join(components)
+    return path or dot

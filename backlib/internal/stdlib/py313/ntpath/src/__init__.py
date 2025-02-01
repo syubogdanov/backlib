@@ -380,15 +380,9 @@ def splitext(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
     """
     p = fspath(p)
 
-    if isinstance(p, bytes):
-        sep = b"\\"
-        altsep = b"/"
-        extsep = b"."
-
-    else:
-        sep = "\\"
-        altsep = "/"
-        extsep = "."
+    sep = b"\\" if isinstance(p, bytes) else "\\"
+    altsep = b"/" if isinstance(p, bytes) else "/"
+    extsep = b"." if isinstance(p, bytes) else "."
 
     sep_index = max(p.rfind(sep), p.rfind(altsep))
     extsep_index = p.rfind(extsep)
@@ -405,3 +399,127 @@ def splitext(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
         return (p, p[:0])
 
     return (p[:extsep_index], p[extsep_index:])
+
+
+@techdebt
+def splitroot(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:  # noqa: PLR0911
+    """Split the pathname `path` into a 3-item tuple `(drive, root, tail)`.
+
+    See Also
+    --------
+    * `ntpath.splitroot`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The functionality has been reduced;
+    * This function should be refactored.
+    """
+    p = fspath(p)
+
+    sep = b"\\" if isinstance(p, bytes) else "\\"
+    altsep = b"/" if isinstance(p, bytes) else "/"
+    colon = b":" if isinstance(p, bytes) else ":"
+    double_sep = b"\\\\" if isinstance(p, bytes) else "\\\\"
+    unc_prefix = b"\\\\?\\UNC\\" if isinstance(p, bytes) else "\\\\?\\UNC\\"
+
+    normalized = p.replace(altsep, sep)
+
+    if normalized.startswith(double_sep):
+        start = 8 if normalized[:8].upper() == unc_prefix else 2
+        index = normalized.find(sep, start)
+
+        if index == -1:
+            return (p, p[:0], p[:0])
+
+        index2 = normalized.find(sep, index + 1)
+
+        if index2 == -1:
+            return (p, p[:0], p[:0])
+
+        return (p[:index2], p[index2:index2 + 1], p[index2 + 1:])
+
+    if normalized.startswith(sep):
+        return (p[:0], sep, p[1:])
+
+    if normalized[1:2] == colon:
+        if normalized[2:3] == sep:
+            return (p[:2], p[2:3], p[3:])
+        return (p[:2], p[:0], p[2:])
+
+    return (p[:0], p[:0], p)
+
+
+def splitdrive(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
+    """Split the pathname `path` into a pair `(drive, tail)`.
+
+    See Also
+    --------
+    * `ntpath.splitdrive`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    drive, root, tail = splitroot(p)
+    return (drive, root + tail)
+
+
+def split(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
+    """Split the pathname `path` into a pair `(head, tail)`.
+
+    See Also
+    --------
+    * `ntpath.split`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    p = fspath(p)
+
+    sep = b"\\" if isinstance(p, bytes) else "\\"
+    altsep = b"/" if isinstance(p, bytes) else "/"
+
+    drive, root, tail = splitroot(p)
+
+    sep_index = p.rfind(sep)
+    altsep_index = p.rfind(altsep)
+
+    index = max(sep_index + 1, altsep_index + 1)
+    head, tail = p[:index], p[index:]
+
+    return (drive + root + head.rstrip(sep + altsep), tail)
+
+
+def basename(p: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Return the base name of pathname path.
+
+    See Also
+    --------
+    * `ntpath.basename`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    _, tail = split(p)
+    return tail
+
+
+def dirname(p: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Return the directory name of pathname `path`.
+
+    See Also
+    --------
+    * `ntpath.dirname`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    head, _ = split(p)
+    return head
