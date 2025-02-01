@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Final, Literal
 
 from backlib.internal.stdlib.py313.os import fspath, fstat, lstat, stat, stat_result
 from backlib.internal.stdlib.py313.stat import S_ISDIR, S_ISLNK, S_ISREG
 from backlib.internal.typing import AnyStr
+from backlib.internal.utils.sys import is_darwin
 
 
 if TYPE_CHECKING:
@@ -49,6 +50,9 @@ __all__: list[str] = [
     "splitroot",
     "supports_unicode_filenames",
 ]
+
+
+supports_unicode_filenames: Final[bool] = is_darwin()
 
 
 def commonprefix(m: Sequence[AnyStr | PathLike[AnyStr]]) -> Literal[""] | AnyStr:
@@ -332,3 +336,56 @@ def normcase(s: AnyStr | PathLike[AnyStr]) -> AnyStr:
     * Python 3.13.
     """
     return fspath(s)
+
+
+def splitext(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
+    """Split the pathname `path` into a pair `(root, ext)`.
+
+    See Also
+    --------
+    * `posixpath.splitext`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    p = fspath(p)
+
+    if isinstance(p, bytes):
+        sep = b"/"
+        extsep = b"."
+
+    else:
+        sep = "/"
+        extsep = "."
+
+    sep_index = p.rfind(sep)
+    extsep_index = p.rfind(extsep)
+
+    if extsep_index <= sep_index:
+        return (p, p[:0])
+
+    starts_with_extseps = all(
+        p[index] == extsep
+        for index in range(sep_index + 1, extsep_index + 1)
+    )
+
+    if starts_with_extseps:
+        return (p, p[:0])
+
+    return (p[:extsep_index], p[extsep_index:])
+
+
+def isjunction(path: AnyStr | PathLike[AnyStr]) -> bool:
+    """Return `True` if `path` refers to an existing directory entry that is a junction.
+
+    See Also
+    --------
+    * `posixpath.isjunction`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    fspath(path)
+    return False

@@ -365,3 +365,43 @@ def normcase(s: AnyStr | PathLike[AnyStr]) -> AnyStr:
         return s.replace("/", "\\").lower()
 
     return fsencode(fsdecode(s).replace("/", "\\").lower())
+
+
+def splitext(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
+    """Split the pathname `path` into a pair `(root, ext)`.
+
+    See Also
+    --------
+    * `ntpath.splitext`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    p = fspath(p)
+
+    if isinstance(p, bytes):
+        sep = b"\\"
+        altsep = b"/"
+        extsep = b"."
+
+    else:
+        sep = "\\"
+        altsep = "/"
+        extsep = "."
+
+    sep_index = max(p.rfind(sep), p.rfind(altsep))
+    extsep_index = p.rfind(extsep)
+
+    if extsep_index <= sep_index:
+        return (p, p[:0])
+
+    starts_with_extseps = all(
+        p[index] == extsep
+        for index in range(sep_index + 1, extsep_index + 1)
+    )
+
+    if starts_with_extseps:
+        return (p, p[:0])
+
+    return (p[:extsep_index], p[extsep_index:])
