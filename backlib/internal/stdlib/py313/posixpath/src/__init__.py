@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Final, Literal
 
+from backlib.internal.linters.decorators import techdebt
 from backlib.internal.stdlib.py313.os import fspath, fstat, lstat, stat, stat_result
 from backlib.internal.stdlib.py313.stat import S_ISDIR, S_ISLNK, S_ISREG
 from backlib.internal.typing import AnyStr
@@ -289,7 +290,7 @@ def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:
     -------
     * Python 3.13.
     """
-    path = fspath(path)
+    fspath(path)
     return False
 
 
@@ -389,3 +390,104 @@ def isjunction(path: AnyStr | PathLike[AnyStr]) -> bool:
     """
     fspath(path)
     return False
+
+
+@techdebt
+def splitroot(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:
+    """Split the pathname `path` into a 3-item tuple `(drive, root, tail)`.
+
+    See Also
+    --------
+    * `posixpath.splitroot`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The functionality has been reduced.
+    """
+    p = fspath(p)
+
+    sep = b"/" if isinstance(p, bytes) else "/"
+
+    double_sep = sep * 2
+    triple_sep = sep * 3
+
+    if not p.startswith(sep):
+        return (p[:0], p[:0], p)
+
+    if not p.startswith(double_sep) or p.startswith(triple_sep):
+        return (p[:0], sep, p[1:])
+
+    return (p[:0], p[:2], p[2:])
+
+
+def splitdrive(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
+    """Split the pathname `path` into a pair `(drive, tail)`.
+
+    See Also
+    --------
+    * `posixpath.splitdrive`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    p = fspath(p)
+    return (p[:0], p)
+
+
+def split(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
+    """Split the pathname `path` into a pair `(head, tail)`.
+
+    See Also
+    --------
+    * `posixpath.split`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    p = fspath(p)
+
+    sep = b"/" if isinstance(p, bytes) else "/"
+    index = p.rfind(sep) + 1
+
+    head, tail = p[:index], p[index:]
+
+    if head and head != sep * len(head):
+        head = head.rstrip(sep)
+
+    return (head, tail)
+
+
+def basename(p: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Return the base name of pathname path.
+
+    See Also
+    --------
+    * `posixpath.basename`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    _, tail = split(p)
+    return tail
+
+
+def dirname(p: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Return the directory name of pathname `path`.
+
+    See Also
+    --------
+    * `posixpath.dirname`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    head, _ = split(p)
+    return head
