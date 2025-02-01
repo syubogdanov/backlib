@@ -284,7 +284,7 @@ def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:
 
     See Also
     --------
-    * `os.path.isreserved`.
+    * `posixpath.isreserved`.
 
     Version
     -------
