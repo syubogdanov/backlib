@@ -2,7 +2,7 @@ from functools import cache
 from sys import builtin_module_names, platform, stdout
 from typing import Final
 
-from backlib.internal.linters.decorators import techdebt
+from backlib.internal.markers.decorators import techdebt
 
 
 __all__: list[str] = ["STDOUT_FILENO", "is_darwin", "is_nt", "is_posix", "is_unix"]

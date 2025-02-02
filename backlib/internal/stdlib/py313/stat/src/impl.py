@@ -1,6 +1,6 @@
 from typing import Final
 
-from backlib.internal.linters.decorators import techdebt
+from backlib.internal.markers.decorators import techdebt
 
 
 __all__: list[str] = [
