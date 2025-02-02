@@ -714,21 +714,25 @@ def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr
     """
     path = abspath(path)
 
-    if not strict:
-        return path
+    target = path
+    seen = {target}
 
-    seen = {path}
-    st = stat(path)
+    try:
+        st = lstat(target)
 
-    while S_ISLNK(st.st_mode):
-        path = readlink(path)
-        path = abspath(path)
+        while S_ISLNK(st.st_mode):
+            target = readlink(target)
+            target = abspath(target)
 
-        if path in seen:
-            detail = "..."
-            raise OSError(detail)
+            if target in seen:
+                detail = "Symlink loop is encountered"
+                raise OSError(None, detail, path)
 
-        seen.add(path)
-        st = stat(path)
+            seen.add(target)
+            st = lstat(target)
 
-    return path
+    except OSError:
+        if strict:
+            raise
+
+    return target
