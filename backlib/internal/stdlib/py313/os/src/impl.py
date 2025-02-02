@@ -5,12 +5,12 @@ import os as py_os
 from abc import ABC, abstractmethod
 from contextlib import suppress
 from math import ceil
-from sys import getfilesystemencodeerrors, getfilesystemencoding
+from sys import getfilesystemencodeerrors, getfilesystemencoding, stdout
 from typing import Final, Generic, NamedTuple, TypeVar
 
 from backlib.internal.markers.decorators import techdebt
 from backlib.internal.typing import AnyStr, Self, TypeAlias
-from backlib.internal.utils.sys import STDOUT_FILENO, is_nt, is_posix, is_unix
+from backlib.internal.utils.sys import is_nt, is_posix, is_unix
 from backlib.internal.utils.typing import ReadableBuffer
 
 
@@ -457,7 +457,7 @@ def get_inheritable(fd: int, /) -> bool:
 
 
 @techdebt
-def get_terminal_size(fd: int = STDOUT_FILENO, /) -> terminal_size:
+def get_terminal_size(fd: int | None = None, /) -> terminal_size:
     """Return the size of the terminal window as `(columns, lines)`.
 
     See Also
@@ -473,6 +473,9 @@ def get_terminal_size(fd: int = STDOUT_FILENO, /) -> terminal_size:
     * This function is available on Unix, not POSIX;
     * This function is not a real backport.
     """
+    if fd is None:
+        fd = stdout.fileno()
+
     py_terminal_size = py_os.get_terminal_size(fd)
     return terminal_size(*py_terminal_size)
 
