@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Final, Literal
 
 from backlib.internal.linters.decorators import techdebt
 from backlib.internal.stdlib.py313.os import fspath, fstat, lstat, stat, stat_result
+from backlib.internal.stdlib.py313.posixpath.src.utils import check_arg_types
 from backlib.internal.stdlib.py313.stat import S_ISDIR, S_ISLNK, S_ISREG
 from backlib.internal.typing import AnyStr
 from backlib.internal.utils.sys import is_darwin

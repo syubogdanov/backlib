@@ -3,13 +3,17 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Final, Literal
 
 from backlib.internal.linters.decorators import techdebt
+from backlib.internal.stdlib.py313.ntpath.src.utils import check_arg_types
 from backlib.internal.stdlib.py313.os import (
     PathLike,
     fsdecode,
     fsencode,
     fspath,
     fstat,
+    getcwd,
+    getcwdb,
     lstat,
+    readlink,
     stat,
     stat_result,
 )
@@ -523,3 +527,208 @@ def dirname(p: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """
     head, _ = split(p)
     return head
+
+
+@techdebt
+def join(path: AnyStr | PathLike[AnyStr], *paths: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Join one or more path segments intelligently.
+
+    See Also
+    --------
+    * `ntpath.join`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * This function should be refactored.
+    """
+    path = fspath(path)
+
+    sep = b"\\" if isinstance(path, bytes) else "\\"
+    seps = b"\\/" if isinstance(path, bytes) else "\\/"
+    colon_seps = b":\\/" if isinstance(path, bytes) else ":\\/"
+
+    try:
+        result_drive, result_root, result_path = splitroot(path)
+
+        for p in paths:
+            p_drive, p_root, p_path = splitroot(p)
+            if p_root:
+                # Second path is absolute
+                if p_drive or not result_drive:
+                    result_drive = p_drive
+                result_root = p_root
+                result_path = p_path
+                continue
+            if p_drive and p_drive != result_drive:
+                if p_drive.lower() != result_drive.lower():
+                    # Different drives => ignore the first path entirely
+                    result_drive = p_drive
+                    result_root = p_root
+                    result_path = p_path
+                    continue
+                # Same drive in different case
+                result_drive = p_drive
+            # Second path is relative to the first
+            if result_path and result_path[-1] not in seps:
+                result_path = result_path + sep
+            result_path = result_path + p_path
+        ## add separator between UNC and non-absolute path
+        if (result_path and not result_root and
+            result_drive and result_drive[-1] not in colon_seps):
+            return result_drive + sep + result_path
+        return result_drive + result_root + result_path
+
+    except (TypeError, AttributeError, BytesWarning):
+        check_arg_types("join", path, *paths)
+        raise
+
+
+@techdebt
+def normpath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Normalize a pathname by collapsing redundant separators and up-level references.
+
+    See Also
+    --------
+    * `ntpath.normpath`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The functionality has been reduced;
+    * This function should be refactored.
+    """
+    path = fspath(path)
+
+    sep = b"\\" if isinstance(path, bytes) else "\\"
+    altsep = b"/" if isinstance(path, bytes) else "/"
+    curdir = b"." if isinstance(path, bytes) else "."
+    pardir = b".." if isinstance(path, bytes) else ".."
+
+    path = path.replace(altsep, sep)
+    drive, root, path = splitroot(path)
+    prefix = drive + root
+    components = path.split(sep)
+
+    index = 0
+
+    while index < len(components):
+        if not components[index] or components[index] == curdir:
+            del components[index]
+            continue
+
+        if components[index] != pardir:
+            index += 1
+            continue
+
+        if index > 0 and components[index - 1] != pardir:
+            del components[index - 1 : index + 1]
+            index -= 1
+            continue
+
+        if index == 0 and root:
+            del components[index]
+            continue
+
+        index += 1
+
+    if not prefix and not components:
+        return curdir
+
+    return prefix + sep.join(components)
+
+
+@techdebt
+def abspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Return a normalized absolutized version of the pathname `path`.
+
+    See Also
+    --------
+    * `ntpath.abspath`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The functionality has been reduced.
+    """
+    path = fspath(path)
+
+    if isabs(path):
+        return normpath(path)
+
+    cwd = getcwdb() if isinstance(path, bytes) else getcwd()
+    path = join(cwd, path)
+
+    return normpath(path)
+
+
+@techdebt
+def ismount(path: AnyStr | PathLike[AnyStr]) -> bool:
+    """Return `True` if pathname `path` is a mount point.
+
+    See Also
+    --------
+    * `ntpath.ismount`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The functionality has been reduced.
+    """
+    path = fspath(path)
+
+    sep = b"\\" if isinstance(path, bytes) else "\\"
+    altsep = b"/" if isinstance(path, bytes) else "/"
+
+    path = abspath(path)
+    drive, root, tail = splitroot(path)
+
+    if drive.startswith((sep, altsep)):
+        return not tail
+
+    return bool(root and not tail)
+
+
+def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr:
+    """Return the canonical path of the specified filename.
+
+    See Also
+    --------
+    * `ntpath.realpath`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    path = abspath(path)
+
+    if not strict:
+        return path
+
+    seen = {path}
+    st = stat(path)
+
+    while S_ISLNK(st.st_mode):
+        path = readlink(path)
+        path = abspath(path)
+
+        if path in seen:
+            detail = "..."
+            raise OSError(detail)
+
+        seen.add(path)
+        st = stat(path)
+
+    return path
