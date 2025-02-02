@@ -1,4 +1,4 @@
-from backlib.internal.stdlib.py313.ntpath.src import (
+from backlib.internal.stdlib.py313.ntpath.src.impl import (
     abspath,
     basename,
     commonpath,

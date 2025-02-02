@@ -1,4 +1,4 @@
-from backlib.internal.stdlib.py313.posixpath.src import (
+from backlib.internal.stdlib.py313.posixpath.src.impl import (
     abspath,
     basename,
     commonpath,

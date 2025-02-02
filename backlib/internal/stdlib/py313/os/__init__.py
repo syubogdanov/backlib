@@ -1,4 +1,4 @@
-from backlib.internal.stdlib.py313.os.src import (
+from backlib.internal.stdlib.py313.os.src.impl import (
     F_OK,
     O_APPEND,
     O_CREAT,
