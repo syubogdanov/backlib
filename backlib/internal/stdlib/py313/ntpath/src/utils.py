@@ -1,5 +1,10 @@
 from typing import Any
 
+from backlib.internal.stdlib.py313.ntpath.src.constants import RESERVED_CHARS, RESERVED_NAMES
+
+
+__all___: list[str] = ["check_arg_types", "is_reserved_name"]
+
 
 def check_arg_types(funcname: str, *args: Any) -> None:  # noqa: ANN401
     """Check the types of the arguments to a function."""
@@ -23,3 +28,17 @@ def check_arg_types(funcname: str, *args: Any) -> None:  # noqa: ANN401
     if has_str and has_bytes:
         detail = "Can't mix strings and bytes in path components"
         raise TypeError(detail)
+
+
+def is_reserved_name(name: str) -> bool:
+    """Return `True` if `name` is reserved by the system."""
+    if name.endswith((".", " ")):
+        return name not in (".", "..")
+
+    if RESERVED_CHARS.intersection(name):
+        return True
+
+    prefix, _, _ = name.partition(".")
+    prefix = prefix.rstrip(" ").upper()
+
+    return prefix in RESERVED_NAMES

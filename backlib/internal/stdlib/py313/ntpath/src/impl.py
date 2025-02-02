@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Final, Literal
 
 from backlib.internal.markers.decorators import techdebt
-from backlib.internal.stdlib.py313.ntpath.src.utils import check_arg_types
+from backlib.internal.stdlib.py313.ntpath.src.utils import check_arg_types, is_reserved_name
 from backlib.internal.stdlib.py313.os import (
     PathLike,
     fsdecode,
@@ -726,7 +726,7 @@ def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr
 
             if target in seen:
                 detail = "Symlink loop is encountered"
-                raise OSError(None, detail, path)
+                raise OSError(None, detail, path)  # noqa: TRY301
 
             seen.add(target)
             st = lstat(target)
@@ -736,3 +736,78 @@ def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr
             raise
 
     return target
+
+
+def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:
+    """Return `True` if `path` is a reserved pathname on the current system.
+
+    See Also
+    --------
+    * `ntpath.isreserved`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    _, _, relative_to_root = splitroot(path)
+
+    sep = "\\"
+    altsep = "/"
+
+    tail = fsdecode(relative_to_root)
+    tail = tail.replace(altsep, sep)
+
+    return any(is_reserved_name(name) for name in tail.split(sep))
+
+
+def relpath(
+    path: AnyStr | PathLike[AnyStr],
+    start: AnyStr | PathLike[AnyStr] | None = None,
+) -> AnyStr:
+    """Return a relative filepath to `path`.
+
+    See Also
+    --------
+    * `ntpath.relpath`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    if not (path := fspath(path)):
+        detail = "no path specified"
+        raise ValueError(detail)
+
+    sep = b"\\" if isinstance(path, bytes) else "\\"
+    curdir = b"." if isinstance(path, bytes) else "."
+    pardir = b".." if isinstance(path, bytes) else ".."
+
+    start = curdir if start is None else fspath(start)
+
+    try:
+        absolute_start = abspath(start)
+        absolute_path = abspath(path)
+
+        start_drive, _, start_tail = splitroot(absolute_start)
+        path_drive, _, path_tail = splitroot(absolute_path)
+
+        if normcase(start_drive) != normcase(path_drive):
+            detail = f"path is on mount {path_drive!r}, start on mount {start_drive!r}"
+            raise ValueError(detail)  # noqa: TRY301
+
+        start_components = start_tail.split(sep) if start_tail else []
+        path_components = path_tail.split(sep) if path_tail else []
+
+        count = 0
+
+        for start_component, path_component in zip(start_components, path_components):
+            if normcase(start_component) != normcase(path_component):
+                break
+            count += 1
+
+        components = [pardir] * (len(start_components) - count) + path_components[count:]
+        return sep.join(components) if components else curdir
+
+    except (TypeError, ValueError, AttributeError, BytesWarning, DeprecationWarning):
+        check_arg_types("relpath", path, start)
+        raise

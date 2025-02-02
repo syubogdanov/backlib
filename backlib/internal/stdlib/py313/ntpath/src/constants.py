@@ -1,0 +1,13 @@
+__all__: list[str] = ["RESERVED_CHARS", "RESERVED_NAMES"]
+
+
+ASCII_CONTROL_CHARS = {chr(code) for code in range(32)}
+VISIBLE_RESERVED_CHARS = {'"', "*", ":", "<", ">", "?", "|", "/", "\\"}
+
+DOS_RESERVED_NAMES = {"CON", "PRN", "AUX", "NUL", "CONIN$", "CONOUT$"}
+
+COM_RESERVED_NAMES = {f"COM{char}" for char in "123456789\xb9\xb2\xb3"}
+LPT_RESERVED_NAMES = {f"LPT{char}" for char in "123456789\xb9\xb2\xb3"}
+
+RESERVED_CHARS = ASCII_CONTROL_CHARS | VISIBLE_RESERVED_CHARS
+RESERVED_NAMES = DOS_RESERVED_NAMES | COM_RESERVED_NAMES | LPT_RESERVED_NAMES
