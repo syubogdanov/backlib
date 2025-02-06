@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+from string import ascii_letters, digits
 from typing import TYPE_CHECKING, Final, Literal
 
 from backlib.internal.markers import techdebt
 from backlib.internal.stdlib.py313.ntpath.src.utils import check_arg_types, is_reserved_name
 from backlib.internal.stdlib.py313.os import (
     PathLike,
+    environ,
     fsdecode,
     fsencode,
     fspath,
@@ -22,7 +24,7 @@ from backlib.internal.typing import AnyStr
 
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Iterable, Sequence
 
     from backlib.internal.stdlib.py313.os import PathLike
 
@@ -811,3 +813,233 @@ def relpath(
     except (TypeError, ValueError, AttributeError, BytesWarning, DeprecationWarning):
         check_arg_types("relpath", path, start)
         raise
+
+
+@techdebt
+def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
+    """Return the longest common sub-path of each pathname in the iterable paths.
+
+    See Also
+    --------
+    * `ntpath.commonpath`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The function should be refactored.
+    """
+    paths = [fspath(p) for p in paths]
+
+    if not paths:
+        detail = "commonpath() arg is an empty iterable"
+        raise ValueError(detail)
+
+    sep = b"\\" if isinstance(paths[0], bytes) else "\\"
+    altsep = b"/" if isinstance(paths[0], bytes) else "/"
+    curdir = b"." if isinstance(paths[0], bytes) else "."
+
+    try:
+        drivesplits = [splitroot(p.replace(altsep, sep).lower()) for p in paths]  # type: ignore[arg-type, union-attr]
+        split_paths = [p.split(sep) for _, _, p in drivesplits]
+
+        if len({d for d, _, _ in drivesplits}) != 1:
+            detail = "Paths don't have the same drive"
+            raise ValueError(detail)
+
+        drive, root, path = splitroot(paths[0].replace(altsep, sep))  # type: ignore[arg-type, union-attr]
+
+        if len({r for _, r, _ in drivesplits}) != 1:
+            m1 = "absolute" if drive else "rooted"
+            m2 = "relative" if drive else "not-rooted"
+            detail = f"Can't mix {m1} and {m2} paths"
+            raise ValueError(detail)
+
+        common = path.split(sep)
+        common = [c for c in common if c and c != curdir]
+
+        split_paths = [[c for c in s if c and c != curdir] for s in split_paths]
+
+        s1 = min(split_paths)
+        s2 = max(split_paths)
+
+        for index, char in enumerate(s1):
+            if char != s2[index]:
+                common = common[:index]
+                break
+        else:
+            common = common[:len(s1)]
+
+        return drive + root + sep.join(common)
+
+    except (TypeError, AttributeError):
+        check_arg_types("commonpath", *paths)
+        raise
+
+
+@techdebt
+def expanduser(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Replace an initial component of `~` or `~user` by that user's home directory.
+
+    See Also
+    --------
+    * `ntpath.expanduser`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The function should be refactored.
+    """
+    path = fspath(path)
+
+    seps = b"\\/" if isinstance(path, bytes) else "\\/"
+    tilde = b"~" if isinstance(path, bytes) else "~"
+
+    if not path.startswith(tilde):
+        return path
+
+    sep_index = 1
+
+    while sep_index < len(path) and path[sep_index] not in seps:
+        sep_index += 1
+
+    if "USERPROFILE" in environ:
+        userhome = environ["USERPROFILE"]
+    elif "HOMEPATH" not in environ:
+        return path
+    else:
+        drive = environ.get("HOMEDRIVE", "")
+        userhome = join(drive, environ["HOMEPATH"])
+
+    if sep_index > 1:
+        target_user = path[1:sep_index]
+
+        if isinstance(target_user, bytes):
+            target_user = fsdecode(target_user)  # type: ignore[assignment]
+
+        current_user = environ.get("USERNAME")
+
+        if target_user != current_user:
+            if current_user != basename(userhome):
+                return path
+            userhome = join(dirname(userhome), target_user)  # type: ignore[assignment,type-var]
+
+    if isinstance(path, bytes):
+        userhome = fsencode(userhome)  # type: ignore[assignment]
+        return userhome + path[sep_index:]  # type: ignore[operator,return-value]
+
+    return userhome + path[sep_index:]
+
+
+@techdebt
+def expandvars(path: AnyStr | PathLike[AnyStr]) -> AnyStr:  # noqa: C901, PLR0912, PLR0915
+    """Return the argument with environment variables expanded.
+
+    See Also
+    --------
+    * `ntpath.expandvars`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The function should be refactored.
+    """
+    path = fspath(path)
+
+    quote = b"'" if isinstance(path, bytes) else "'"
+    percent = b"%" if isinstance(path, bytes) else "%"
+    brace = b"{" if isinstance(path, bytes) else "{"
+    rbrace = b"}" if isinstance(path, bytes) else "}"
+    dollar = b"$" if isinstance(path, bytes) else "$"
+
+    if isinstance(path, bytes):
+        if b"$" not in path and b"%" not in path:
+            return path
+        varchars = bytes(ascii_letters + digits + "_-", "ascii")
+        env = None
+
+    else:
+        if "$" not in path and "%" not in path:
+            return path
+        varchars = ascii_letters + digits + "_-"
+        env = environ
+
+    res = path[:0]
+    index = 0
+    pathlen = len(path)
+    while index < pathlen:
+        c = path[index:index+1]
+        if c == quote:   # no expansion within single quotes
+            path = path[index + 1:]
+            pathlen = len(path)
+            try:
+                index = path.index(c)
+                res += c + path[:index + 1]
+            except ValueError:
+                res += c + path
+                index = pathlen - 1
+        elif c == percent:  # variable or '%'
+            if path[index + 1:index + 2] == percent:
+                res += c
+                index += 1
+            else:
+                path = path[index+1:]
+                pathlen = len(path)
+                try:
+                    index = path.index(percent)
+                except ValueError:
+                    res += percent + path
+                    index = pathlen - 1
+                else:
+                    var = path[:index]
+                    try:
+                        value = fsencode(environ[fsdecode(var)]) if env is None else env[var]  # type: ignore[index]
+                    except KeyError:
+                        value = percent + var + percent
+                    res += value
+        elif c == dollar:  # variable or '$$'
+            if path[index + 1:index + 2] == dollar:
+                res += c
+                index += 1
+            elif path[index + 1:index + 2] == brace:
+                path = path[index+2:]
+                pathlen = len(path)
+                try:
+                    index = path.index(rbrace)
+                except ValueError:
+                    res += dollar + brace + path
+                    index = pathlen - 1
+                else:
+                    var = path[:index]
+                    try:
+                        value = fsencode(environ[fsdecode(var)]) if env is None else env[var]  # type: ignore[index]
+                    except KeyError:
+                        value = dollar + brace + var + rbrace
+                    res += value
+            else:
+                var = path[:0]
+                index += 1
+                c = path[index:index + 1]
+                while c and c in varchars:
+                    var += c
+                    index += 1
+                    c = path[index:index + 1]
+                try:
+                    value = fsencode(environ[fsdecode(var)]) if env is None else env[var]  # type: ignore[index]
+                except KeyError:
+                    value = dollar + var
+                res += value
+                if c:
+                    index -= 1
+        else:
+            res += c
+        index += 1
+    return res

@@ -1,3 +1,4 @@
+from backlib.internal.stdlib.py313.os.src.env import environ
 from backlib.internal.stdlib.py313.os.src.impl import (
     F_OK,
     O_APPEND,
@@ -84,6 +85,7 @@ __all__: list[str] = [
     "curdir",
     "defpath",
     "devnull",
+    "environ",
     "error",
     "extsep",
     "fsdecode",
@@ -128,6 +130,8 @@ PathLike.__module__ = __backlib__
 
 stat_result.__module__ = __backlib__
 terminal_size.__module__ = __backlib__
+
+# [!] environ.__module__ = __backlib__
 
 access.__module__ = __backlib__
 chdir.__module__ = __backlib__
