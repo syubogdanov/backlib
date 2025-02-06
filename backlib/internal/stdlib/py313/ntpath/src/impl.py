@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Final, Literal
 
-from backlib.internal.markers.decorators import techdebt
+from backlib.internal.markers import techdebt
 from backlib.internal.stdlib.py313.ntpath.src.utils import check_arg_types, is_reserved_name
 from backlib.internal.stdlib.py313.os import (
     PathLike,

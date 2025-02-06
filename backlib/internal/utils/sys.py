@@ -1,7 +1,7 @@
 from functools import cache
 from sys import builtin_module_names, platform
 
-from backlib.internal.markers.decorators import techdebt
+from backlib.internal.markers import techdebt
 
 
 __all__: list[str] = ["is_darwin", "is_nt", "is_posix", "is_unix"]

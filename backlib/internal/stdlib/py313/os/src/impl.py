@@ -8,7 +8,7 @@ from math import ceil
 from sys import getfilesystemencodeerrors, getfilesystemencoding, stdout
 from typing import Final, Generic, NamedTuple, TypeVar
 
-from backlib.internal.markers.decorators import techdebt
+from backlib.internal.markers import mocked, techdebt
 from backlib.internal.typing import AnyStr, Self, TypeAlias
 from backlib.internal.utils.sys import is_nt, is_posix, is_unix
 from backlib.internal.utils.typing import ReadableBuffer
@@ -107,19 +107,19 @@ SEEK_CUR: Final[int] = 1
 SEEK_END: Final[int] = 2
 
 
-F_OK: Final[int] = techdebt(py_os.F_OK)
-R_OK: Final[int] = techdebt(py_os.R_OK)
-W_OK: Final[int] = techdebt(py_os.W_OK)
-X_OK: Final[int] = techdebt(py_os.X_OK)
+F_OK: Final[int] = mocked(py_os.F_OK)
+R_OK: Final[int] = mocked(py_os.R_OK)
+W_OK: Final[int] = mocked(py_os.W_OK)
+X_OK: Final[int] = mocked(py_os.X_OK)
 
 
-O_APPEND: Final[int] = techdebt(py_os.O_APPEND)
-O_CREAT: Final[int] = techdebt(py_os.O_CREAT)
-O_EXCL: Final[int] = techdebt(py_os.O_EXCL)
-O_RDONLY: Final[int] = techdebt(py_os.O_RDONLY)
-O_RDWR: Final[int] = techdebt(py_os.O_RDWR)
-O_TRUNC: Final[int] = techdebt(py_os.O_TRUNC)
-O_WRONLY: Final[int] = techdebt(py_os.O_WRONLY)
+O_APPEND: Final[int] = mocked(py_os.O_APPEND)
+O_CREAT: Final[int] = mocked(py_os.O_CREAT)
+O_EXCL: Final[int] = mocked(py_os.O_EXCL)
+O_RDONLY: Final[int] = mocked(py_os.O_RDONLY)
+O_RDWR: Final[int] = mocked(py_os.O_RDWR)
+O_TRUNC: Final[int] = mocked(py_os.O_TRUNC)
+O_WRONLY: Final[int] = mocked(py_os.O_WRONLY)
 
 
 @techdebt
@@ -254,7 +254,7 @@ class PathLike(ABC, Generic[AnyStr_co]):
         return True
 
 
-@techdebt
+@mocked
 def access(
     path: int | AnyStr | PathLike[AnyStr],
     mode: int,
@@ -272,10 +272,6 @@ def access(
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.access(
         path=path,
@@ -286,7 +282,7 @@ def access(
     )
 
 
-@techdebt
+@mocked
 def chdir(path: int | AnyStr | PathLike[AnyStr]) -> None:
     """Change the current working directory to path.
 
@@ -297,15 +293,11 @@ def chdir(path: int | AnyStr | PathLike[AnyStr]) -> None:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.chdir(path)
 
 
-@techdebt
+@mocked
 def close(fd: int) -> None:
     """Close file descriptor `fd`.
 
@@ -316,10 +308,6 @@ def close(fd: int) -> None:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.close(fd)
 
@@ -384,7 +372,7 @@ def fsencode(filename: AnyStr | PathLike[AnyStr]) -> bytes:
     return filename.encode(encoding, errors)
 
 
-@techdebt
+@mocked
 def fspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Return the file system representation of the path.
 
@@ -395,10 +383,6 @@ def fspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.fspath(path)
 
@@ -417,6 +401,7 @@ def fstat(fd: int) -> stat_result:
     return stat(fd)
 
 
+@mocked
 @techdebt
 def ftruncate(fd: int, length: int, /) -> None:
     """Truncate the file corresponding to file descriptor `fd`.
@@ -431,13 +416,12 @@ def ftruncate(fd: int, length: int, /) -> None:
 
     Technical Debt
     --------------
-    * This function is available on Unix, not POSIX;
-    * This function is not a real backport.
+    * This function is available on Unix, not POSIX.
     """
     return py_os.ftruncate(fd, length)
 
 
-@techdebt
+@mocked
 def get_inheritable(fd: int, /) -> bool:
     """Get the 'inheritable' flag of the specified file descriptor (a boolean).
 
@@ -448,14 +432,11 @@ def get_inheritable(fd: int, /) -> bool:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.get_inheritable(fd)
 
 
+@mocked
 @techdebt
 def get_terminal_size(fd: int | None = None, /) -> terminal_size:
     """Return the size of the terminal window as `(columns, lines)`.
@@ -470,8 +451,7 @@ def get_terminal_size(fd: int | None = None, /) -> terminal_size:
 
     Technical Debt
     --------------
-    * This function is available on Unix, not POSIX;
-    * This function is not a real backport.
+    * This function is available on Unix, not POSIX.
     """
     if fd is None:
         fd = stdout.fileno()
@@ -480,7 +460,7 @@ def get_terminal_size(fd: int | None = None, /) -> terminal_size:
     return terminal_size(*py_terminal_size)
 
 
-@techdebt
+@mocked
 def getcwd() -> str:
     """Return a string representing the current working directory.
 
@@ -491,15 +471,11 @@ def getcwd() -> str:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.getcwd()  # noqa: PTH109
 
 
-@techdebt
+@mocked
 def getcwdb() -> bytes:
     """Return a bytestring representing the current working directory.
 
@@ -510,15 +486,11 @@ def getcwdb() -> bytes:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.getcwdb()  # noqa: PTH109
 
 
-@techdebt
+@mocked
 def isatty(fd: int, /) -> bool:
     """Check if the file descriptor `fd` is open and connected to a tty(-like) device.
 
@@ -529,14 +501,11 @@ def isatty(fd: int, /) -> bool:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.isatty(fd)
 
 
+@mocked
 @techdebt
 def link(
     src: AnyStr | PathLike[AnyStr],
@@ -558,8 +527,7 @@ def link(
 
     Technical Debt
     --------------
-    * This function is available on Unix, not POSIX;
-    * This function is not a real backport.
+    * This function is available on Unix, not POSIX.
     """
     return py_os.link(
         src=src,
@@ -570,7 +538,7 @@ def link(
     )
 
 
-@techdebt
+@mocked
 def lseek(fd: int, position: int, whence: int, /) -> int:
     """Set the current position of file descriptor `fd` to position `pos`, modified by `whence`.
 
@@ -581,10 +549,6 @@ def lseek(fd: int, position: int, whence: int, /) -> int:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.lseek(fd, position, whence)
 
@@ -603,7 +567,7 @@ def lstat(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> stat
     return stat(path, dir_fd=dir_fd, follow_symlinks=False)
 
 
-@techdebt
+@mocked
 def mkdir(path: AnyStr | PathLike[AnyStr], mode: int = 0o777, *, dir_fd: int | None = None) -> None:
     """Create a directory named `path` with numeric mode `mode`.
 
@@ -614,15 +578,11 @@ def mkdir(path: AnyStr | PathLike[AnyStr], mode: int = 0o777, *, dir_fd: int | N
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.mkdir(path, mode, dir_fd=dir_fd)  # noqa: PTH102
 
 
-@techdebt
+@mocked
 def open(  # noqa: A001
     path: AnyStr | PathLike[AnyStr],
     flags: int,
@@ -630,7 +590,7 @@ def open(  # noqa: A001
     *,
     dir_fd: int | None = None,
 ) -> int:
-    """Open the file `path` and set various `flags` and possibly its `mode`.
+    """Open the file `path` and set various `flags` and, possibly, its `mode`.
 
     See Also
     --------
@@ -639,15 +599,11 @@ def open(  # noqa: A001
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.open(path, flags, mode, dir_fd=dir_fd)
 
 
-@techdebt
+@mocked
 def read(fd: int, length: int, /) -> bytes:
     """Read at most `length` bytes from file descriptor `fd`.
 
@@ -658,14 +614,11 @@ def read(fd: int, length: int, /) -> bytes:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.read(fd, length)
 
 
+@mocked
 @techdebt
 def readlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> AnyStr:
     """Return a string representing the path to which the symbolic link points.
@@ -680,13 +633,12 @@ def readlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> A
 
     Technical Debt
     --------------
-    * This function is available on Unix, not POSIX;
-    * This function is not a real backport.
+    * This function is available on Unix, not POSIX.
     """
     return py_os.readlink(path, dir_fd=dir_fd)  # noqa: PTH115
 
 
-@techdebt
+@mocked
 def rename(
     src: AnyStr | PathLike[AnyStr],
     dst: AnyStr | PathLike[AnyStr],
@@ -703,15 +655,11 @@ def rename(
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.rename(src, dst, src_dir_fd=src_dir_fd, dst_dir_fd=dst_dir_fd)  # noqa: PTH104
 
 
-@techdebt
+@mocked
 def replace(
     src: AnyStr | PathLike[AnyStr],
     dst: AnyStr | PathLike[AnyStr],
@@ -728,15 +676,11 @@ def replace(
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.replace(src, dst, src_dir_fd=src_dir_fd, dst_dir_fd=dst_dir_fd)  # noqa: PTH105
 
 
-@techdebt
+@mocked
 def rmdir(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> None:
     """Remove (delete) the directory `path`.
 
@@ -747,15 +691,11 @@ def rmdir(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> None
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.rmdir(path, dir_fd=dir_fd)  # noqa: PTH106
 
 
-@techdebt
+@mocked
 def set_inheritable(fd: int, inheritable: bool, /) -> None:  # noqa: FBT001
     """Set the 'inheritable' flag of the specified file descriptor.
 
@@ -766,15 +706,11 @@ def set_inheritable(fd: int, inheritable: bool, /) -> None:  # noqa: FBT001
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.set_inheritable(fd, inheritable)
 
 
-@techdebt
+@mocked
 def stat(
     path: int | AnyStr | PathLike[AnyStr],
     *,
@@ -790,10 +726,6 @@ def stat(
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     py_stat_result = py_os.stat(path, dir_fd=dir_fd, follow_symlinks=follow_symlinks)  # noqa: PTH116
 
@@ -827,6 +759,7 @@ def stat(
     )
 
 
+@mocked
 @techdebt
 def symlink(
     src: AnyStr | PathLike[AnyStr],
@@ -847,13 +780,12 @@ def symlink(
 
     Technical Debt
     --------------
-    * This function is available on Unix, not POSIX;
-    * This funciton is not a real backport.
+    * This function is available on Unix, not POSIX.
     """
     return py_os.symlink(src, dst, target_is_directory, dir_fd=dir_fd)
 
 
-@techdebt
+@mocked
 def strerror(code: int, /) -> str:
     """Return the error message corresponding to the error code in `code`.
 
@@ -864,15 +796,11 @@ def strerror(code: int, /) -> str:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.strerror(code)
 
 
-@techdebt
+@mocked
 def unlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> None:
     """Remove (delete) the file path.
 
@@ -883,15 +811,11 @@ def unlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> Non
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.unlink(path, dir_fd=dir_fd)  # noqa: PTH108
 
 
-@techdebt
+@mocked
 def write(fd: int, data: ReadableBuffer, /) -> int:
     """Write the bytestring in `data` to file descriptor `fd`.
 
@@ -902,9 +826,5 @@ def write(fd: int, data: ReadableBuffer, /) -> int:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function is not a real backport.
     """
     return py_os.write(fd, data)
