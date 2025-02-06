@@ -3,14 +3,14 @@ import sys
 from typing import TypeVar
 
 
-__all__: list[str] = ["mocked", "techdebt"]
+__all__: list[str] = ["py_alias", "techdebt"]
 
 
 T = TypeVar("T")
 
 
-def mocked(mockable: T) -> T:
-    """Mark the object as a mocked object."""
+def py_alias(mockable: T) -> T:
+    """Mark the object as an alias to Python implementation."""
     if (3, 9, 0) <= sys.version_info < (3, 14, 0):
         return mockable
 

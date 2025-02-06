@@ -1,6 +1,6 @@
 from typing import Final
 
-from backlib.internal.markers import mocked, techdebt
+from backlib.internal.markers import py_alias, techdebt
 
 
 __all__: list[str] = [
@@ -119,9 +119,9 @@ S_IFIFO: Final[int]  = 0o010000
 S_IFLNK: Final[int]  = 0o120000
 S_IFSOCK: Final[int] = 0o140000
 
-S_IFDOOR: Final[int] = mocked(0)
-S_IFPORT: Final[int] = mocked(0)
-S_IFWHT: Final[int] = mocked(0)
+S_IFDOOR: Final[int] = py_alias(0)
+S_IFPORT: Final[int] = py_alias(0)
+S_IFWHT: Final[int] = py_alias(0)
 
 S_ISUID: Final[int] = 0o4000
 S_ISGID: Final[int] = 0o2000
