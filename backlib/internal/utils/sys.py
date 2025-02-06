@@ -35,3 +35,8 @@ def is_unix() -> bool:
     * This is an alias to `is_posix`.
     """
     return is_posix()
+
+
+def is_vxworks() -> bool:
+    """Check if the platform is `VxWorks`."""
+    return platform == "vxworks"

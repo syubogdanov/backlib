@@ -1,17 +1,33 @@
 from __future__ import annotations
 
+import re
+
+from errno import ENOTDIR
 from typing import TYPE_CHECKING, Final, Literal
 
 from backlib.internal.markers import techdebt
-from backlib.internal.stdlib.py313.os import fspath, fstat, lstat, stat, stat_result
+from backlib.internal.stdlib.py313.os import (
+    environ,
+    environb,
+    fsencode,
+    fspath,
+    fstat,
+    getcwd,
+    getcwdb,
+    lstat,
+    readlink,
+    stat,
+    stat_result,
+    strerror,
+)
 from backlib.internal.stdlib.py313.posixpath.src.utils import check_arg_types
 from backlib.internal.stdlib.py313.stat import S_ISDIR, S_ISLNK, S_ISREG
 from backlib.internal.typing import AnyStr
-from backlib.internal.utils.sys import is_darwin
+from backlib.internal.utils.sys import is_darwin, is_vxworks
 
 
 if TYPE_CHECKING:
-    from collections.abc import Sequence
+    from collections.abc import Iterable, Sequence
 
     from backlib.internal.stdlib.py313.os import PathLike
 
@@ -533,3 +549,393 @@ def normpath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
 
     path = root + sep.join(components)
     return path or dot
+
+
+@techdebt
+def relpath(
+    path: AnyStr | PathLike[AnyStr],
+    start: AnyStr | PathLike[AnyStr] | None = None,
+) -> AnyStr:
+    """Return a relative filepath to `path`.
+
+    See Also
+    --------
+    * `posixpath.relpath`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The function should be refactored.
+    """
+    path = fspath(path)
+
+    if not path:
+        detail = "no path specified"
+        raise ValueError(detail)
+
+    curdir = b"." if isinstance(path, bytes) else "."
+    sep = b"/" if isinstance(path, bytes) else "/"
+    pardir = b".." if isinstance(path, bytes) else ".."
+
+    start = curdir if start is None else fspath(start)
+
+    try:
+        start_tail = abspath(start).lstrip(sep)
+        path_tail = abspath(path).lstrip(sep)
+
+        start_list = start_tail.split(sep) if start_tail else []
+        path_list = path_tail.split(sep) if path_tail else []
+
+        index = len(commonprefix([start_list, path_list]))  # type: ignore[type-var]
+        components = [pardir] * (len(start_list) - index) + path_list[index:]
+
+        if not components:
+            return curdir
+
+        return sep.join(components)
+
+    except (TypeError, AttributeError, BytesWarning, DeprecationWarning):
+        check_arg_types("relpath", path, start)
+        raise
+
+
+@techdebt
+def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr:  # noqa: C901, PLR0915
+    """Return the canonical path of the specified filename.
+
+    See Also
+    --------
+    * `posixpath.realpath`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The function should be refactored
+    """
+    filename = fspath(path)
+
+    sep = b"/" if isinstance(filename, bytes) else "/"
+    curdir = b"." if isinstance(filename, bytes) else "."
+    pardir = b".." if isinstance(filename, bytes) else ".."
+    cwd = getcwdb() if isinstance(filename, bytes) else getcwd()
+
+    rest = filename.split(sep)[::-1]
+    part_count = len(rest)
+    path = sep if filename.startswith(sep) else cwd
+
+    seen: dict[AnyStr, AnyStr] = {}
+
+    while part_count:
+        name = rest.pop()
+        if name is None:
+            seen[rest.pop()] = path
+            continue
+        part_count -= 1
+        if not name or name == curdir:
+            continue
+        if name == pardir:
+            path = path[:path.rindex(sep)] or sep
+            continue
+        newpath = path + name if path == sep else path + sep + name
+        try:
+            st_mode = lstat(newpath).st_mode
+            if not S_ISLNK(st_mode):
+                if strict and part_count and not S_ISDIR(st_mode):
+                    raise OSError(ENOTDIR, strerror(ENOTDIR), newpath)  # noqa: TRY301
+                path = newpath
+                continue
+            if newpath in seen:
+                # Already seen this path
+                path = seen[newpath]
+                if path is not None:
+                    continue
+                if strict:
+                    stat(newpath)
+                path = newpath
+                continue
+            target = readlink(newpath)
+        except OSError:
+            if strict:
+                raise
+            path = newpath
+            continue
+        seen[newpath] = None  # type: ignore[assignment]
+        if target.startswith(sep):
+            path = sep
+        rest.append(newpath)
+        rest.append(None)  # type: ignore[arg-type]
+        target_parts = target.split(sep)[::-1]
+        rest.extend(target_parts)
+        part_count += len(target_parts)
+
+    return path
+
+
+@techdebt
+def ismount(path: AnyStr | PathLike[AnyStr]) -> bool:
+    """Return `True` if pathname `path` is a mount point.
+
+    See Also
+    --------
+    * `posixpath.ismount`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The function should be refactored.
+    """
+    pardir = b".." if isinstance(path, bytes) else ".."
+
+    try:
+        s1 = lstat(path)
+    except (OSError, ValueError):
+        return False
+
+    if S_ISLNK(s1.st_mode):
+        return False
+
+    path = fspath(path)
+    parent = join(path, pardir)  # type: ignore[type-var]
+
+    try:
+        s2 = lstat(parent)  # type: ignore[type-var]
+
+    except OSError:
+        parent = realpath(parent)  # type: ignore[type-var]
+        try:
+            s2 = lstat(parent)  # type: ignore[type-var]
+        except OSError:
+            return False
+
+    return s1.st_dev != s2.st_dev or s1.st_ino == s2.st_ino
+
+
+def abspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Return a normalized absolutized version of the pathname `path`.
+
+    See Also
+    --------
+    * `posixpath.abspath`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+    path = fspath(path)
+
+    sep = b"/" if isinstance(path, bytes) else "/"
+
+    if not path.startswith(sep):
+        cwd = getcwdb() if isinstance(path, bytes) else getcwd()
+        path = join(cwd, path)
+
+    return normpath(path)
+
+
+@techdebt
+def join(path: AnyStr | PathLike[AnyStr], *paths: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Join one or more path segments intelligently.
+
+    See Also
+    --------
+    * `posixpath.join`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The function should be refactored.
+    """
+    initial_path = fspath(path)
+
+    sep = b"/" if isinstance(initial_path, bytes) else "/"
+
+    final_path = initial_path
+
+    try:
+        for another_path in paths:
+            another_path = fspath(another_path)  # noqa: PLW2901
+
+            if another_path.startswith(sep) or not final_path:
+                final_path = another_path
+            elif final_path.endswith(sep):
+                final_path += another_path
+            else:
+                final_path += sep + another_path
+
+    except (TypeError, AttributeError, BytesWarning):
+        check_arg_types("join", initial_path, *paths)
+        raise
+
+    return final_path
+
+
+@techdebt
+def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
+    """Return the longest common sub-path of each pathname in the iterable paths.
+
+    See Also
+    --------
+    * `posixpath.commonpath`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The function should be refactored.
+    """
+    paths = [fspath(p) for p in paths]
+
+    if not paths:
+        detail = "commonpath() arg is an empty sequence"
+        raise ValueError(detail)
+
+    sep = b"/" if isinstance(paths[0], bytes) else "/"
+    curdir = b"." if isinstance(paths[0], bytes) else "."
+
+    try:
+        split_paths = [path.split(sep) for path in paths]  # type: ignore[arg-type,union-attr]
+
+        try:
+            isabs, = {p.startswith(sep) for p in paths}  # type: ignore[arg-type,union-attr]
+
+        except ValueError:
+            detail = "Can't mix absolute and relative paths"
+            raise ValueError(detail) from None
+
+        split_paths = [[c for c in s if c and c != curdir] for s in split_paths]
+
+        s1 = min(split_paths)
+        s2 = max(split_paths)
+
+        common = s1
+        for i, c in enumerate(s1):
+            if c != s2[i]:
+                common = s1[:i]
+                break
+
+        prefix = sep if isabs else sep[:0]
+        return prefix + sep.join(common)  # type: ignore[arg-type,operator,return-value]
+
+    except (TypeError, AttributeError):
+        check_arg_types("commonpath", *paths)
+        raise
+
+
+@techdebt
+def expanduser(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Replace an initial component of `~` or `~user` by that user's home directory.
+
+    See Also
+    --------
+    * `posixpath.expanduser`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The functionality has been reduced;
+    * This function should be refactored.
+    """
+    path = fspath(path)
+
+    sep = b"/" if isinstance(path, bytes) else "/"
+    tilde = b"~" if isinstance(path, bytes) else "~"
+
+    if not path.startswith(tilde):
+        return path
+
+    sep_index = path.find(sep, 1)
+    if sep_index < 0:
+        sep_index = len(path)
+
+    if sep_index > 1:
+        return path
+
+    if "HOME" not in environ:
+        return path
+
+    if is_vxworks():
+        return path
+
+    userhome = environ["HOME"]
+
+    if isinstance(path, bytes):
+        userhome = fsencode(userhome)  # type: ignore[assignment]
+
+    userhome = userhome.rstrip(sep)  # type: ignore[arg-type]
+    return (userhome + path[sep_index:]) or sep  # type: ignore[operator,return-value]
+
+
+@techdebt
+def expandvars(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
+    """Return the argument with environment variables expanded.
+
+    See Also
+    --------
+    * `posixpath.expandvars`.
+
+    Version
+    -------
+    * Python 3.13.
+
+    Technical Debt
+    --------------
+    * The function should be refactored.
+    """
+    path = fspath(path)
+
+    varprog = re.compile(r"\$(\w+|\{[^}]*\})", re.ASCII)
+    varprogb = re.compile(br"\$(\w+|\{[^}]*\})", re.ASCII)
+
+    dollar = b"$" if isinstance(path, bytes) else "$"
+    start = b"{" if isinstance(path, bytes) else "{"
+    end = b"}" if isinstance(path, bytes) else "}"
+
+    if dollar not in path:
+        return path
+
+    search = varprogb.search if isinstance(path, bytes) else varprog.search
+    env = environb if isinstance(path, bytes) else environ
+
+    i = 0
+    while True:
+        m = search(path, i)
+
+        if not m:
+            break
+
+        i, j = m.span(0)
+        name = m.group(1)
+
+        if name.startswith(start) and name.endswith(end):
+            name = name[1:-1]
+
+        try:
+            value = env[name]
+
+        except KeyError:
+            i = j
+
+        else:
+            tail = path[j:]
+            path = path[:i] + value
+            i = len(path)  # type: ignore[arg-type]
+            path += tail  # type: ignore[operator]
+
+    return path

@@ -600,7 +600,7 @@ def relpath(
     return os_relpath(path, start)
 
 
-def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr:  # noqa: ARG001
+def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr:
     """Return the canonical path of the specified filename.
 
     See Also
@@ -612,7 +612,7 @@ def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr
     * Python 3.13.
     """
     os_realpath = nt_realpath if is_nt() else posix_realpath
-    return os_realpath(path)
+    return os_realpath(path, strict=strict)
 
 
 def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:

@@ -1,4 +1,4 @@
-from backlib.internal.stdlib.py313.os.src.env import environ
+from backlib.internal.stdlib.py313.os.src.env import environ, environb, supports_bytes_environ
 from backlib.internal.stdlib.py313.os.src.impl import (
     F_OK,
     O_APPEND,
@@ -86,6 +86,7 @@ __all__: list[str] = [
     "defpath",
     "devnull",
     "environ",
+    "environb",
     "error",
     "extsep",
     "fsdecode",
@@ -117,6 +118,7 @@ __all__: list[str] = [
     "stat",
     "stat_result",
     "strerror",
+    "supports_bytes_environ",
     "symlink",
     "terminal_size",
     "unlink",
@@ -132,6 +134,7 @@ stat_result.__module__ = __backlib__
 terminal_size.__module__ = __backlib__
 
 # [!] environ.__module__ = __backlib__
+# [!] environb.__module__ = __backlib__
 
 access.__module__ = __backlib__
 chdir.__module__ = __backlib__
