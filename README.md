@@ -48,14 +48,16 @@ data = json.loads("{\"backlib\": \"pypi\"}")
 assert data == {"backlib": "pypi"}
 ```
 
-#### ntpath [SOON]
+#### ntpath [UNRELEASED]
 
 For more, see the [documentation][github/docs/ntpath].
 
 ```python
 from backlib.py313 import ntpath
 
-...
+is_reserved = ntpath.isreserved("./backlib")
+
+assert not is_reserved
 ```
 
 #### os [SOON]
@@ -70,14 +72,16 @@ st = os.stat("./pyproject.toml")
 assert st.st_birthtime_ns > 0
 ```
 
-#### os.path [SOON]
+#### os.path [UNRELEASED]
 
 For more, see the [documentation][github/docs/os.path].
 
 ```python
 from backlib.py313 import ospath
 
-...
+is_reserved = ospath.isreserved("./backlib")
+
+assert not is_reserved
 ```
 
 #### pathlib [SOON]
@@ -90,14 +94,16 @@ from backlib.py313 import pathlib
 ...
 ```
 
-#### posixpath [SOON]
+#### posixpath [UNRELEASED]
 
 For more, see the [documentation][github/docs/posixpath].
 
 ```python
 from backlib.py313 import posixpath
 
-...
+is_reserved = posixpath.isreserved("./backlib")
+
+assert not is_reserved
 ```
 
 #### shutil [SOON]
