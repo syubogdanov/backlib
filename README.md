@@ -26,6 +26,16 @@ pip install backlib
 
 ### Usage
 
+#### errno [SOON]
+
+For more, see the [documentation][github/docs/errno].
+
+```python
+from backlib.py313 import errno
+
+...
+```
+
 #### io [SOON]
 
 For more, see the [documentation][github/docs/io].
@@ -164,6 +174,7 @@ MIT License, Copyright (c) 2025 Sergei Bogdanov. See [LICENSE][github/license] f
 
 <!-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- -->
 
+[github/docs/errno]: https://github.com/syubogdanov/backlib/tree/main/docs/errno.md
 [github/docs/io]: https://github.com/syubogdanov/backlib/tree/main/docs/io.md
 [github/docs/json]: https://github.com/syubogdanov/backlib/tree/main/docs/json.md
 [github/docs/ntpath]: https://github.com/syubogdanov/backlib/tree/main/docs/ntpath.md
