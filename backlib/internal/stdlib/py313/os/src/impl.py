@@ -10,7 +10,7 @@ from typing import Final, Generic, NamedTuple, TypeVar
 
 from backlib.internal.markers import py_alias, techdebt
 from backlib.internal.typing import AnyStr, Self, TypeAlias
-from backlib.internal.utils.platforms import is_nt, is_posix, is_unix
+from backlib.internal.utils.platform import is_nt, is_posix, is_unix
 from backlib.internal.utils.typing import ReadableBuffer
 
 
