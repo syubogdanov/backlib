@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import TypeVar
+from enum import Enum, auto
+from typing import Literal, TypeVar
 
 from backlib.internal.markers import techdebt
 from backlib.internal.utils.platform import (
@@ -17,27 +18,24 @@ from backlib.internal.utils.platform import (
 T = TypeVar("T")
 
 
-class Undefined:
-    """An undefined value.
+class Undefined(Enum):
+    """An undefined value."""
 
-    Notes
-    -----
-    * This is not the same as `None`.
-    """
+    DEFAULT = auto()
 
 
 def or_platform(  # noqa: PLR0911, PLR0913
     object_: object,
     name: str,
     *,
-    darwin: T | type[Undefined] = Undefined,
-    nt: T | type[Undefined] = Undefined,
-    posix: T | type[Undefined] = Undefined,
-    solaris: T | type[Undefined] = Undefined,
-    sunos: T | type[Undefined] = Undefined,
-    unix: T | type[Undefined] = Undefined,
-    vxworks: T | type[Undefined] = Undefined,
-    otherwise: T | type[Undefined] = Undefined,
+    darwin: T | Undefined = Undefined.DEFAULT,
+    nt: T | Undefined = Undefined.DEFAULT,
+    posix: T | Undefined = Undefined.DEFAULT,
+    solaris: T | Undefined = Undefined.DEFAULT,
+    sunos: T | Undefined = Undefined.DEFAULT,
+    unix: T | Undefined = Undefined.DEFAULT,
+    vxworks: T | Undefined = Undefined.DEFAULT,
+    otherwise: T | Undefined = Undefined.DEFAULT,
 ) -> T:
     """Get a named attribute if exists, otherwise the platform default value.
 
@@ -46,31 +44,33 @@ def or_platform(  # noqa: PLR0911, PLR0913
     * Platforms that are supersets over others are prioritized;
     * For example, *Darwin* is selected over *POSIX*.
     """
-    if (value := getattr(object_, name, Undefined)) is not Undefined:
+    value = getattr(object_, name, Undefined.DEFAULT)
+
+    if not isinstance(value, Undefined):
         return techdebt(value)
 
-    if nt is not Undefined and is_nt():
+    if not isinstance(nt, Undefined) and is_nt():
         return techdebt(nt)
 
-    if darwin is not Undefined and is_darwin():
+    if not isinstance(darwin, Undefined) and is_darwin():
         return techdebt(darwin)
 
-    if solaris is not Undefined and is_solaris():
+    if not isinstance(solaris, Undefined) and is_solaris():
         return techdebt(solaris)
 
-    if sunos is not Undefined and is_sunos():
+    if not isinstance(sunos, Undefined) and is_sunos():
         return techdebt(sunos)
 
-    if vxworks is not Undefined and is_vxworks():
+    if not isinstance(vxworks, Undefined) and is_vxworks():
         return techdebt(vxworks)
 
-    if unix is not Undefined and is_unix():
+    if not isinstance(unix, Undefined) and is_unix():
         return techdebt(unix)
 
-    if posix is not Undefined and is_posix():
+    if not isinstance(posix, Undefined) and is_posix():
         return techdebt(posix)
 
-    if otherwise is not Undefined:
+    if not isinstance(otherwise, Undefined):
         return techdebt(otherwise)
 
     detail = "The platform is not supported..."
