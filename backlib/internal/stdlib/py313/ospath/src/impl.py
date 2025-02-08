@@ -75,7 +75,7 @@ from backlib.internal.stdlib.py313.posixpath import (
     supports_unicode_filenames as posix_supports_unicode_filenames,
 )
 from backlib.internal.typing import AnyStr
-from backlib.internal.utils.sys import is_nt, is_posix
+from backlib.internal.utils.platforms import is_nt, is_posix
 
 
 if TYPE_CHECKING:

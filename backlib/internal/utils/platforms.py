@@ -4,13 +4,15 @@ from sys import builtin_module_names, platform
 from backlib.internal.markers import techdebt
 
 
-__all__: list[str] = ["is_darwin", "is_nt", "is_posix", "is_unix"]
-
-
-@cache
-def is_darwin() -> bool:
-    """Check if the platform is `Darwin`."""
-    return platform == "darwin"
+__all__: list[str] = [
+    "is_darwin",
+    "is_nt",
+    "is_posix",
+    "is_solaris",
+    "is_sunos",
+    "is_unix",
+    "is_vxworks",
+]
 
 
 @cache
@@ -25,8 +27,8 @@ def is_posix() -> bool:
     return "posix" in builtin_module_names
 
 
-@cache
 @techdebt
+@cache
 def is_unix() -> bool:
     """Check if the platform is `Unix`.
 
@@ -37,6 +39,25 @@ def is_unix() -> bool:
     return is_posix()
 
 
+@cache
+def is_darwin() -> bool:
+    """Check if the platform is `Darwin`."""
+    return platform == "darwin"
+
+
+@cache
 def is_vxworks() -> bool:
     """Check if the platform is `VxWorks`."""
     return platform == "vxworks"
+
+
+@cache
+def is_solaris() -> bool:
+    """Check if the platform is `Solaris`."""
+    return platform in "solaris"
+
+
+@cache
+def is_sunos() -> bool:
+    """Check if the platform is `SunOS`."""
+    return platform == "sunos5"
