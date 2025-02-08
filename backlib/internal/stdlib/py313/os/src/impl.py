@@ -10,6 +10,7 @@ from typing import Final, Generic, NamedTuple, TypeVar
 
 from backlib.internal.markers import techdebt
 from backlib.internal.typing import AnyStr, Self, TypeAlias
+from backlib.internal.utils import alias
 from backlib.internal.utils.platform import is_nt, is_posix, is_unix
 from backlib.internal.utils.typing import ReadableBuffer
 
@@ -723,35 +724,35 @@ def stat(
     -------
     * Python 3.13.
     """
-    py_stat_result = py_os.stat(path, dir_fd=dir_fd, follow_symlinks=follow_symlinks)  # noqa: PTH116
+    st = py_os.stat(path, dir_fd=dir_fd, follow_symlinks=follow_symlinks)  # noqa: PTH116
 
     return stat_result(
-        st_mode=py_stat_result.st_mode,
-        st_ino=py_stat_result.st_ino,
-        st_dev=py_stat_result.st_dev,
-        st_nlink=py_stat_result.st_nlink,
-        st_uid=py_stat_result.st_uid,
-        st_gid=py_stat_result.st_gid,
-        st_size=py_stat_result.st_size,
-        st_atime=py_stat_result.st_atime,
-        st_mtime=py_stat_result.st_mtime,
-        st_ctime=py_stat_result.st_ctime,
-        st_atime_ns=py_stat_result.st_atime_ns,
-        st_mtime_ns=py_stat_result.st_mtime_ns,
-        st_ctime_ns=py_stat_result.st_ctime_ns,
-        st_birthtime=getattr(py_stat_result, "st_birthtime", py_stat_result.st_ctime),
-        st_birthtime_ns=getattr(py_stat_result, "st_birthtime_ns", py_stat_result.st_ctime_ns),
-        st_blocks=getattr(py_stat_result, "st_blocks", ceil(py_stat_result.st_size / 512)),
-        st_blksize=getattr(py_stat_result, "st_blksize", 512),
-        st_rdev=getattr(py_stat_result, "st_rdev", 0),
-        st_flags=getattr(py_stat_result, "st_flags", 0),
-        st_gen=getattr(py_stat_result, "st_gen", 0),
-        st_fstype=getattr(py_stat_result, "st_fstype", ""),
-        st_rsize=getattr(py_stat_result, "st_rsize", py_stat_result.st_size),
-        st_creator=getattr(py_stat_result, "st_creator", 0),
-        st_type=getattr(py_stat_result, "st_type", 0),
-        st_file_attributes=getattr(py_stat_result, "st_file_attributes", 0),
-        st_reparse_tag=getattr(py_stat_result, "st_reparse_tag", 0),
+        st_mode=st.st_mode,
+        st_ino=st.st_ino,
+        st_dev=st.st_dev,
+        st_nlink=st.st_nlink,
+        st_uid=st.st_uid,
+        st_gid=st.st_gid,
+        st_size=st.st_size,
+        st_atime=st.st_atime,
+        st_mtime=st.st_mtime,
+        st_ctime=st.st_ctime,
+        st_atime_ns=st.st_atime_ns,
+        st_mtime_ns=st.st_mtime_ns,
+        st_ctime_ns=st.st_ctime_ns,
+        st_birthtime=alias.or_default(st, "st_birthtime", otherwise=st.st_ctime),
+        st_birthtime_ns=alias.or_default(st, "st_birthtime_ns", otherwise=st.st_ctime_ns),
+        st_blocks=alias.or_default(st, "st_blocks", otherwise=ceil(st.st_size / 512)),
+        st_blksize=alias.or_default(st, "st_blksize", otherwise=512),
+        st_rdev=alias.or_default(st, "st_rdev", otherwise=0),
+        st_flags=alias.or_default(st, "st_flags", otherwise=0),
+        st_gen=alias.or_default(st, "st_gen", otherwise=0),
+        st_fstype=alias.or_default(st, "st_fstype", otherwise=""),
+        st_rsize=alias.or_default(st, "st_rsize", otherwise=st.st_size),
+        st_creator=alias.or_default(st, "st_creator", otherwise=0),
+        st_type=alias.or_default(st, "st_type", otherwise=0),
+        st_file_attributes=alias.or_default(st, "st_file_attributes", otherwise=0),
+        st_reparse_tag=alias.or_default(st, "st_reparse_tag", otherwise=0),
     )
 
 

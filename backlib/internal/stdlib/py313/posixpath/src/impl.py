@@ -935,7 +935,7 @@ def expandvars(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
         else:
             tail = path[j:]
             path = path[:i] + value
-            i = len(path)  # type: ignore[arg-type]
-            path += tail  # type: ignore[operator]
+            i = len(path)
+            path += tail
 
     return path

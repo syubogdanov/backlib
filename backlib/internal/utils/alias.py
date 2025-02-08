@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum, auto
-from typing import Literal, TypeVar
+from typing import TypeVar
 
 from backlib.internal.markers import techdebt
 from backlib.internal.utils.platform import (
@@ -83,4 +83,9 @@ def or_default(
     otherwise: T,
 ) -> T:
     """Get a named attribute if exists, otherwise the default value."""
-    return getattr(object_, name, otherwise)
+    return or_platform(object_, name, otherwise=otherwise)
+
+
+def to(object_: T) -> T:
+    """Mark an object as an alias."""
+    return techdebt(object_)
