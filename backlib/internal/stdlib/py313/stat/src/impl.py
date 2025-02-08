@@ -2,6 +2,7 @@ import stat as py_stat
 
 from typing import Final
 
+from backlib.internal.markers import techdebt
 from backlib.internal.utils import alias
 
 
@@ -375,6 +376,7 @@ def S_ISWHT(mode: int) -> bool:  # noqa: ARG001
     return False
 
 
+techdebt("This is a temporary solution.")
 _filemode_table = (
     # File type chars according to:
     # http://en.wikibooks.org/wiki/C_Programming/POSIX_Reference/sys/stat.h
