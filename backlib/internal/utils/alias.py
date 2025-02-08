@@ -30,14 +30,14 @@ def or_platform(  # noqa: PLR0911, PLR0913
     object_: object,
     name: str,
     *,
-    darwin: T | Undefined = Undefined,
-    nt: T | Undefined = Undefined,
-    posix: T | Undefined = Undefined,
-    solaris: T | Undefined = Undefined,
-    sunos: T | Undefined = Undefined,
-    unix: T | Undefined = Undefined,
-    vxworks: T | Undefined = Undefined,
-    otherwise: T | Undefined = Undefined,
+    darwin: T | type[Undefined] = Undefined,
+    nt: T | type[Undefined] = Undefined,
+    posix: T | type[Undefined] = Undefined,
+    solaris: T | type[Undefined] = Undefined,
+    sunos: T | type[Undefined] = Undefined,
+    unix: T | type[Undefined] = Undefined,
+    vxworks: T | type[Undefined] = Undefined,
+    otherwise: T | type[Undefined] = Undefined,
 ) -> T:
     """Get a named attribute if exists, otherwise the platform default value.
 
