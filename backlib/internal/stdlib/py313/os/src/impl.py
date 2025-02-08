@@ -8,7 +8,7 @@ from math import ceil
 from sys import getfilesystemencodeerrors, getfilesystemencoding, stdout
 from typing import Final, Generic, NamedTuple, TypeVar
 
-from backlib.internal.markers import py_alias, techdebt
+from backlib.internal.markers import techdebt
 from backlib.internal.typing import AnyStr, Self, TypeAlias
 from backlib.internal.utils.platform import is_nt, is_posix, is_unix
 from backlib.internal.utils.typing import ReadableBuffer
@@ -107,19 +107,19 @@ SEEK_CUR: Final[int] = 1
 SEEK_END: Final[int] = 2
 
 
-F_OK: Final[int] = py_alias(py_os.F_OK)
-R_OK: Final[int] = py_alias(py_os.R_OK)
-W_OK: Final[int] = py_alias(py_os.W_OK)
-X_OK: Final[int] = py_alias(py_os.X_OK)
+F_OK: Final[int] = techdebt(py_os.F_OK)
+R_OK: Final[int] = techdebt(py_os.R_OK)
+W_OK: Final[int] = techdebt(py_os.W_OK)
+X_OK: Final[int] = techdebt(py_os.X_OK)
 
 
-O_APPEND: Final[int] = py_alias(py_os.O_APPEND)
-O_CREAT: Final[int] = py_alias(py_os.O_CREAT)
-O_EXCL: Final[int] = py_alias(py_os.O_EXCL)
-O_RDONLY: Final[int] = py_alias(py_os.O_RDONLY)
-O_RDWR: Final[int] = py_alias(py_os.O_RDWR)
-O_TRUNC: Final[int] = py_alias(py_os.O_TRUNC)
-O_WRONLY: Final[int] = py_alias(py_os.O_WRONLY)
+O_APPEND: Final[int] = techdebt(py_os.O_APPEND)
+O_CREAT: Final[int] = techdebt(py_os.O_CREAT)
+O_EXCL: Final[int] = techdebt(py_os.O_EXCL)
+O_RDONLY: Final[int] = techdebt(py_os.O_RDONLY)
+O_RDWR: Final[int] = techdebt(py_os.O_RDWR)
+O_TRUNC: Final[int] = techdebt(py_os.O_TRUNC)
+O_WRONLY: Final[int] = techdebt(py_os.O_WRONLY)
 
 
 @techdebt
@@ -254,7 +254,7 @@ class PathLike(ABC, Generic[AnyStr_co]):
         return True
 
 
-@py_alias
+@techdebt
 def access(
     path: int | AnyStr | PathLike[AnyStr],
     mode: int,
@@ -282,7 +282,7 @@ def access(
     )
 
 
-@py_alias
+@techdebt
 def chdir(path: int | AnyStr | PathLike[AnyStr]) -> None:
     """Change the current working directory to path.
 
@@ -297,7 +297,7 @@ def chdir(path: int | AnyStr | PathLike[AnyStr]) -> None:
     return py_os.chdir(path)
 
 
-@py_alias
+@techdebt
 def close(fd: int) -> None:
     """Close file descriptor `fd`.
 
@@ -372,7 +372,7 @@ def fsencode(filename: AnyStr | PathLike[AnyStr]) -> bytes:
     return filename.encode(encoding, errors)
 
 
-@py_alias
+@techdebt
 def fspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Return the file system representation of the path.
 
@@ -401,7 +401,6 @@ def fstat(fd: int) -> stat_result:
     return stat(fd)
 
 
-@py_alias
 @techdebt
 def ftruncate(fd: int, length: int, /) -> None:
     """Truncate the file corresponding to file descriptor `fd`.
@@ -421,7 +420,7 @@ def ftruncate(fd: int, length: int, /) -> None:
     return py_os.ftruncate(fd, length)
 
 
-@py_alias
+@techdebt
 def get_inheritable(fd: int, /) -> bool:
     """Get the 'inheritable' flag of the specified file descriptor (a boolean).
 
@@ -436,7 +435,6 @@ def get_inheritable(fd: int, /) -> bool:
     return py_os.get_inheritable(fd)
 
 
-@py_alias
 @techdebt
 def get_terminal_size(fd: int | None = None, /) -> terminal_size:
     """Return the size of the terminal window as `(columns, lines)`.
@@ -460,7 +458,7 @@ def get_terminal_size(fd: int | None = None, /) -> terminal_size:
     return terminal_size(*py_terminal_size)
 
 
-@py_alias
+@techdebt
 def getcwd() -> str:
     """Return a string representing the current working directory.
 
@@ -475,7 +473,7 @@ def getcwd() -> str:
     return py_os.getcwd()  # noqa: PTH109
 
 
-@py_alias
+@techdebt
 def getcwdb() -> bytes:
     """Return a bytestring representing the current working directory.
 
@@ -490,7 +488,7 @@ def getcwdb() -> bytes:
     return py_os.getcwdb()  # noqa: PTH109
 
 
-@py_alias
+@techdebt
 def isatty(fd: int, /) -> bool:
     """Check if the file descriptor `fd` is open and connected to a tty(-like) device.
 
@@ -505,7 +503,6 @@ def isatty(fd: int, /) -> bool:
     return py_os.isatty(fd)
 
 
-@py_alias
 @techdebt
 def link(
     src: AnyStr | PathLike[AnyStr],
@@ -538,7 +535,7 @@ def link(
     )
 
 
-@py_alias
+@techdebt
 def lseek(fd: int, position: int, whence: int, /) -> int:
     """Set the current position of file descriptor `fd` to position `pos`, modified by `whence`.
 
@@ -567,7 +564,7 @@ def lstat(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> stat
     return stat(path, dir_fd=dir_fd, follow_symlinks=False)
 
 
-@py_alias
+@techdebt
 def mkdir(path: AnyStr | PathLike[AnyStr], mode: int = 0o777, *, dir_fd: int | None = None) -> None:
     """Create a directory named `path` with numeric mode `mode`.
 
@@ -582,7 +579,7 @@ def mkdir(path: AnyStr | PathLike[AnyStr], mode: int = 0o777, *, dir_fd: int | N
     return py_os.mkdir(path, mode, dir_fd=dir_fd)  # noqa: PTH102
 
 
-@py_alias
+@techdebt
 def open(  # noqa: A001
     path: AnyStr | PathLike[AnyStr],
     flags: int,
@@ -603,7 +600,7 @@ def open(  # noqa: A001
     return py_os.open(path, flags, mode, dir_fd=dir_fd)
 
 
-@py_alias
+@techdebt
 def read(fd: int, length: int, /) -> bytes:
     """Read at most `length` bytes from file descriptor `fd`.
 
@@ -618,7 +615,6 @@ def read(fd: int, length: int, /) -> bytes:
     return py_os.read(fd, length)
 
 
-@py_alias
 @techdebt
 def readlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> AnyStr:
     """Return a string representing the path to which the symbolic link points.
@@ -638,7 +634,7 @@ def readlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> A
     return py_os.readlink(path, dir_fd=dir_fd)  # noqa: PTH115
 
 
-@py_alias
+@techdebt
 def rename(
     src: AnyStr | PathLike[AnyStr],
     dst: AnyStr | PathLike[AnyStr],
@@ -659,7 +655,7 @@ def rename(
     return py_os.rename(src, dst, src_dir_fd=src_dir_fd, dst_dir_fd=dst_dir_fd)  # noqa: PTH104
 
 
-@py_alias
+@techdebt
 def replace(
     src: AnyStr | PathLike[AnyStr],
     dst: AnyStr | PathLike[AnyStr],
@@ -680,7 +676,7 @@ def replace(
     return py_os.replace(src, dst, src_dir_fd=src_dir_fd, dst_dir_fd=dst_dir_fd)  # noqa: PTH105
 
 
-@py_alias
+@techdebt
 def rmdir(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> None:
     """Remove (delete) the directory `path`.
 
@@ -695,7 +691,7 @@ def rmdir(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> None
     return py_os.rmdir(path, dir_fd=dir_fd)  # noqa: PTH106
 
 
-@py_alias
+@techdebt
 def set_inheritable(fd: int, inheritable: bool, /) -> None:  # noqa: FBT001
     """Set the 'inheritable' flag of the specified file descriptor.
 
@@ -710,7 +706,7 @@ def set_inheritable(fd: int, inheritable: bool, /) -> None:  # noqa: FBT001
     return py_os.set_inheritable(fd, inheritable)
 
 
-@py_alias
+@techdebt
 def stat(
     path: int | AnyStr | PathLike[AnyStr],
     *,
@@ -759,7 +755,6 @@ def stat(
     )
 
 
-@py_alias
 @techdebt
 def symlink(
     src: AnyStr | PathLike[AnyStr],
@@ -785,7 +780,7 @@ def symlink(
     return py_os.symlink(src, dst, target_is_directory, dir_fd=dir_fd)
 
 
-@py_alias
+@techdebt
 def strerror(code: int, /) -> str:
     """Return the error message corresponding to the error code in `code`.
 
@@ -800,7 +795,7 @@ def strerror(code: int, /) -> str:
     return py_os.strerror(code)
 
 
-@py_alias
+@techdebt
 def unlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> None:
     """Remove (delete) the file path.
 
@@ -815,7 +810,7 @@ def unlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> Non
     return py_os.unlink(path, dir_fd=dir_fd)  # noqa: PTH108
 
 
-@py_alias
+@techdebt
 def write(fd: int, data: ReadableBuffer, /) -> int:
     """Write the bytestring in `data` to file descriptor `fd`.
 
