@@ -6,6 +6,7 @@ from backlib.internal.markers import techdebt
 
 __all__: list[str] = [
     "is_darwin",
+    "is_freebsd",
     "is_nt",
     "is_posix",
     "is_solaris",
@@ -60,4 +61,10 @@ def is_solaris() -> bool:
 @cache
 def is_sunos() -> bool:
     """Check if the platform is `SunOS`."""
-    return platform == "sunos5"
+    return platform.startswith("sunos")
+
+
+@cache
+def is_freebsd() -> bool:
+    """Check if the platform is `FreeBSD`."""
+    return platform.startswith("freebsd")

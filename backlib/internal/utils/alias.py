@@ -6,6 +6,7 @@ from typing import TypeVar
 from backlib.internal.markers import techdebt
 from backlib.internal.utils.platform import (
     is_darwin,
+    is_freebsd,
     is_nt,
     is_posix,
     is_solaris,
@@ -24,11 +25,13 @@ class Undefined(Enum):
     DEFAULT = auto()
 
 
-def or_platform(  # noqa: PLR0911, PLR0913
+def or_platform(  # noqa: C901, PLR0911, PLR0913
     object_: object,
     name: str,
+    /,
     *,
     darwin: T | Undefined = Undefined.DEFAULT,
+    freebsd: T | Undefined = Undefined.DEFAULT,
     nt: T | Undefined = Undefined.DEFAULT,
     posix: T | Undefined = Undefined.DEFAULT,
     solaris: T | Undefined = Undefined.DEFAULT,
@@ -63,6 +66,9 @@ def or_platform(  # noqa: PLR0911, PLR0913
 
     if not isinstance(vxworks, Undefined) and is_vxworks():
         return techdebt(vxworks)
+
+    if not isinstance(freebsd, Undefined) and is_freebsd():
+        return techdebt(freebsd)
 
     if not isinstance(unix, Undefined) and is_unix():
         return techdebt(unix)
