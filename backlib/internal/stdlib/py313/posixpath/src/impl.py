@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import re
 
-from errno import ENOTDIR
 from typing import TYPE_CHECKING, Final, Literal
 
 from backlib.internal.markers import techdebt
+from backlib.internal.stdlib.py313.errno import ENOTDIR
 from backlib.internal.stdlib.py313.os import (
     environ,
     environb,
