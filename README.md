@@ -33,7 +33,7 @@ For more, see the [documentation][github/docs/errno].
 ```python
 from backlib.py313 import errno
 
-...
+assert errno.ENOTCAPABLE == 93
 ```
 
 #### io [SOON]
