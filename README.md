@@ -94,16 +94,6 @@ is_reserved = ospath.isreserved("./backlib")
 assert not is_reserved
 ```
 
-#### pathlib [SOON]
-
-For more, see the [documentation][github/docs/pathlib].
-
-```python
-from backlib.py313 import pathlib
-
-...
-```
-
 #### posixpath [UNRELEASED]
 
 For more, see the [documentation][github/docs/posixpath].
@@ -180,7 +170,6 @@ MIT License, Copyright (c) 2025 Sergei Bogdanov. See [LICENSE][github/license] f
 [github/docs/ntpath]: https://github.com/syubogdanov/backlib/tree/main/docs/ntpath.md
 [github/docs/os]: https://github.com/syubogdanov/backlib/tree/main/docs/os.md
 [github/docs/os.path]: https://github.com/syubogdanov/backlib/tree/main/docs/os.path.md
-[github/docs/pathlib]: https://github.com/syubogdanov/backlib/tree/main/docs/pathlib.md
 [github/docs/posixpath]: https://github.com/syubogdanov/backlib/tree/main/docs/posixpath.md
 [github/docs/shutil]: https://github.com/syubogdanov/backlib/tree/main/docs/shutil.md
 [github/docs/stat]: https://github.com/syubogdanov/backlib/tree/main/docs/stat.md
