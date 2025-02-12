@@ -519,7 +519,7 @@ def dirname(p: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return head
 
 
-@techdebt
+@refactorable
 def join(path: AnyStr | PathLike[AnyStr], *paths: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Join one or more path segments intelligently.
 
@@ -530,10 +530,6 @@ def join(path: AnyStr | PathLike[AnyStr], *paths: AnyStr | PathLike[AnyStr]) -> 
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This function should be refactored.
     """
     path = fspath(path)
 
@@ -791,7 +787,7 @@ def relpath(
         raise
 
 
-@techdebt
+@refactorable
 def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
     """Return the longest common sub-path of each pathname in the iterable paths.
 
@@ -802,10 +798,6 @@ def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The function should be refactored.
     """
     paths = [fspath(p) for p in paths]
 
@@ -855,7 +847,7 @@ def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
         raise
 
 
-@techdebt
+@refactorable
 def expanduser(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Replace an initial component of `~` or `~user` by that user's home directory.
 
@@ -866,10 +858,6 @@ def expanduser(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The function should be refactored.
     """
     path = fspath(path)
 
@@ -912,7 +900,7 @@ def expanduser(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return userhome + path[sep_index:]
 
 
-@techdebt
+@refactorable
 def expandvars(path: AnyStr | PathLike[AnyStr]) -> AnyStr:  # noqa: C901, PLR0912, PLR0915
     """Return the argument with environment variables expanded.
 
@@ -923,10 +911,6 @@ def expandvars(path: AnyStr | PathLike[AnyStr]) -> AnyStr:  # noqa: C901, PLR091
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The function should be refactored.
     """
     path = fspath(path)
 

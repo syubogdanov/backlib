@@ -547,7 +547,7 @@ def normpath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return path or dot
 
 
-@techdebt
+@refactorable
 def relpath(
     path: AnyStr | PathLike[AnyStr],
     start: AnyStr | PathLike[AnyStr] | None = None,
@@ -561,10 +561,6 @@ def relpath(
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The function should be refactored.
     """
     path = fspath(path)
 
@@ -598,7 +594,7 @@ def relpath(
         raise
 
 
-@techdebt
+@refactorable
 def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr:  # noqa: C901, PLR0915
     """Return the canonical path of the specified filename.
 
@@ -609,10 +605,6 @@ def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The function should be refactored
     """
     filename = fspath(path)
 
@@ -673,7 +665,7 @@ def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr
     return path
 
 
-@techdebt
+@refactorable
 def ismount(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if pathname `path` is a mount point.
 
@@ -684,10 +676,6 @@ def ismount(path: AnyStr | PathLike[AnyStr]) -> bool:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The function should be refactored.
     """
     pardir = b".." if isinstance(path, bytes) else ".."
 
@@ -737,7 +725,7 @@ def abspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return normpath(path)
 
 
-@techdebt
+@refactorable
 def join(path: AnyStr | PathLike[AnyStr], *paths: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Join one or more path segments intelligently.
 
@@ -748,10 +736,6 @@ def join(path: AnyStr | PathLike[AnyStr], *paths: AnyStr | PathLike[AnyStr]) -> 
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The function should be refactored.
     """
     initial_path = fspath(path)
 
@@ -777,7 +761,7 @@ def join(path: AnyStr | PathLike[AnyStr], *paths: AnyStr | PathLike[AnyStr]) -> 
     return final_path
 
 
-@techdebt
+@refactorable
 def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
     """Return the longest common sub-path of each pathname in the iterable paths.
 
@@ -788,10 +772,6 @@ def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The function should be refactored.
     """
     paths = [fspath(p) for p in paths]
 
@@ -874,7 +854,7 @@ def expanduser(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return (userhome + path[sep_index:]) or sep  # type: ignore[operator,return-value]
 
 
-@techdebt
+@refactorable
 def expandvars(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Return the argument with environment variables expanded.
 
@@ -885,10 +865,6 @@ def expandvars(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The function should be refactored.
     """
     path = fspath(path)
 
