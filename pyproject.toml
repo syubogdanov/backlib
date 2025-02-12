@@ -78,7 +78,7 @@ target-version = "py39"
 
 [tool.ruff.lint]
 select = ["ALL"]
-ignore = ["D100", "D104"]
+ignore = ["A005", "D100", "D104"]
 
 [tool.ruff.lint.extend-per-file-ignores]
 "backlib/internal/stdlib/py313/json/src/**" = ["D"]
