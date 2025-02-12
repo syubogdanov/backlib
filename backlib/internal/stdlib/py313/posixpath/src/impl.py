@@ -4,7 +4,7 @@ import re
 
 from typing import TYPE_CHECKING, Final, Literal
 
-from backlib.internal.markers import techdebt
+from backlib.internal.markers import refactorable, simplified, techdebt
 from backlib.internal.stdlib.py313.errno import ENOTDIR
 from backlib.internal.stdlib.py313.os import (
     environ,
@@ -404,7 +404,7 @@ def isjunction(path: AnyStr | PathLike[AnyStr]) -> bool:
     return False
 
 
-@techdebt
+@simplified
 def splitroot(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:
     """Split the pathname `path` into a 3-item tuple `(drive, root, tail)`.
 
@@ -415,10 +415,6 @@ def splitroot(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The functionality has been reduced.
     """
     p = fspath(p)
 
@@ -835,7 +831,8 @@ def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
         raise
 
 
-@techdebt
+@refactorable
+@simplified
 def expanduser(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Replace an initial component of `~` or `~user` by that user's home directory.
 
@@ -846,11 +843,6 @@ def expanduser(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The functionality has been reduced;
-    * This function should be refactored.
     """
     path = fspath(path)
 

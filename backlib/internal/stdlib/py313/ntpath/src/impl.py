@@ -3,7 +3,7 @@ from __future__ import annotations
 from string import ascii_letters, digits
 from typing import TYPE_CHECKING, Final, Literal
 
-from backlib.internal.markers import techdebt
+from backlib.internal.markers import refactorable, simplified, techdebt
 from backlib.internal.stdlib.py313.ntpath.src.utils import check_arg_types, is_reserved_name
 from backlib.internal.stdlib.py313.os import (
     PathLike,
@@ -329,7 +329,7 @@ def isabs(s: AnyStr | PathLike[AnyStr]) -> bool:
     return prefix.startswith(colon_sep, 1) or prefix.startswith(double_sep)
 
 
-@techdebt
+@simplified
 def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if pathname `path` is located on a Windows Dev Drive.
 
@@ -340,16 +340,12 @@ def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The functionality has been reduced.
     """
     fspath(path)
     return False
 
 
-@techdebt
+@simplified
 def normcase(s: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Normalize the case of a pathname.
 
@@ -360,10 +356,6 @@ def normcase(s: AnyStr | PathLike[AnyStr]) -> AnyStr:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The functionality has been reduced.
     """
     s = fspath(s)
 
@@ -407,7 +399,8 @@ def splitext(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
     return (p[:extsep_index], p[extsep_index:])
 
 
-@techdebt
+@refactorable
+@simplified
 def splitroot(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:  # noqa: PLR0911
     """Split the pathname `path` into a 3-item tuple `(drive, root, tail)`.
 
@@ -418,11 +411,6 @@ def splitroot(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:  #
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The functionality has been reduced;
-    * This function should be refactored.
     """
     p = fspath(p)
 
@@ -589,7 +577,8 @@ def join(path: AnyStr | PathLike[AnyStr], *paths: AnyStr | PathLike[AnyStr]) -> 
         raise
 
 
-@techdebt
+@refactorable
+@simplified
 def normpath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Normalize a pathname by collapsing redundant separators and up-level references.
 
@@ -600,11 +589,6 @@ def normpath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The functionality has been reduced;
-    * This function should be refactored.
     """
     path = fspath(path)
 
@@ -646,7 +630,7 @@ def normpath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return prefix + sep.join(components)
 
 
-@techdebt
+@simplified
 def abspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Return a normalized absolutized version of the pathname `path`.
 
@@ -657,10 +641,6 @@ def abspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The functionality has been reduced.
     """
     path = fspath(path)
 
@@ -673,7 +653,7 @@ def abspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return normpath(path)
 
 
-@techdebt
+@simplified
 def ismount(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if pathname `path` is a mount point.
 
@@ -684,10 +664,6 @@ def ismount(path: AnyStr | PathLike[AnyStr]) -> bool:
     Version
     -------
     * Python 3.13.
-
-    Technical Debt
-    --------------
-    * The functionality has been reduced.
     """
     path = fspath(path)
 
