@@ -1001,7 +1001,7 @@ def expandvars(path: AnyStr | PathLike[AnyStr]) -> AnyStr:  # noqa: C901, PLR091
                 else:
                     var = path[:index]
                     try:
-                        value = fsencode(environ[fsdecode(var)]) if env is None else env[var]  # type: ignore[index]
+                        value = fsencode(environ[fsdecode(var)]) if env is None else env[var]
                     except KeyError:
                         value = percent + var + percent
                     res += value
@@ -1020,7 +1020,7 @@ def expandvars(path: AnyStr | PathLike[AnyStr]) -> AnyStr:  # noqa: C901, PLR091
                 else:
                     var = path[:index]
                     try:
-                        value = fsencode(environ[fsdecode(var)]) if env is None else env[var]  # type: ignore[index]
+                        value = fsencode(environ[fsdecode(var)]) if env is None else env[var]
                     except KeyError:
                         value = dollar + brace + var + rbrace
                     res += value
@@ -1033,7 +1033,7 @@ def expandvars(path: AnyStr | PathLike[AnyStr]) -> AnyStr:  # noqa: C901, PLR091
                     index += 1
                     c = path[index:index + 1]
                 try:
-                    value = fsencode(environ[fsdecode(var)]) if env is None else env[var]  # type: ignore[index]
+                    value = fsencode(environ[fsdecode(var)]) if env is None else env[var]
                 except KeyError:
                     value = dollar + var
                 res += value

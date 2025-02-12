@@ -108,19 +108,19 @@ SEEK_CUR: Final[int] = 1
 SEEK_END: Final[int] = 2
 
 
-F_OK: Final[int] = techdebt(py_os.F_OK)
-R_OK: Final[int] = techdebt(py_os.R_OK)
-W_OK: Final[int] = techdebt(py_os.W_OK)
-X_OK: Final[int] = techdebt(py_os.X_OK)
+F_OK: Final[int] = alias.to(py_os.F_OK)
+R_OK: Final[int] = alias.to(py_os.R_OK)
+W_OK: Final[int] = alias.to(py_os.W_OK)
+X_OK: Final[int] = alias.to(py_os.X_OK)
 
 
-O_APPEND: Final[int] = techdebt(py_os.O_APPEND)
-O_CREAT: Final[int] = techdebt(py_os.O_CREAT)
-O_EXCL: Final[int] = techdebt(py_os.O_EXCL)
-O_RDONLY: Final[int] = techdebt(py_os.O_RDONLY)
-O_RDWR: Final[int] = techdebt(py_os.O_RDWR)
-O_TRUNC: Final[int] = techdebt(py_os.O_TRUNC)
-O_WRONLY: Final[int] = techdebt(py_os.O_WRONLY)
+O_APPEND: Final[int] = alias.to(py_os.O_APPEND)
+O_CREAT: Final[int] = alias.to(py_os.O_CREAT)
+O_EXCL: Final[int] = alias.to(py_os.O_EXCL)
+O_RDONLY: Final[int] = alias.to(py_os.O_RDONLY)
+O_RDWR: Final[int] = alias.to(py_os.O_RDWR)
+O_TRUNC: Final[int] = alias.to(py_os.O_TRUNC)
+O_WRONLY: Final[int] = alias.to(py_os.O_WRONLY)
 
 
 @techdebt
@@ -264,7 +264,7 @@ def access(
     effective_ids: bool = False,
     follow_symlinks: bool = True,
 ) -> bool:
-    """Use the real uid/gid to test for access to `path`.
+    """Use the real uid / gid to test for access to `path`.
 
     See Also
     --------
@@ -274,7 +274,9 @@ def access(
     -------
     * Python 3.13.
     """
-    return py_os.access(
+    py_access = alias.to(py_os.access)
+
+    return py_access(
         path=path,
         mode=mode,
         dir_fd=dir_fd,
@@ -295,7 +297,8 @@ def chdir(path: int | AnyStr | PathLike[AnyStr]) -> None:
     -------
     * Python 3.13.
     """
-    return py_os.chdir(path)
+    py_chdir = alias.to(py_os.chdir)
+    return py_chdir(path)
 
 
 @techdebt
@@ -310,7 +313,8 @@ def close(fd: int) -> None:
     -------
     * Python 3.13.
     """
-    return py_os.close(fd)
+    py_close = alias.to(py_os.close)
+    return py_close(fd)
 
 
 def closerange(fd_low: int, fd_high: int, /) -> None:
@@ -385,7 +389,8 @@ def fspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     -------
     * Python 3.13.
     """
-    return py_os.fspath(path)
+    py_fspath = alias.to(py_os.fspath)
+    return py_fspath(path)
 
 
 def fstat(fd: int) -> stat_result:
@@ -418,7 +423,8 @@ def ftruncate(fd: int, length: int, /) -> None:
     --------------
     * This function is available on Unix, not POSIX.
     """
-    return py_os.ftruncate(fd, length)
+    py_ftruncate = alias.to(py_os.ftruncate)
+    return py_ftruncate(fd, length)
 
 
 @techdebt
@@ -433,7 +439,8 @@ def get_inheritable(fd: int, /) -> bool:
     -------
     * Python 3.13.
     """
-    return py_os.get_inheritable(fd)
+    py_get_inheritable = alias.to(py_os.get_inheritable)
+    return py_get_inheritable(fd)
 
 
 @techdebt
@@ -455,7 +462,9 @@ def get_terminal_size(fd: int | None = None, /) -> terminal_size:
     if fd is None:
         fd = stdout.fileno()
 
-    py_terminal_size = py_os.get_terminal_size(fd)
+    py_get_terminal_size = alias.to(py_os.get_terminal_size)
+    py_terminal_size = py_get_terminal_size(fd)
+
     return terminal_size(*py_terminal_size)
 
 
@@ -471,7 +480,8 @@ def getcwd() -> str:
     -------
     * Python 3.13.
     """
-    return py_os.getcwd()  # noqa: PTH109
+    py_getcwd = alias.to(py_os.getcwd)
+    return py_getcwd()
 
 
 @techdebt
@@ -486,7 +496,8 @@ def getcwdb() -> bytes:
     -------
     * Python 3.13.
     """
-    return py_os.getcwdb()  # noqa: PTH109
+    py_getcwdb = alias.to(py_os.getcwdb)
+    return py_getcwdb()
 
 
 @techdebt
@@ -501,7 +512,8 @@ def isatty(fd: int, /) -> bool:
     -------
     * Python 3.13.
     """
-    return py_os.isatty(fd)
+    py_isatty = alias.to(py_os.isatty)
+    return py_isatty(fd)
 
 
 @techdebt
@@ -527,7 +539,9 @@ def link(
     --------------
     * This function is available on Unix, not POSIX.
     """
-    return py_os.link(
+    py_link = alias.to(py_os.link)
+
+    return py_link(
         src=src,
         dst=dst,
         src_dir_fd=src_dir_fd,
@@ -548,7 +562,8 @@ def lseek(fd: int, position: int, whence: int, /) -> int:
     -------
     * Python 3.13.
     """
-    return py_os.lseek(fd, position, whence)
+    py_lseek = alias.to(py_os.lseek)
+    return py_lseek(fd, position, whence)
 
 
 def lstat(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> stat_result:
@@ -577,7 +592,8 @@ def mkdir(path: AnyStr | PathLike[AnyStr], mode: int = 0o777, *, dir_fd: int | N
     -------
     * Python 3.13.
     """
-    return py_os.mkdir(path, mode, dir_fd=dir_fd)  # noqa: PTH102
+    py_mkdir = alias.to(py_os.mkdir)
+    return py_mkdir(path, mode, dir_fd=dir_fd)
 
 
 @techdebt
@@ -598,7 +614,8 @@ def open(  # noqa: A001
     -------
     * Python 3.13.
     """
-    return py_os.open(path, flags, mode, dir_fd=dir_fd)
+    py_open = alias.to(py_os.open)
+    return py_open(path, flags, mode, dir_fd=dir_fd)
 
 
 @techdebt
@@ -613,7 +630,8 @@ def read(fd: int, length: int, /) -> bytes:
     -------
     * Python 3.13.
     """
-    return py_os.read(fd, length)
+    py_read = alias.to(py_os.read)
+    return py_read(fd, length)
 
 
 @techdebt
@@ -632,7 +650,8 @@ def readlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> A
     --------------
     * This function is available on Unix, not POSIX.
     """
-    return py_os.readlink(path, dir_fd=dir_fd)  # noqa: PTH115
+    py_readlink = alias.to(py_os.readlink)
+    return py_readlink(path, dir_fd=dir_fd)
 
 
 @techdebt
@@ -653,7 +672,8 @@ def rename(
     -------
     * Python 3.13.
     """
-    return py_os.rename(src, dst, src_dir_fd=src_dir_fd, dst_dir_fd=dst_dir_fd)  # noqa: PTH104
+    py_rename = alias.to(py_os.rename)
+    return py_rename(src, dst, src_dir_fd=src_dir_fd, dst_dir_fd=dst_dir_fd)
 
 
 @techdebt
@@ -674,7 +694,8 @@ def replace(
     -------
     * Python 3.13.
     """
-    return py_os.replace(src, dst, src_dir_fd=src_dir_fd, dst_dir_fd=dst_dir_fd)  # noqa: PTH105
+    py_replace = alias.to(py_os.replace)
+    return py_replace(src, dst, src_dir_fd=src_dir_fd, dst_dir_fd=dst_dir_fd)
 
 
 @techdebt
@@ -689,7 +710,8 @@ def rmdir(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> None
     -------
     * Python 3.13.
     """
-    return py_os.rmdir(path, dir_fd=dir_fd)  # noqa: PTH106
+    py_rmdir = alias.to(py_os.rmdir)
+    return py_rmdir(path, dir_fd=dir_fd)
 
 
 @techdebt
@@ -704,7 +726,8 @@ def set_inheritable(fd: int, inheritable: bool, /) -> None:  # noqa: FBT001
     -------
     * Python 3.13.
     """
-    return py_os.set_inheritable(fd, inheritable)
+    py_set_inheritable = alias.to(py_os.set_inheritable)
+    return py_set_inheritable(fd, inheritable)
 
 
 @techdebt
@@ -724,7 +747,8 @@ def stat(
     -------
     * Python 3.13.
     """
-    st = py_os.stat(path, dir_fd=dir_fd, follow_symlinks=follow_symlinks)  # noqa: PTH116
+    py_stat = alias.to(py_os.stat)
+    st = py_stat(path, dir_fd=dir_fd, follow_symlinks=follow_symlinks)
 
     return stat_result(
         st_mode=st.st_mode,
@@ -778,7 +802,8 @@ def symlink(
     --------------
     * This function is available on Unix, not POSIX.
     """
-    return py_os.symlink(src, dst, target_is_directory, dir_fd=dir_fd)
+    py_symlink = alias.to(py_os.symlink)
+    return py_symlink(src, dst, target_is_directory, dir_fd=dir_fd)
 
 
 @techdebt
@@ -793,7 +818,8 @@ def strerror(code: int, /) -> str:
     -------
     * Python 3.13.
     """
-    return py_os.strerror(code)
+    py_strerror = alias.to(py_os.strerror)
+    return py_strerror(code)
 
 
 @techdebt
@@ -808,7 +834,8 @@ def unlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> Non
     -------
     * Python 3.13.
     """
-    return py_os.unlink(path, dir_fd=dir_fd)  # noqa: PTH108
+    py_unlink = alias.to(py_os.unlink)
+    return py_unlink(path, dir_fd=dir_fd)
 
 
 @techdebt
@@ -823,4 +850,5 @@ def write(fd: int, data: ReadableBuffer, /) -> int:
     -------
     * Python 3.13.
     """
-    return py_os.write(fd, data)
+    py_write = alias.to(py_os.write)
+    return py_write(fd, data)
