@@ -4,7 +4,7 @@ import re
 
 from typing import TYPE_CHECKING, Final, Literal
 
-from backlib.internal.markers import refactorable, simplified, techdebt
+from backlib.internal.markers import refactorable, simplified
 from backlib.internal.stdlib.py313.errno import ENOTDIR
 from backlib.internal.stdlib.py313.os import (
     environ,
