@@ -51,6 +51,7 @@ typing-extensions = {version = "^4.12", python = "<3.11"}
 optional = true
 
 [tool.poetry.group.lint.dependencies]
+black = "^25.1"
 mypy = "^1.13"
 ruff = "^0.7"
 
@@ -59,6 +60,10 @@ optional = true
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.3"
+
+[tool.black]
+line-length = 100
+target-version = ["py39"]
 
 [tool.mypy]
 disallow_any_unimported = true

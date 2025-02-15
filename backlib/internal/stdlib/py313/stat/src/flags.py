@@ -100,12 +100,12 @@ ST_ATIME: Final[int] = 7
 ST_MTIME: Final[int] = 8
 ST_CTIME: Final[int] = 9
 
-S_IFDIR: Final[int]  = 0o040000
-S_IFCHR: Final[int]  = 0o020000
-S_IFBLK: Final[int]  = 0o060000
-S_IFREG: Final[int]  = 0o100000
-S_IFIFO: Final[int]  = 0o010000
-S_IFLNK: Final[int]  = 0o120000
+S_IFDIR: Final[int] = 0o040000
+S_IFCHR: Final[int] = 0o020000
+S_IFBLK: Final[int] = 0o060000
+S_IFREG: Final[int] = 0o100000
+S_IFIFO: Final[int] = 0o010000
+S_IFLNK: Final[int] = 0o120000
 S_IFSOCK: Final[int] = 0o140000
 
 S_IFDOOR: Final[int] = alias.to(py_stat.S_IFDOOR)
@@ -132,7 +132,7 @@ S_IROTH: Final[int] = 0o0004
 S_IWOTH: Final[int] = 0o0002
 S_IXOTH: Final[int] = 0o0001
 
-UF_SETTABLE: Final[int] = 0x0000ffff
+UF_SETTABLE: Final[int] = 0x0000FFFF
 UF_NODUMP: Final[int] = 0x00000001
 UF_IMMUTABLE: Final[int] = 0x00000002
 UF_APPEND: Final[int] = 0x00000004
@@ -143,7 +143,7 @@ UF_TRACKED: Final[int] = 0x00000040
 UF_DATAVAULT: Final[int] = 0x00000080
 UF_HIDDEN: Final[int] = 0x00008000
 
-SF_SETTABLE: Final[int] = 0xffff0000
+SF_SETTABLE: Final[int] = 0xFFFF0000
 SF_ARCHIVED: Final[int] = 0x00010000
 SF_IMMUTABLE: Final[int] = 0x00020000
 SF_APPEND: Final[int] = 0x00040000
