@@ -1,4 +1,4 @@
-from backlib.internal.stdlib.py313.stat.src.core import (
+from backlib.internal.stdlib.py313.stat.src.flags import (
     FILE_ATTRIBUTE_ARCHIVE,
     FILE_ATTRIBUTE_COMPRESSED,
     FILE_ATTRIBUTE_DEVICE,
@@ -27,12 +27,10 @@ from backlib.internal.stdlib.py313.stat.src.core import (
     S_IFDOOR,
     S_IFIFO,
     S_IFLNK,
-    S_IFMT,
     S_IFPORT,
     S_IFREG,
     S_IFSOCK,
     S_IFWHT,
-    S_IMODE,
     S_IREAD,
     S_IRGRP,
     S_IROTH,
@@ -40,19 +38,9 @@ from backlib.internal.stdlib.py313.stat.src.core import (
     S_IRWXG,
     S_IRWXO,
     S_IRWXU,
-    S_ISBLK,
-    S_ISCHR,
-    S_ISDIR,
-    S_ISDOOR,
-    S_ISFIFO,
     S_ISGID,
-    S_ISLNK,
-    S_ISPORT,
-    S_ISREG,
-    S_ISSOCK,
     S_ISUID,
     S_ISVTX,
-    S_ISWHT,
     S_IWGRP,
     S_IWOTH,
     S_IWRITE,
@@ -91,8 +79,22 @@ from backlib.internal.stdlib.py313.stat.src.core import (
     UF_OPAQUE,
     UF_SETTABLE,
     UF_TRACKED,
-    filemode,
 )
+from backlib.internal.stdlib.py313.stat.src.ismode import (
+    S_IFMT,
+    S_IMODE,
+    S_ISBLK,
+    S_ISCHR,
+    S_ISDIR,
+    S_ISDOOR,
+    S_ISFIFO,
+    S_ISLNK,
+    S_ISPORT,
+    S_ISREG,
+    S_ISSOCK,
+    S_ISWHT,
+)
+from backlib.internal.stdlib.py313.stat.src.rendering import filemode
 
 
 __all__: list[str] = [

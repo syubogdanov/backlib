@@ -4,7 +4,7 @@ import re
 
 from typing import TYPE_CHECKING, Final, Literal
 
-from backlib.internal.markers import todo.restore, todo
+from backlib.internal.markers import todo
 from backlib.internal.stdlib.py313.errno import ENOTDIR
 from backlib.internal.stdlib.py313.os import (
     environ,
