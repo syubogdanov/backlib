@@ -88,7 +88,7 @@ def or_default(
     otherwise: T,
 ) -> T:
     """Get a named attribute if exists, otherwise the default value."""
-    return or_platform(object_, name, otherwise=otherwise)
+    return getattr(object_, name, otherwise)
 
 
 def to(object_: T) -> T:
