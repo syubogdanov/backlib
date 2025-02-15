@@ -386,87 +386,87 @@ returned by [os.stat()][os]:
 ### \* stat.**FILE_ATTRIBUTE_ARCHIVE**
 
 A file or directory that is an archive file or directory. Applications typically use this attribute
-to mark files for backup or removal. (Windows).
+to mark files for backup or removal (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_COMPRESSED**
 
 A file or directory that is compressed. For a file, all of the data in the file is compressed. For a
-directory, compression is the default for newly created files and subdirectories. (Windows).
+directory, compression is the default for newly created files and subdirectories (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_DEVICE**
 
-This value is reserved for system use. (Windows).
+This value is reserved for system use (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_DIRECTORY**
 
-The handle that identifies a directory. (Windows).
+The handle that identifies a directory (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_ENCRYPTED**
 
 A file or directory that is encrypted. For a file, all data streams in the file are encrypted. For a
-directory, encryption is the default for newly created files and subdirectories. (Windows).
+directory, encryption is the default for newly created files and subdirectories (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_HIDDEN**
 
-The file or directory is hidden. It is not included in an ordinary directory listing. (Windows).
+The file or directory is hidden. It is not included in an ordinary directory listing (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_INTEGRITY_STREAM**
 
 The directory or user data stream is configured with integrity (only supported on ReFS volumes). It
 is not included in an ordinary directory listing. The integrity setting persists with the file if
 it's renamed. If a file is copied the destination file will have integrity set if either the source
-file or destination directory have integrity set. (Windows).
+file or destination directory have integrity set (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_NORMAL**
 
-A file that does not have other attributes set. This attribute is valid only when used alone.
+A file that does not have other attributes set. This attribute is valid only when used alone
 (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_NOT_CONTENT_INDEXED**
 
-The file or directory is not to be indexed by the content indexing service. (Windows).
+The file or directory is not to be indexed by the content indexing service (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_NO_SCRUB_DATA**
 
 The user data stream not to be read by the background data integrity scanner (AKA scrubber). When
 set on a directory it only provides inheritance. This flag is only supported on Storage Spaces and
-ReFS volumes. It is not included in an ordinary directory listing. (Windows).
+ReFS volumes. It is not included in an ordinary directory listing (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_OFFLINE**
 
 The data of a file is not available immediately. This attribute indicates that the file data is
 physically moved to offline storage. This attribute is used by Remote Storage, which is the
-hierarchical storage management software. Applications should not arbitrarily change this attribute.
+hierarchical storage management software. Applications should not arbitrarily change this attribute
 (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_READONLY**
 
 A file that is read-only. Applications can read the file, but cannot write to it or delete it. This
-attribute is not honored on directories. (Windows).
+attribute is not honored on directories (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_REPARSE_POINT**
 
-A file or directory that has an associated reparse point, or a file that is a symbolic link.
+A file or directory that has an associated reparse point, or a file that is a symbolic link
 (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_SPARSE_FILE**
 
-A file that is a sparse file. (Windows).
+A file that is a sparse file (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_SYSTEM**
 
-A file or directory that the operating system uses a part of, or uses exclusively. (Windows).
+A file or directory that the operating system uses a part of, or uses exclusively (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_TEMPORARY**
 
 A file that is being used for temporary storage. File systems avoid writing data back to mass
 storage if sufficient cache memory is available, because typically, an application deletes a
 temporary file after the handle is closed. In that scenario, the system can entirely avoid writing
-the data. Otherwise, the data is written after the handle is closed. (Windows).
+the data. Otherwise, the data is written after the handle is closed (Windows).
 
 ### \* stat.**FILE_ATTRIBUTE_VIRTUAL**
 
-This value is reserved for system use. (Windows).
+This value is reserved for system use (Windows).
 
 ###
 
@@ -475,16 +475,16 @@ The following constants are available for comparing against the `st_reparse_tag`
 
 ### \* stat.**IO_REPARSE_TAG_SYMLINK**
 
-Used for symbolic link support. (Windows).
+Used for symbolic link support (Windows).
 
 ### \* stat.**IO_REPARSE_TAG_MOUNT_POINT**
 
-Used for mount point support. (Windows).
+Used for mount point support (Windows).
 
 ### \* stat.**IO_REPARSE_TAG_APPEXECLINK**
 
 Used by Universal Windows Platform (UWP) packages to encode information that allows the application
-to be launched by CreateProcess. Server-side interpretation only, not meaningful over the wire.
+to be launched by CreateProcess. Server-side interpretation only, not meaningful over the wire
 (Windows).
 
 <!-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- -->
