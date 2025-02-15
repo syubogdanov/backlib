@@ -1,6 +1,23 @@
 from backlib.internal.stdlib.py313.os.src.abc import PathLike
-from backlib.internal.stdlib.py313.os.src.env import environ, environb, supports_bytes_environ
-from backlib.internal.stdlib.py313.os.src.impl import (
+from backlib.internal.stdlib.py313.os.src.constants import (
+    altsep,
+    curdir,
+    defpath,
+    devnull,
+    extsep,
+    linesep,
+    name,
+    pardir,
+    pathsep,
+    sep,
+)
+from backlib.internal.stdlib.py313.os.src.environment import (
+    environ,
+    environb,
+    supports_bytes_environ,
+)
+from backlib.internal.stdlib.py313.os.src.errors import error
+from backlib.internal.stdlib.py313.os.src.flags import (
     F_OK,
     O_APPEND,
     O_CREAT,
@@ -15,16 +32,12 @@ from backlib.internal.stdlib.py313.os.src.impl import (
     SEEK_SET,
     W_OK,
     X_OK,
+)
+from backlib.internal.stdlib.py313.os.src.functions import (
     access,
-    altsep,
     chdir,
     close,
     closerange,
-    curdir,
-    defpath,
-    devnull,
-    error,
-    extsep,
     fsdecode,
     fsencode,
     fspath,
@@ -35,21 +48,16 @@ from backlib.internal.stdlib.py313.os.src.impl import (
     getcwd,
     getcwdb,
     isatty,
-    linesep,
     link,
     lseek,
     lstat,
     mkdir,
-    name,
     open,  # noqa: A004
-    pardir,
-    pathsep,
     read,
     readlink,
     rename,
     replace,
     rmdir,
-    sep,
     set_inheritable,
     stat,
     strerror,

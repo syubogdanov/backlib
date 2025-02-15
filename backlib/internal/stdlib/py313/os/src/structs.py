@@ -5,6 +5,9 @@ from typing import NamedTuple
 from backlib.internal.markers import todo
 
 
+__all__: list[str] = ["stat_result", "terminal_size"]
+
+
 @todo.restore
 class stat_result(NamedTuple):  # noqa: N801
     """Object whose attributes correspond roughly to the members of the `stat` structure.

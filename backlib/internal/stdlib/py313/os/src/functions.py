@@ -5,11 +5,11 @@ import os as py_os
 from contextlib import suppress
 from math import ceil
 from sys import getfilesystemencodeerrors, getfilesystemencoding, stdout
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING
 
 from backlib.internal.markers import depends_on
 from backlib.internal.stdlib.py313.os.src.structs import stat_result, terminal_size
-from backlib.internal.typing import AnyStr, TypeAlias
+from backlib.internal.typing import AnyStr
 from backlib.internal.utils import alias
 from backlib.internal.utils.platform import is_nt, is_posix
 from backlib.internal.utils.typing import ReadableBuffer
@@ -20,30 +20,10 @@ if TYPE_CHECKING:
 
 
 __all__: list[str] = [
-    "F_OK",
-    "O_APPEND",
-    "O_CREAT",
-    "O_EXCL",
-    "O_RDONLY",
-    "O_RDWR",
-    "O_TRUNC",
-    "O_WRONLY",
-    "R_OK",
-    "SEEK_CUR",
-    "SEEK_END",
-    "SEEK_SET",
-    "W_OK",
-    "X_OK",
     "access",
-    "altsep",
     "chdir",
     "close",
     "closerange",
-    "curdir",
-    "defpath",
-    "devnull",
-    "error",
-    "extsep",
     "fsdecode",
     "fsencode",
     "fspath",
@@ -54,21 +34,16 @@ __all__: list[str] = [
     "getcwd",
     "getcwdb",
     "isatty",
-    "linesep",
     "link",
     "lseek",
     "lstat",
     "mkdir",
-    "name",
     "open",
-    "pardir",
-    "pathsep",
     "read",
     "readlink",
     "rename",
     "replace",
     "rmdir",
-    "sep",
     "set_inheritable",
     "stat",
     "strerror",
@@ -81,44 +56,6 @@ __all__: list[str] = [
 if not is_nt() and not is_posix():
     detail = "no os specific module found"
     raise ImportError(detail)
-
-
-error: TypeAlias = OSError
-
-
-curdir: Final[str] = "."
-pardir: Final[str] = ".."
-extsep: Final[str] = "."
-
-name: Final[str] = "posix" if is_posix() else "nt"
-linesep: Final[str] = "\n" if is_posix() else "\r\n"
-
-sep: Final[str] = "/" if is_posix() else "\\"
-pathsep: Final[str] = ":" if is_posix() else ";"
-altsep: Final[str | None] = None if is_posix() else "/"
-
-defpath: Final[str] = "/bin:/usr/bin" if is_posix() else ".;C:\\bin"
-devnull: Final[str] = "/dev/null" if is_posix() else "nul"
-
-
-SEEK_SET: Final[int] = 0
-SEEK_CUR: Final[int] = 1
-SEEK_END: Final[int] = 2
-
-
-F_OK: Final[int] = alias.to(py_os.F_OK)
-R_OK: Final[int] = alias.to(py_os.R_OK)
-W_OK: Final[int] = alias.to(py_os.W_OK)
-X_OK: Final[int] = alias.to(py_os.X_OK)
-
-
-O_APPEND: Final[int] = alias.to(py_os.O_APPEND)
-O_CREAT: Final[int] = alias.to(py_os.O_CREAT)
-O_EXCL: Final[int] = alias.to(py_os.O_EXCL)
-O_RDONLY: Final[int] = alias.to(py_os.O_RDONLY)
-O_RDWR: Final[int] = alias.to(py_os.O_RDWR)
-O_TRUNC: Final[int] = alias.to(py_os.O_TRUNC)
-O_WRONLY: Final[int] = alias.to(py_os.O_WRONLY)
 
 
 def access(

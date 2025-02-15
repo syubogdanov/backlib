@@ -6,6 +6,9 @@ from typing import Generic, TypeVar
 from backlib.internal.typing import Self
 
 
+__all__: list[str] = ["PathLike"]
+
+
 AnyStr_co = TypeVar("AnyStr_co", bytes, str, covariant=True)
 
 
