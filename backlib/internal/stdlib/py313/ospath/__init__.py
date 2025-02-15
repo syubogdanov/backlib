@@ -1,4 +1,4 @@
-from backlib.internal.stdlib.py313.ospath.src.impl import (
+from backlib.internal.stdlib.py313.ospath.src.functions import (
     abspath,
     basename,
     commonpath,
