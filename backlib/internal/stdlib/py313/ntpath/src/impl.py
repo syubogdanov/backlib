@@ -3,7 +3,7 @@ from __future__ import annotations
 from string import ascii_letters, digits
 from typing import TYPE_CHECKING, Final, Literal
 
-from backlib.internal.markers import refactorable, simplified, techdebt
+from backlib.internal.markers import todo
 from backlib.internal.stdlib.py313.ntpath.src.utils import check_arg_types, is_reserved_name
 from backlib.internal.stdlib.py313.os import (
     PathLike,
@@ -306,7 +306,6 @@ def isjunction(path: AnyStr | PathLike[AnyStr]) -> bool:
     return st.st_reparse_tag == IO_REPARSE_TAG_MOUNT_POINT
 
 
-@techdebt
 def isabs(s: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if `path` is an absolute pathname.
 
@@ -329,7 +328,7 @@ def isabs(s: AnyStr | PathLike[AnyStr]) -> bool:
     return prefix.startswith(colon_sep, 1) or prefix.startswith(double_sep)
 
 
-@simplified
+@todo.restore
 def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if pathname `path` is located on a Windows Dev Drive.
 
@@ -345,7 +344,7 @@ def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:
     return False
 
 
-@simplified
+@todo.restore
 def normcase(s: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Normalize the case of a pathname.
 
@@ -399,8 +398,8 @@ def splitext(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr]:
     return (p[:extsep_index], p[extsep_index:])
 
 
-@refactorable
-@simplified
+@todo.refactor
+@todo.restore
 def splitroot(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:  # noqa: PLR0911
     """Split the pathname `path` into a 3-item tuple `(drive, root, tail)`.
 
@@ -519,7 +518,7 @@ def dirname(p: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return head
 
 
-@refactorable
+@todo.refactor
 def join(path: AnyStr | PathLike[AnyStr], *paths: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Join one or more path segments intelligently.
 
@@ -573,8 +572,8 @@ def join(path: AnyStr | PathLike[AnyStr], *paths: AnyStr | PathLike[AnyStr]) -> 
         raise
 
 
-@refactorable
-@simplified
+@todo.refactor
+@todo.restore
 def normpath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Normalize a pathname by collapsing redundant separators and up-level references.
 
@@ -626,7 +625,7 @@ def normpath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return prefix + sep.join(components)
 
 
-@simplified
+@todo.restore
 def abspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Return a normalized absolutized version of the pathname `path`.
 
@@ -649,7 +648,7 @@ def abspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return normpath(path)
 
 
-@simplified
+@todo.restore
 def ismount(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if pathname `path` is a mount point.
 
@@ -787,7 +786,7 @@ def relpath(
         raise
 
 
-@refactorable
+@todo.refactor
 def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
     """Return the longest common sub-path of each pathname in the iterable paths.
 
@@ -847,7 +846,7 @@ def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
         raise
 
 
-@refactorable
+@todo.refactor
 def expanduser(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Replace an initial component of `~` or `~user` by that user's home directory.
 
@@ -900,7 +899,7 @@ def expanduser(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return userhome + path[sep_index:]
 
 
-@refactorable
+@todo.refactor
 def expandvars(path: AnyStr | PathLike[AnyStr]) -> AnyStr:  # noqa: C901, PLR0912, PLR0915
     """Return the argument with environment variables expanded.
 

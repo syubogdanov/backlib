@@ -3,7 +3,6 @@ from __future__ import annotations
 from enum import Enum, auto
 from typing import TypeVar
 
-from backlib.internal.markers import techdebt
 from backlib.internal.utils.platform import (
     is_darwin,
     is_freebsd,
@@ -50,34 +49,34 @@ def or_platform(  # noqa: C901, PLR0911, PLR0913
     value = getattr(object_, name, Undefined.DEFAULT)
 
     if not isinstance(value, Undefined):
-        return techdebt(value)
+        return value
 
     if not isinstance(nt, Undefined) and is_nt():
-        return techdebt(nt)
+        return nt
 
     if not isinstance(darwin, Undefined) and is_darwin():
-        return techdebt(darwin)
+        return darwin
 
     if not isinstance(solaris, Undefined) and is_solaris():
-        return techdebt(solaris)
+        return solaris
 
     if not isinstance(sunos, Undefined) and is_sunos():
-        return techdebt(sunos)
+        return sunos
 
     if not isinstance(vxworks, Undefined) and is_vxworks():
-        return techdebt(vxworks)
+        return vxworks
 
     if not isinstance(freebsd, Undefined) and is_freebsd():
-        return techdebt(freebsd)
+        return freebsd
 
     if not isinstance(unix, Undefined) and is_unix():
-        return techdebt(unix)
+        return unix
 
     if not isinstance(posix, Undefined) and is_posix():
-        return techdebt(posix)
+        return posix
 
     if not isinstance(otherwise, Undefined):
-        return techdebt(otherwise)
+        return otherwise
 
     detail = "The platform is not supported..."
     raise NotImplementedError(detail)
@@ -94,4 +93,4 @@ def or_default(
 
 def to(object_: T) -> T:
     """Mark an object as an alias."""
-    return techdebt(object_)
+    return object_

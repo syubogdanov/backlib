@@ -4,7 +4,7 @@ import re
 
 from typing import TYPE_CHECKING, Final, Literal
 
-from backlib.internal.markers import refactorable, simplified
+from backlib.internal.markers import todo.restore, todo
 from backlib.internal.stdlib.py313.errno import ENOTDIR
 from backlib.internal.stdlib.py313.os import (
     environ,
@@ -404,7 +404,7 @@ def isjunction(path: AnyStr | PathLike[AnyStr]) -> bool:
     return False
 
 
-@simplified
+@todo.restore
 def splitroot(p: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:
     """Split the pathname `path` into a 3-item tuple `(drive, root, tail)`.
 
@@ -547,7 +547,7 @@ def normpath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return path or dot
 
 
-@refactorable
+@todo.refactor
 def relpath(
     path: AnyStr | PathLike[AnyStr],
     start: AnyStr | PathLike[AnyStr] | None = None,
@@ -594,7 +594,7 @@ def relpath(
         raise
 
 
-@refactorable
+@todo.refactor
 def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr:  # noqa: C901, PLR0915
     """Return the canonical path of the specified filename.
 
@@ -665,7 +665,7 @@ def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr
     return path
 
 
-@refactorable
+@todo.refactor
 def ismount(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if pathname `path` is a mount point.
 
@@ -725,7 +725,7 @@ def abspath(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return normpath(path)
 
 
-@refactorable
+@todo.refactor
 def join(path: AnyStr | PathLike[AnyStr], *paths: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Join one or more path segments intelligently.
 
@@ -761,7 +761,7 @@ def join(path: AnyStr | PathLike[AnyStr], *paths: AnyStr | PathLike[AnyStr]) -> 
     return final_path
 
 
-@refactorable
+@todo.refactor
 def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
     """Return the longest common sub-path of each pathname in the iterable paths.
 
@@ -811,8 +811,8 @@ def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
         raise
 
 
-@refactorable
-@simplified
+@todo.refactor
+@todo.restore
 def expanduser(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Replace an initial component of `~` or `~user` by that user's home directory.
 
@@ -854,7 +854,7 @@ def expanduser(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     return (userhome + path[sep_index:]) or sep  # type: ignore[operator,return-value]
 
 
-@refactorable
+@todo.refactor
 def expandvars(path: AnyStr | PathLike[AnyStr]) -> AnyStr:
     """Return the argument with environment variables expanded.
 

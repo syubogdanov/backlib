@@ -1,7 +1,7 @@
 from functools import cache
 from sys import builtin_module_names, platform
 
-from backlib.internal.markers import techdebt
+from backlib.internal.markers import todo
 
 
 __all__: list[str] = [
@@ -28,7 +28,7 @@ def is_posix() -> bool:
     return "posix" in builtin_module_names
 
 
-@techdebt
+@todo.restore
 @cache
 def is_unix() -> bool:
     """Check if the platform is `Unix`.

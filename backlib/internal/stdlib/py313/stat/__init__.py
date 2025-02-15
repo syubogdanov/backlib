@@ -1,4 +1,4 @@
-from backlib.internal.stdlib.py313.stat.src.impl import (
+from backlib.internal.stdlib.py313.stat.src.core import (
     FILE_ATTRIBUTE_ARCHIVE,
     FILE_ATTRIBUTE_COMPRESSED,
     FILE_ATTRIBUTE_DEVICE,

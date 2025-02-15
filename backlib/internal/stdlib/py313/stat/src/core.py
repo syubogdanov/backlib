@@ -2,7 +2,7 @@ import stat as py_stat
 
 from typing import Final
 
-from backlib.internal.markers import techdebt
+from backlib.internal.markers import todo
 from backlib.internal.utils import alias
 
 
@@ -122,9 +122,9 @@ S_IFIFO: Final[int]  = 0o010000
 S_IFLNK: Final[int]  = 0o120000
 S_IFSOCK: Final[int] = 0o140000
 
-S_IFDOOR: Final[int] = alias.or_default(py_stat, "S_IFDOOR", otherwise=0)
-S_IFPORT: Final[int] = alias.or_default(py_stat, "S_IFPORT", otherwise=0)
-S_IFWHT: Final[int] = alias.or_default(py_stat, "S_IFWHT", otherwise=0)
+S_IFDOOR: Final[int] = alias.to(py_stat.S_IFDOOR)
+S_IFPORT: Final[int] = alias.to(py_stat.S_IFPORT)
+S_IFWHT: Final[int] = alias.to(py_stat.S_IFWHT)
 
 S_ISUID: Final[int] = 0o4000
 S_ISGID: Final[int] = 0o2000
@@ -319,7 +319,7 @@ def S_ISSOCK(mode: int) -> bool:
     return S_IFMT(mode) == S_IFSOCK
 
 
-@techdebt
+@todo.restore
 def S_ISDOOR(mode: int) -> bool:  # noqa: ARG001
     """Return `True` if the mode is from a door.
 
@@ -338,7 +338,7 @@ def S_ISDOOR(mode: int) -> bool:  # noqa: ARG001
     return False
 
 
-@techdebt
+@todo.restore
 def S_ISPORT(mode: int) -> bool:  # noqa: ARG001
     """Return `True` if the mode is from an event port.
 
@@ -357,7 +357,7 @@ def S_ISPORT(mode: int) -> bool:  # noqa: ARG001
     return False
 
 
-@techdebt
+@todo.restore
 def S_ISWHT(mode: int) -> bool:  # noqa: ARG001
     """Return `True` if the mode is from a whiteout.
 
@@ -376,7 +376,7 @@ def S_ISWHT(mode: int) -> bool:  # noqa: ARG001
     return False
 
 
-techdebt("This is a temporary solution.")
+todo.refactor("This is a temporary solution.")
 _filemode_table = (
     # File type chars according to:
     # http://en.wikibooks.org/wiki/C_Programming/POSIX_Reference/sys/stat.h
