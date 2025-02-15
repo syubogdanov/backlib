@@ -15,6 +15,8 @@ which should be all-inclusive.
 Dictionary providing a mapping from the errno value to the string name in the underlying system. For
 instance, `errno.errorcode[errno.EPERM]` maps to `'EPERM'`.
 
+###
+
 To translate a numeric error code to an error message, use [os.strerror()][os].
 
 ### \* errno.**EPERM**
