@@ -324,11 +324,11 @@ The file is stored compressed (macOS 10.6+).
 
 ### \* stat.**UF_TRACKED**
 
-Used for handling document IDs (macOS)
+Used for handling document IDs (macOS).
 
 ### \* stat.**UF_DATAVAULT**
 
-The file needs an entitlement for reading or writing (macOS 10.13+)
+The file needs an entitlement for reading or writing (macOS 10.13+).
 
 ### \* stat.**UF_HIDDEN**
 
@@ -336,15 +336,15 @@ The file should not be displayed in a GUI (macOS 10.5+).
 
 ### \* stat.**SF_SETTABLE**
 
-All super-user changeable flags
+All super-user changeable flags.
 
 ### \* stat.**SF_SUPPORTED**
 
-All super-user supported flags
+All super-user supported flags.
 
 ### \* stat.**SF_SYNTHETIC**
 
-All super-user read-only synthetic flags
+All super-user read-only synthetic flags.
 
 ### \* stat.**SF_ARCHIVED**
 
@@ -360,7 +360,7 @@ The file may only be appended to.
 
 ### \* stat.**SF_RESTRICTED**
 
-The file needs an entitlement to write to (macOS 10.13+)
+The file needs an entitlement to write to (macOS 10.13+).
 
 ### \* stat.**SF_NOUNLINK**
 
@@ -372,11 +372,11 @@ The file is a snapshot file.
 
 ### \* stat.**SF_FIRMLINK**
 
-The file is a firmlink (macOS 10.15+)
+The file is a firmlink (macOS 10.15+).
 
 ### \* stat.**SF_DATALESS**
 
-The file is a dataless object (macOS 10.15+)
+The file is a dataless object (macOS 10.15+).
 
 ###
 
