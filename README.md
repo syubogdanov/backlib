@@ -162,7 +162,7 @@ from backlib.py313 import zipfile
 
 MIT License, Copyright (c) 2025 Sergei Bogdanov. See [LICENSE][github/license] file.
 
-<!-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- -->
+<!-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- -->
 
 [github/docs/errno]: https://github.com/syubogdanov/backlib/tree/main/docs/py313/errno.md
 [github/docs/io]: https://github.com/syubogdanov/backlib/tree/main/docs/py313/io.md
