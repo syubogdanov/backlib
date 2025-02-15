@@ -208,8 +208,9 @@ Whiteout.
 ###
 
 > [!NOTE]
-> `S_IFDOOR`, `S_IFPORT` or `S_IFWHT` are defined as `0` when the platform does not have support for
-> the file types.
+> `S_IFDOOR`, `S_IFPORT` or `S_IFWHT` are defined as `0` if the current platform does not have
+> support for the file types. This will be changed in the future in favor of using values from
+> platforms where these constants are defined.
 
 The following flags can also be used in the mode argument of [os.chmod()][os]:
 
