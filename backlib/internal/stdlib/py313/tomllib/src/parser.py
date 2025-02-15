@@ -179,15 +179,15 @@ class Flags:
         self._flags: dict[str, dict] = {}
         self._pending_flags: set[tuple[Key, int]] = set()
 
-    def add_pending(self, key: Key, flag: int) -> None:
+    def add_pending(self, key: Key, flag: int) -> None:  # noqa: D102
         self._pending_flags.add((key, flag))
 
-    def finalize_pending(self) -> None:
+    def finalize_pending(self) -> None:  # noqa: D102
         for key, flag in self._pending_flags:
             self.set(key, flag, recursive=False)
         self._pending_flags.clear()
 
-    def unset_all(self, key: Key) -> None:
+    def unset_all(self, key: Key) -> None:  # noqa: D102
         cont = self._flags
         for k in key[:-1]:
             if k not in cont:
@@ -195,7 +195,7 @@ class Flags:
             cont = cont[k]["nested"]
         cont.pop(key[-1], None)
 
-    def set(self, key: Key, flag: int, *, recursive: bool) -> None:
+    def set(self, key: Key, flag: int, *, recursive: bool) -> None:  # noqa: D102
         cont = self._flags
         key_parent, key_stem = key[:-1], key[-1]
         for k in key_parent:
@@ -206,7 +206,7 @@ class Flags:
             cont[key_stem] = {"flags": set(), "recursive_flags": set(), "nested": {}}
         cont[key_stem]["recursive_flags" if recursive else "flags"].add(flag)
 
-    def is_(self, key: Key, flag: int) -> bool:
+    def is_(self, key: Key, flag: int) -> bool:  # noqa: D102
         if not key:
             return False  # document root has no flags
         cont = self._flags
@@ -224,12 +224,12 @@ class Flags:
         return False
 
 
-class NestedDict:
+class NestedDict:  # noqa: D101
     def __init__(self) -> None:
         # The parsed content of the TOML document
         self.dict: dict[str, Any] = {}
 
-    def get_or_create_nest(
+    def get_or_create_nest(  # noqa: D102
         self,
         key: Key,
         *,
@@ -247,7 +247,7 @@ class NestedDict:
                 raise KeyError(detail)
         return cont
 
-    def append_nest_to_list(self, key: Key) -> None:
+    def append_nest_to_list(self, key: Key) -> None:  # noqa: D102
         cont = self.get_or_create_nest(key[:-1])
         last_key = key[-1]
         if last_key in cont:
@@ -260,12 +260,12 @@ class NestedDict:
             cont[last_key] = [{}]
 
 
-class Output(NamedTuple):
+class Output(NamedTuple):  # noqa: D101
     data: NestedDict
     flags: Flags
 
 
-def skip_chars(src: str, pos: Pos, chars: Iterable[str]) -> Pos:
+def skip_chars(src: str, pos: Pos, chars: Iterable[str]) -> Pos:  # noqa: D103
     try:
         while src[pos] in chars:
             pos += 1
@@ -274,7 +274,7 @@ def skip_chars(src: str, pos: Pos, chars: Iterable[str]) -> Pos:
     return pos
 
 
-def skip_until(
+def skip_until(  # noqa: D103
     src: str,
     pos: Pos,
     expect: str,
@@ -296,7 +296,7 @@ def skip_until(
     return new_pos
 
 
-def skip_comment(src: str, pos: Pos) -> Pos:
+def skip_comment(src: str, pos: Pos) -> Pos:  # noqa: D103
     try:
         char: str | None = src[pos]
     except IndexError:
@@ -308,7 +308,7 @@ def skip_comment(src: str, pos: Pos) -> Pos:
     return pos
 
 
-def skip_comments_and_array_ws(src: str, pos: Pos) -> Pos:
+def skip_comments_and_array_ws(src: str, pos: Pos) -> Pos:  # noqa: D103
     while True:
         pos_before_skip = pos
         pos = skip_chars(src, pos, TOML_WS_AND_NEWLINE)
@@ -317,7 +317,7 @@ def skip_comments_and_array_ws(src: str, pos: Pos) -> Pos:
             return pos
 
 
-def create_dict_rule(src: str, pos: Pos, out: Output) -> tuple[Pos, Key]:
+def create_dict_rule(src: str, pos: Pos, out: Output) -> tuple[Pos, Key]:  # noqa: D103
     pos += 1  # Skip "["
     pos = skip_chars(src, pos, TOML_WS)
     pos, key = parse_key(src, pos)
@@ -335,7 +335,7 @@ def create_dict_rule(src: str, pos: Pos, out: Output) -> tuple[Pos, Key]:
     return pos + 1, key
 
 
-def create_list_rule(src: str, pos: Pos, out: Output) -> tuple[Pos, Key]:
+def create_list_rule(src: str, pos: Pos, out: Output) -> tuple[Pos, Key]:  # noqa: D103
     pos += 2  # Skip "[["
     pos = skip_chars(src, pos, TOML_WS)
     pos, key = parse_key(src, pos)
@@ -356,7 +356,7 @@ def create_list_rule(src: str, pos: Pos, out: Output) -> tuple[Pos, Key]:
     return pos + 2, key
 
 
-def key_value_rule(
+def key_value_rule(  # noqa: D103
     src: str, pos: Pos, out: Output, header: Key, parse_float: ParseFloat,
 ) -> Pos:
     pos, key, value = parse_key_value_pair(src, pos, parse_float)
@@ -390,7 +390,7 @@ def key_value_rule(
     return pos
 
 
-def parse_key_value_pair(
+def parse_key_value_pair(  # noqa: D103
     src: str, pos: Pos, parse_float: ParseFloat,
 ) -> tuple[Pos, Key, Any]:
     pos, key = parse_key(src, pos)
@@ -406,7 +406,7 @@ def parse_key_value_pair(
     return pos, key, value
 
 
-def parse_key(src: str, pos: Pos) -> tuple[Pos, Key]:
+def parse_key(src: str, pos: Pos) -> tuple[Pos, Key]:  # noqa: D103
     pos, key_part = parse_key_part(src, pos)
     key: Key = (key_part,)
     pos = skip_chars(src, pos, TOML_WS)
@@ -424,7 +424,7 @@ def parse_key(src: str, pos: Pos) -> tuple[Pos, Key]:
         pos = skip_chars(src, pos, TOML_WS)
 
 
-def parse_key_part(src: str, pos: Pos) -> tuple[Pos, str]:
+def parse_key_part(src: str, pos: Pos) -> tuple[Pos, str]:  # noqa: D103
     try:
         char: str | None = src[pos]
     except IndexError:
@@ -440,12 +440,12 @@ def parse_key_part(src: str, pos: Pos) -> tuple[Pos, str]:
     raise suffixed_err(src, pos, "Invalid initial character for a key part")
 
 
-def parse_one_line_basic_str(src: str, pos: Pos) -> tuple[Pos, str]:
+def parse_one_line_basic_str(src: str, pos: Pos) -> tuple[Pos, str]:  # noqa: D103
     pos += 1
     return parse_basic_str(src, pos, multiline=False)
 
 
-def parse_array(src: str, pos: Pos, parse_float: ParseFloat) -> tuple[Pos, list]:
+def parse_array(src: str, pos: Pos, parse_float: ParseFloat) -> tuple[Pos, list]:  # noqa: D103
     pos += 1
     array: list = []
 
@@ -469,7 +469,7 @@ def parse_array(src: str, pos: Pos, parse_float: ParseFloat) -> tuple[Pos, list]
             return pos + 1, array
 
 
-def parse_inline_table(src: str, pos: Pos, parse_float: ParseFloat) -> tuple[Pos, dict]:
+def parse_inline_table(src: str, pos: Pos, parse_float: ParseFloat) -> tuple[Pos, dict]:  # noqa: D103
     pos += 1
     nested_dict = NestedDict()
     flags = Flags()
@@ -501,7 +501,7 @@ def parse_inline_table(src: str, pos: Pos, parse_float: ParseFloat) -> tuple[Pos
         pos = skip_chars(src, pos, TOML_WS)
 
 
-def parse_basic_str_escape(
+def parse_basic_str_escape(  # noqa: D103
     src: str, pos: Pos, *, multiline: bool = False,
 ) -> tuple[Pos, str]:
     escape_id = src[pos : pos + 2]
@@ -530,11 +530,11 @@ def parse_basic_str_escape(
         raise suffixed_err(src, pos, "Unescaped '\\' in a string") from None
 
 
-def parse_basic_str_escape_multiline(src: str, pos: Pos) -> tuple[Pos, str]:
+def parse_basic_str_escape_multiline(src: str, pos: Pos) -> tuple[Pos, str]:  # noqa: D103
     return parse_basic_str_escape(src, pos, multiline=True)
 
 
-def parse_hex_char(src: str, pos: Pos, hex_len: int) -> tuple[Pos, str]:
+def parse_hex_char(src: str, pos: Pos, hex_len: int) -> tuple[Pos, str]:  # noqa: D103
     hex_str = src[pos : pos + hex_len]
     if len(hex_str) != hex_len or not HEXDIGIT_CHARS.issuperset(hex_str):
         raise suffixed_err(src, pos, "Invalid hex value")
@@ -545,7 +545,7 @@ def parse_hex_char(src: str, pos: Pos, hex_len: int) -> tuple[Pos, str]:
     return pos, chr(hex_int)
 
 
-def parse_literal_str(src: str, pos: Pos) -> tuple[Pos, str]:
+def parse_literal_str(src: str, pos: Pos) -> tuple[Pos, str]:  # noqa: D103
     pos += 1  # Skip starting apostrophe
     start_pos = pos
     pos = skip_until(
@@ -554,7 +554,7 @@ def parse_literal_str(src: str, pos: Pos) -> tuple[Pos, str]:
     return pos + 1, src[start_pos:pos]  # Skip ending apostrophe
 
 
-def parse_multiline_str(src: str, pos: Pos, *, literal: bool) -> tuple[Pos, str]:
+def parse_multiline_str(src: str, pos: Pos, *, literal: bool) -> tuple[Pos, str]:  # noqa: D103
     pos += 3
     if src.startswith("\n", pos):
         pos += 1
@@ -585,7 +585,7 @@ def parse_multiline_str(src: str, pos: Pos, *, literal: bool) -> tuple[Pos, str]
     return pos, result + (delim * 2)
 
 
-def parse_basic_str(src: str, pos: Pos, *, multiline: bool) -> tuple[Pos, str]:
+def parse_basic_str(src: str, pos: Pos, *, multiline: bool) -> tuple[Pos, str]:  # noqa: D103
     if multiline:
         error_on = ILLEGAL_MULTILINE_BASIC_STR_CHARS
         parse_escapes = parse_basic_str_escape_multiline
@@ -617,7 +617,7 @@ def parse_basic_str(src: str, pos: Pos, *, multiline: bool) -> tuple[Pos, str]:
         pos += 1
 
 
-def parse_value(  # noqa: C901, PLR0911, PLR0912
+def parse_value(  # noqa: C901, D103, PLR0911, PLR0912
     src: str, pos: Pos, parse_float: ParseFloat,
 ) -> tuple[Pos, Any]:
     try:
@@ -685,7 +685,8 @@ def parse_value(  # noqa: C901, PLR0911, PLR0912
 
 def suffixed_err(src: str, pos: Pos, msg: str) -> TOMLDecodeError:
     """Return a `TOMLDecodeError` where error message is suffixed with
-    coordinates in source."""
+    coordinates in source.
+    """  # noqa: D205
 
     def coord_repr(src: str, pos: Pos) -> str:
         if pos >= len(src):
@@ -697,7 +698,7 @@ def suffixed_err(src: str, pos: Pos, msg: str) -> TOMLDecodeError:
     return TOMLDecodeError(f"{msg} (at {coord_repr(src, pos)})")
 
 
-def is_unicode_scalar_value(codepoint: int) -> bool:
+def is_unicode_scalar_value(codepoint: int) -> bool:  # noqa: D103
     return (0 <= codepoint <= 55295) or (57344 <= codepoint <= 1114111)  # noqa: PLR2004
 
 
@@ -708,7 +709,7 @@ def make_safe_parse_float(parse_float: ParseFloat) -> ParseFloat:
     would be mixed with parsed TOML tables and arrays, thus confusing
     the parser. The returned decorated callable raises `ValueError`
     instead of returning illegal types.
-    """
+    """  # noqa: D401
     # The default `float` callable never returns illegal types. Optimize it.
     if parse_float is float:
         return float

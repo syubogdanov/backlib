@@ -26,7 +26,7 @@ __all__: list[str] = [
 ]
 
 
-def S_IMODE(mode: int) -> int:
+def S_IMODE(mode: int) -> int:  # noqa: N802
     """Return the portion of the file's mode that can be set by `os.chmod()`.
 
     See Also
@@ -40,7 +40,7 @@ def S_IMODE(mode: int) -> int:
     return mode & 0o7777
 
 
-def S_IFMT(mode: int) -> int:
+def S_IFMT(mode: int) -> int:  # noqa: N802
     """Return the portion of the file's mode that describes the file type.
 
     See Also
@@ -54,7 +54,7 @@ def S_IFMT(mode: int) -> int:
     return mode & 0o170000
 
 
-def S_ISDIR(mode: int) -> bool:
+def S_ISDIR(mode: int) -> bool:  # noqa: N802
     """Return `True` if the mode is from a directory.
 
     See Also
@@ -68,7 +68,7 @@ def S_ISDIR(mode: int) -> bool:
     return S_IFMT(mode) == S_IFDIR
 
 
-def S_ISCHR(mode: int) -> bool:
+def S_ISCHR(mode: int) -> bool:  # noqa: N802
     """Return `True` if the mode is from a character special device file.
 
     See Also
@@ -82,7 +82,7 @@ def S_ISCHR(mode: int) -> bool:
     return S_IFMT(mode) == S_IFCHR
 
 
-def S_ISBLK(mode: int) -> bool:
+def S_ISBLK(mode: int) -> bool:  # noqa: N802
     """Return `True` if the mode is from a block special device file.
 
     See Also
@@ -96,7 +96,7 @@ def S_ISBLK(mode: int) -> bool:
     return S_IFMT(mode) == S_IFBLK
 
 
-def S_ISREG(mode: int) -> bool:
+def S_ISREG(mode: int) -> bool:  # noqa: N802
     """Return `True` if the mode is from a regular file.
 
     See Also
@@ -110,7 +110,7 @@ def S_ISREG(mode: int) -> bool:
     return S_IFMT(mode) == S_IFREG
 
 
-def S_ISFIFO(mode: int) -> bool:
+def S_ISFIFO(mode: int) -> bool:  # noqa: N802
     """Return `True` if the mode is from a FIFO (named pipe).
 
     See Also
@@ -124,7 +124,7 @@ def S_ISFIFO(mode: int) -> bool:
     return S_IFMT(mode) == S_IFIFO
 
 
-def S_ISLNK(mode: int) -> bool:
+def S_ISLNK(mode: int) -> bool:  # noqa: N802
     """Return `True` if the mode is from a symbolic link.
 
     See Also
@@ -138,7 +138,7 @@ def S_ISLNK(mode: int) -> bool:
     return S_IFMT(mode) == S_IFLNK
 
 
-def S_ISSOCK(mode: int) -> bool:
+def S_ISSOCK(mode: int) -> bool:  # noqa: N802
     """Return `True` if the mode is from a socket.
 
     See Also
@@ -153,7 +153,7 @@ def S_ISSOCK(mode: int) -> bool:
 
 
 @todo.restore
-def S_ISDOOR(mode: int) -> bool:  # noqa: ARG001
+def S_ISDOOR(mode: int) -> bool:  # noqa: ARG001, N802
     """Return `True` if the mode is from a door.
 
     See Also
@@ -172,7 +172,7 @@ def S_ISDOOR(mode: int) -> bool:  # noqa: ARG001
 
 
 @todo.restore
-def S_ISPORT(mode: int) -> bool:  # noqa: ARG001
+def S_ISPORT(mode: int) -> bool:  # noqa: ARG001, N802
     """Return `True` if the mode is from an event port.
 
     See Also
@@ -191,7 +191,7 @@ def S_ISPORT(mode: int) -> bool:  # noqa: ARG001
 
 
 @todo.restore
-def S_ISWHT(mode: int) -> bool:  # noqa: ARG001
+def S_ISWHT(mode: int) -> bool:  # noqa: ARG001, N802
     """Return `True` if the mode is from a whiteout.
 
     See Also

@@ -108,7 +108,8 @@ def scanstring(s: str, end: int, strict: bool = True) -> tuple[str, int]:  # noq
     control characters are allowed in the string.
 
     Returns a tuple of the decoded string and the index of the character in s
-    after the end quote."""
+    after the end quote.
+    """  # noqa: D205
     chunks = []
     begin = end - 1
     while 1:

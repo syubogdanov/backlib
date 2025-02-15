@@ -88,7 +88,7 @@ def match_to_datetime(match: re.Match) -> datetime | date:
 
 
 @cache
-def cached_tz(hour_str: str, minute_str: str, sign_str: str) -> timezone:
+def cached_tz(hour_str: str, minute_str: str, sign_str: str) -> timezone:  # noqa: D103
     sign = 1 if sign_str == "+" else -1
     return timezone(
         timedelta(
@@ -98,13 +98,13 @@ def cached_tz(hour_str: str, minute_str: str, sign_str: str) -> timezone:
     )
 
 
-def match_to_localtime(match: re.Match) -> time:
+def match_to_localtime(match: re.Match) -> time:  # noqa: D103
     hour_str, minute_str, sec_str, micros_str = match.groups()
     micros = int(micros_str.ljust(6, "0")) if micros_str else 0
     return time(int(hour_str), int(minute_str), int(sec_str), micros)
 
 
-def match_to_number(match: re.Match, parse_float: ParseFloat) -> Any:  # noqa: ANN401
+def match_to_number(match: re.Match, parse_float: ParseFloat) -> Any:  # noqa: ANN401, D103
     if match.group("floatpart"):
         return parse_float(match.group())
     return int(match.group(), 0)

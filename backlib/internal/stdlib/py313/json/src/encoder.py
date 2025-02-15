@@ -34,14 +34,14 @@ del i
 INFINITY = float("inf")
 
 def encode_basestring(s: str) -> str:
-    """Return a JSON representation of a Python string"""
+    """Return a JSON representation of a Python string."""
     def replace(match: re.Match[str]) -> str:
         return ESCAPE_DCT[match.group(0)]
     return '"' + ESCAPE.sub(replace, s) + '"'
 
 
 def encode_basestring_ascii(s: str) -> str:
-    """Return an ASCII-only JSON representation of a Python string"""
+    """Return an ASCII-only JSON representation of a Python string."""
     def replace(match: re.Match[str]) -> str:
         s = match.group(0)
         try:
