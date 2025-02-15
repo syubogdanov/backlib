@@ -431,4 +431,4 @@ def filemode(mode: int) -> str:
 
         perms.append(perm)
 
-    return "".join(perm)
+    return "".join(perms)
