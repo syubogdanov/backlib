@@ -641,7 +641,7 @@ Owner died.
 
 State not recoverable.
 
-<!-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- -->
+<!-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- -->
 
 [BlockingIOError]: https://docs.python.org/3.13/library/exceptions.html#BlockingIOError
 [BrokenPipeError]: https://docs.python.org/3.13/library/exceptions.html#BrokenPipeError
