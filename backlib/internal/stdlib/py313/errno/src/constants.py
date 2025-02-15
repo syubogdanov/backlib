@@ -171,7 +171,6 @@ __all__: list[str] = [
 ]
 
 
-
 E2BIG: Final[int] = alias.or_platform(
     py_errno,
     "E2BIG",
