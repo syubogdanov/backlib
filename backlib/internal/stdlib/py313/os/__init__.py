@@ -1,3 +1,4 @@
+from backlib.internal.stdlib.py313.os.src.abc import PathLike
 from backlib.internal.stdlib.py313.os.src.env import environ, environb, supports_bytes_environ
 from backlib.internal.stdlib.py313.os.src.impl import (
     F_OK,
@@ -14,7 +15,6 @@ from backlib.internal.stdlib.py313.os.src.impl import (
     SEEK_SET,
     W_OK,
     X_OK,
-    PathLike,
     access,
     altsep,
     chdir,
@@ -52,13 +52,12 @@ from backlib.internal.stdlib.py313.os.src.impl import (
     sep,
     set_inheritable,
     stat,
-    stat_result,
     strerror,
     symlink,
-    terminal_size,
     unlink,
     write,
 )
+from backlib.internal.stdlib.py313.os.src.structs import stat_result, terminal_size
 
 
 __all__: list[str] = [

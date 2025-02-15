@@ -2,17 +2,21 @@ from __future__ import annotations
 
 import os as py_os
 
-from abc import ABC, abstractmethod
 from contextlib import suppress
 from math import ceil
 from sys import getfilesystemencodeerrors, getfilesystemencoding, stdout
-from typing import Final, Generic, NamedTuple, TypeVar
+from typing import TYPE_CHECKING, Final
 
-from backlib.internal.markers import depends_on, todo
-from backlib.internal.typing import AnyStr, Self, TypeAlias
+from backlib.internal.markers import depends_on
+from backlib.internal.stdlib.py313.os.src.structs import stat_result, terminal_size
+from backlib.internal.typing import AnyStr, TypeAlias
 from backlib.internal.utils import alias
 from backlib.internal.utils.platform import is_nt, is_posix
 from backlib.internal.utils.typing import ReadableBuffer
+
+
+if TYPE_CHECKING:
+    from backlib.internal.stdlib.py313.os.src.abc import PathLike
 
 
 __all__: list[str] = [
@@ -30,7 +34,6 @@ __all__: list[str] = [
     "SEEK_SET",
     "W_OK",
     "X_OK",
-    "PathLike",
     "access",
     "altsep",
     "chdir",
@@ -68,10 +71,8 @@ __all__: list[str] = [
     "sep",
     "set_inheritable",
     "stat",
-    "stat_result",
     "strerror",
     "symlink",
-    "terminal_size",
     "unlink",
     "write",
 ]
@@ -80,9 +81,6 @@ __all__: list[str] = [
 if not is_nt() and not is_posix():
     detail = "no os specific module found"
     raise ImportError(detail)
-
-
-AnyStr_co = TypeVar("AnyStr_co", bytes, str, covariant=True)
 
 
 error: TypeAlias = OSError
@@ -121,136 +119,6 @@ O_RDONLY: Final[int] = alias.to(py_os.O_RDONLY)
 O_RDWR: Final[int] = alias.to(py_os.O_RDWR)
 O_TRUNC: Final[int] = alias.to(py_os.O_TRUNC)
 O_WRONLY: Final[int] = alias.to(py_os.O_WRONLY)
-
-
-@todo.restore
-class stat_result(NamedTuple):  # noqa: N801
-    """Object whose attributes correspond roughly to the members of the `stat` structure.
-
-    See Also
-    --------
-    * `os.stat_result`.
-
-    Version
-    -------
-    * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This class is a `NamedTuple`, not `structeq[float]`.
-    """
-
-    st_mode: int
-    st_ino: int
-    st_dev: int
-    st_nlink: int
-    st_uid: int
-    st_gid: int
-    st_size: int
-
-    st_atime: float
-    st_mtime: float
-    st_ctime: float
-
-    st_atime_ns: int
-    st_mtime_ns: int
-    st_ctime_ns: int
-
-    st_birthtime: float
-    st_birthtime_ns: int
-
-    # Unix
-    st_blocks: int
-    st_blksize: int
-    st_rdev: int
-    st_flags: int
-
-    # FreeBSD
-    st_gen: int
-
-    # Solaris
-    st_fstype: str
-
-    # macOS
-    st_rsize: int
-    st_creator: int
-    st_type: int
-
-    # Windows
-    st_file_attributes: int
-    st_reparse_tag: int
-
-
-@todo.restore
-class terminal_size(NamedTuple):  # noqa: N801
-    """A subclass of tuple, holding `(columns, lines)` of the terminal window size.
-
-    See Also
-    --------
-    * `os.terminal_size`.
-
-    Version
-    -------
-    * Python 3.13.
-
-    Technical Debt
-    --------------
-    * This class is a `NamedTuple`, not `structeq[int]`.
-    """
-
-    columns: int
-    lines: int
-
-
-class PathLike(ABC, Generic[AnyStr_co]):
-    """An abstract base class for objects representing a file system path.
-
-    See Also
-    --------
-    * `os.PathLike`.
-
-    Version
-    -------
-    * Python 3.13.
-    """
-
-    __slots__: tuple[str, ...] = ()
-
-    @abstractmethod
-    def __fspath__(self: Self) -> AnyStr_co:
-        """Return the file system path representation of the object.
-
-        See Also
-        --------
-        * `os.PathLike.__fspath__`.
-
-        Version
-        -------
-        * Python 3.13.
-        """
-
-    @classmethod
-    def __subclasshook__(cls: type[Self], subclass: type) -> bool:
-        """Check if subclasses implement the `__fspath__` method.
-
-        See Also
-        --------
-        * `os.PathLike.__subclasshook__`.
-
-        Version
-        -------
-        * Python 3.13.
-        """
-        if cls is not PathLike:
-            return NotImplemented
-
-        if not hasattr(subclass, "__fspath__"):
-            return NotImplemented
-
-        if not callable(subclass.__fspath__):
-            return NotImplemented
-
-        return True
 
 
 def access(
