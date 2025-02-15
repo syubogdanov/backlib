@@ -2,7 +2,13 @@ import errno as py_errno
 
 from typing import Final
 
-from backlib.internal.stdlib.py313.errno.src import darwin1, freebsd13, msvc22, posix88, solaris10
+from backlib.internal.stdlib.py313.errno.src.platforms import (
+    darwin1,
+    freebsd13,
+    msvc22,
+    posix88,
+    solaris10,
+)
 from backlib.internal.utils import alias
 
 
