@@ -1,4 +1,4 @@
-from backlib.internal.stdlib.py313.errno.src.core import (
+from backlib.internal.stdlib.py313.errno.src.constants import (
     E2BIG,
     EACCES,
     EADDRINUSE,
