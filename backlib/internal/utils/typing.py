@@ -5,11 +5,9 @@ from backlib.internal.typing import Self, TypeAlias
 
 
 __all__: list[str] = [
-    "OpenBinaryMode",
     "OpenBinaryModeReading",
     "OpenBinaryModeUpdating",
     "OpenBinaryModeWriting",
-    "OpenTextMode",
     "OpenTextModeReading",
     "OpenTextModeUpdating",
     "OpenTextModeWriting",
@@ -74,7 +72,6 @@ OpenTextModeReading: TypeAlias = Literal[
     "tUr",
     "Utr",
 ]
-OpenTextMode: TypeAlias = OpenTextModeUpdating | OpenTextModeWriting | OpenTextModeReading
 
 OpenBinaryModeUpdating: TypeAlias = Literal[
     "rb+",
@@ -104,7 +101,6 @@ OpenBinaryModeUpdating: TypeAlias = Literal[
 ]
 OpenBinaryModeWriting: TypeAlias = Literal["wb", "bw", "ab", "ba", "xb", "bx"]
 OpenBinaryModeReading: TypeAlias = Literal["rb", "br", "rbU", "rUb", "Urb", "brU", "bUr", "Ubr"]
-OpenBinaryMode: TypeAlias = OpenBinaryModeUpdating | OpenBinaryModeReading | OpenBinaryModeWriting
 
 
 ReadableBuffer: TypeAlias = Buffer

@@ -1,15 +1,15 @@
 from __future__ import annotations
 
-from typing import IO, TYPE_CHECKING, BinaryIO, Literal, overload
+from typing import IO, TYPE_CHECKING, Any, BinaryIO, Literal, overload
 from warnings import warn
 
-from backlib.internal.typing import AnyStr
 from backlib.internal.utils.typing import (
-    OpenBinaryMode,
     OpenBinaryModeReading,
     OpenBinaryModeUpdating,
     OpenBinaryModeWriting,
-    OpenTextMode,
+    OpenTextModeReading,
+    OpenTextModeUpdating,
+    OpenTextModeWriting,
 )
 
 
@@ -28,8 +28,8 @@ if TYPE_CHECKING:
 
 @overload
 def open(  # noqa: A001
-    file: int | AnyStr | PathLike[AnyStr],
-    mode: OpenTextMode = "r",
+    file: int | bytes | str | PathLike[bytes] | PathLike[str],
+    mode: OpenTextModeUpdating | OpenTextModeWriting | OpenTextModeReading = "r",
     buffering: int = -1,
     encoding: str | None = None,
     errors: str | None = None,
@@ -41,8 +41,8 @@ def open(  # noqa: A001
 
 @overload
 def open(  # noqa: A001
-    file: int | AnyStr | PathLike[AnyStr],
-    mode: OpenBinaryMode,
+    file: int | bytes | str | PathLike[bytes] | PathLike[str],
+    mode: OpenBinaryModeUpdating | OpenBinaryModeReading | OpenBinaryModeWriting,
     buffering: Literal[0],
     encoding: None = None,
     errors: None = None,
@@ -54,7 +54,7 @@ def open(  # noqa: A001
 
 @overload
 def open(  # noqa: A001
-    file: int | AnyStr | PathLike[AnyStr],
+    file: int | bytes | str | PathLike[bytes] | PathLike[str],
     mode: OpenBinaryModeUpdating,
     buffering: Literal[-1, 1] = -1,
     encoding: None = None,
@@ -67,7 +67,7 @@ def open(  # noqa: A001
 
 @overload
 def open(  # noqa: A001
-    file: int | AnyStr | PathLike[AnyStr],
+    file: int | bytes | str | PathLike[bytes] | PathLike[str],
     mode: OpenBinaryModeWriting,
     buffering: Literal[-1, 1] = -1,
     encoding: None = None,
@@ -80,7 +80,7 @@ def open(  # noqa: A001
 
 @overload
 def open(  # noqa: A001
-    file: int | AnyStr | PathLike[AnyStr],
+    file: int | bytes | str | PathLike[bytes] | PathLike[str],
     mode: OpenBinaryModeReading,
     buffering: Literal[-1, 1] = -1,
     encoding: None = None,
@@ -93,8 +93,8 @@ def open(  # noqa: A001
 
 @overload
 def open(  # noqa: A001
-    file: int | AnyStr | PathLike[AnyStr],
-    mode: OpenBinaryMode,
+    file: int | bytes | str | PathLike[bytes] | PathLike[str],
+    mode: OpenBinaryModeUpdating | OpenBinaryModeReading | OpenBinaryModeWriting,
     buffering: int = -1,
     encoding: None = None,
     errors: None = None,
@@ -106,7 +106,7 @@ def open(  # noqa: A001
 
 @overload
 def open(  # noqa: A001
-    file: int | AnyStr | PathLike[AnyStr],
+    file: int | bytes | str | PathLike[bytes] | PathLike[str],
     mode: str,
     buffering: int = -1,
     encoding: str | None = None,
@@ -114,11 +114,11 @@ def open(  # noqa: A001
     newline: str | None = None,
     closefd: bool = True,  # noqa: FBT001, FBT002
     opener: Callable[[str, int], int] | None = None,
-) -> IO[AnyStr]: ...
+) -> IO[Any]: ...
 
 
 def open(  # noqa: A001
-    file: int | AnyStr | PathLike[AnyStr],
+    file: int | bytes | str | PathLike[bytes] | PathLike[str],
     mode: str = "r",
     buffering: int = -1,
     encoding: str | None = None,
@@ -126,7 +126,7 @@ def open(  # noqa: A001
     newline: str | None = None,
     closefd: bool = True,  # noqa: FBT001, FBT002
     opener: Callable[[str, int], int] | None = None,
-) -> IO[AnyStr]:
+) -> IO[Any]:
     """Open `file` and return a corresponding file object.
 
     See Also
@@ -137,6 +137,7 @@ def open(  # noqa: A001
     -------
     * Python 3.13.
     """
+    raise NotImplementedError
 
 
 def open_code(path: str) -> BinaryIO:
