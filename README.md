@@ -70,7 +70,7 @@ is_reserved = ntpath.isreserved("./backlib")
 assert not is_reserved
 ```
 
-#### os [SOON]
+#### os [UNRELEASED]
 
 For more, see the [documentation][github/docs/os].
 
