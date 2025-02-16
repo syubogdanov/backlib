@@ -1,3 +1,10 @@
+"""Error codes for Visual Studio 22.
+
+See Also
+--------
+* https://learn.microsoft.com/en-us/cpp/c-runtime-library/errno-constants
+"""
+
 from typing import Final
 
 

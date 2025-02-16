@@ -1,8 +1,4 @@
-import stat as py_stat
-
 from typing import Final
-
-from backlib.internal.utils import alias
 
 
 __all__: list[str] = [
@@ -108,9 +104,9 @@ S_IFIFO: Final[int] = 0o010000
 S_IFLNK: Final[int] = 0o120000
 S_IFSOCK: Final[int] = 0o140000
 
-S_IFDOOR: Final[int] = alias.to(py_stat.S_IFDOOR)
-S_IFPORT: Final[int] = alias.to(py_stat.S_IFPORT)
-S_IFWHT: Final[int] = alias.to(py_stat.S_IFWHT)
+S_IFDOOR: Final[int] = 0o150000
+S_IFPORT: Final[int] = 0o160000
+S_IFWHT: Final[int] = 0o160000
 
 S_ISUID: Final[int] = 0o4000
 S_ISGID: Final[int] = 0o2000

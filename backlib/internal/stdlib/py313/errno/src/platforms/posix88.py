@@ -1,3 +1,10 @@
+"""Error codes for POSIX 88.
+
+See Also
+--------
+* https://docs.rust-embedded.org/rust-i2cdev/libc/consts/os/posix88/index.html
+"""
+
 from typing import Final
 
 

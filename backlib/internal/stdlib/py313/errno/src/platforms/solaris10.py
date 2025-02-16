@@ -1,3 +1,10 @@
+"""Error codes for Solaris 10.0+.
+
+See Also
+--------
+* https://www.ioplex.com/~miallen/errcmp.html
+"""
+
 from typing import Final
 
 

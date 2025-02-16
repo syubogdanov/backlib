@@ -2,7 +2,7 @@
 
 See Also
 --------
-* https://docs.rs/crate/libc/latest
+* https://docs.rs/libc/latest/libc/
 """
 
 from typing import Final
