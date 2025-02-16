@@ -26,7 +26,7 @@ def text_encoding(encoding: str | None, stacklevel: int = 2) -> str:
         return encoding
 
     if alias.or_default(sys.flags, "warn_default_encoding", otherwise=False):
-        detail = "'encoding' argument not specified."
-        warn(detail, EncodingWarning, stacklevel=(stacklevel + 1))
+        message = "'encoding' argument not specified."
+        warn(message, EncodingWarning, stacklevel=(stacklevel + 1))
 
     return "utf-8" if sys.flags.utf8_mode else "locale"

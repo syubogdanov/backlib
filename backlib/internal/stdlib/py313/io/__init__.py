@@ -1,4 +1,4 @@
-from backlib.internal.stdlib.py313.io.src import (
+from backlib.internal.stdlib.py313.io.src.classes import (
     BufferedIOBase,
     BufferedRandom,
     BufferedReader,
@@ -11,8 +11,6 @@ from backlib.internal.stdlib.py313.io.src import (
     StringIO,
     TextIOBase,
     TextIOWrapper,
-    open,  # noqa: A004
-    open_code,
 )
 from backlib.internal.stdlib.py313.io.src.constants import DEFAULT_BUFFER_SIZE
 from backlib.internal.stdlib.py313.io.src.encoding import text_encoding
@@ -20,6 +18,7 @@ from backlib.internal.stdlib.py313.io.src.errors import (
     BlockingIOError,  # noqa: A004
     UnsupportedOperation,
 )
+from backlib.internal.stdlib.py313.io.src.openers import open, open_code  # noqa: A004
 
 
 __all__: list[str] = [
