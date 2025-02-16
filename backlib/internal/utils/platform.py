@@ -7,6 +7,7 @@ from backlib.internal.markers import todo
 __all__: list[str] = [
     "is_darwin",
     "is_freebsd",
+    "is_linux",
     "is_nt",
     "is_posix",
     "is_solaris",
@@ -55,7 +56,7 @@ def is_vxworks() -> bool:
 @cache
 def is_solaris() -> bool:
     """Check if the platform is `Solaris`."""
-    return platform in "solaris"
+    return platform.startswith("solaris")
 
 
 @cache
@@ -68,3 +69,9 @@ def is_sunos() -> bool:
 def is_freebsd() -> bool:
     """Check if the platform is `FreeBSD`."""
     return platform.startswith("freebsd")
+
+
+@cache
+def is_linux() -> bool:
+    """Check if the platform is `Linux`."""
+    return platform == "linux"

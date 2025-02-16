@@ -6,6 +6,7 @@ from typing import TypeVar
 from backlib.internal.utils.platform import (
     is_darwin,
     is_freebsd,
+    is_linux,
     is_nt,
     is_posix,
     is_solaris,
@@ -31,6 +32,7 @@ def or_platform(  # noqa: C901, PLR0911, PLR0913
     *,
     darwin: T | Undefined = Undefined.DEFAULT,
     freebsd: T | Undefined = Undefined.DEFAULT,
+    linux: T | Undefined = Undefined.DEFAULT,
     nt: T | Undefined = Undefined.DEFAULT,
     posix: T | Undefined = Undefined.DEFAULT,
     solaris: T | Undefined = Undefined.DEFAULT,
@@ -68,6 +70,9 @@ def or_platform(  # noqa: C901, PLR0911, PLR0913
 
     if not isinstance(freebsd, Undefined) and is_freebsd():
         return freebsd
+
+    if not isinstance(linux, Undefined) and is_linux():
+        return linux
 
     if not isinstance(unix, Undefined) and is_unix():
         return unix
