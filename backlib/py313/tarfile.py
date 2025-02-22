@@ -1,4 +1,4 @@
-from backlib.internal.stdlib.py313.tarfile import (
+from backlib.internal.backports.py313.tarfile import (
     AREGTYPE,
     BLKTYPE,
     CHRTYPE,

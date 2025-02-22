@@ -1,4 +1,23 @@
-from backlib.internal.backports.py313.os import (
+from backlib.internal.backports.py313.os.src.abc import PathLike
+from backlib.internal.backports.py313.os.src.constants import (
+    altsep,
+    curdir,
+    defpath,
+    devnull,
+    extsep,
+    linesep,
+    name,
+    pardir,
+    pathsep,
+    sep,
+)
+from backlib.internal.backports.py313.os.src.environment import (
+    environ,
+    environb,
+    supports_bytes_environ,
+)
+from backlib.internal.backports.py313.os.src.errors import error
+from backlib.internal.backports.py313.os.src.flags import (
     CLD_CONTINUED,
     CLD_DUMPED,
     CLD_EXITED,
@@ -122,19 +141,12 @@ from backlib.internal.backports.py313.os import (
     X_OK,
     XATTR_CREATE,
     XATTR_REPLACE,
-    PathLike,
+)
+from backlib.internal.backports.py313.os.src.functions import (
     access,
-    altsep,
     chdir,
     close,
     closerange,
-    curdir,
-    defpath,
-    devnull,
-    environ,
-    environb,
-    error,
-    extsep,
     fsdecode,
     fsencode,
     fspath,
@@ -145,31 +157,24 @@ from backlib.internal.backports.py313.os import (
     getcwd,
     getcwdb,
     isatty,
-    linesep,
     link,
     lseek,
     lstat,
     mkdir,
-    name,
     open,  # noqa: A004
-    pardir,
-    pathsep,
     read,
     readlink,
     rename,
     replace,
     rmdir,
-    sep,
     set_inheritable,
     stat,
-    stat_result,
     strerror,
-    supports_bytes_environ,
     symlink,
-    terminal_size,
     unlink,
     write,
 )
+from backlib.internal.backports.py313.os.src.structs import stat_result, terminal_size
 
 
 __all__: list[str] = [
@@ -344,3 +349,45 @@ __all__: list[str] = [
     "unlink",
     "write",
 ]
+
+__backlib__: str = "backlib.py313.os"
+
+
+PathLike.__module__ = __backlib__
+
+stat_result.__module__ = __backlib__
+terminal_size.__module__ = __backlib__
+
+# [!] environ.__module__ = __backlib__
+# [!] environb.__module__ = __backlib__
+
+access.__module__ = __backlib__
+chdir.__module__ = __backlib__
+close.__module__ = __backlib__
+closerange.__module__ = __backlib__
+fsdecode.__module__ = __backlib__
+fsencode.__module__ = __backlib__
+fspath.__module__ = __backlib__
+fstat.__module__ = __backlib__
+ftruncate.__module__ = __backlib__
+get_inheritable.__module__ = __backlib__
+get_terminal_size.__module__ = __backlib__
+getcwd.__module__ = __backlib__
+getcwdb.__module__ = __backlib__
+isatty.__module__ = __backlib__
+link.__module__ = __backlib__
+lseek.__module__ = __backlib__
+lstat.__module__ = __backlib__
+mkdir.__module__ = __backlib__
+open.__module__ = __backlib__
+read.__module__ = __backlib__
+readlink.__module__ = __backlib__
+rename.__module__ = __backlib__
+replace.__module__ = __backlib__
+rmdir.__module__ = __backlib__
+set_inheritable.__module__ = __backlib__
+stat.__module__ = __backlib__
+strerror.__module__ = __backlib__
+symlink.__module__ = __backlib__
+unlink.__module__ = __backlib__
+write.__module__ = __backlib__

@@ -1,4 +1,4 @@
-from backlib.internal.backports.py313.errno import (
+from backlib.internal.backports.py313.errno.src.codes import (
     E2BIG,
     EACCES,
     EADDRINUSE,

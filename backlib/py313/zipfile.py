@@ -1,4 +1,4 @@
-from backlib.internal.stdlib.py313.zipfile import (
+from backlib.internal.backports.py313.zipfile import (
     ZIP_BZIP2,
     ZIP_DEFLATED,
     ZIP_LZMA,

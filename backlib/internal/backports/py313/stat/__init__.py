@@ -1,4 +1,4 @@
-from backlib.internal.backports.py313.stat import (
+from backlib.internal.backports.py313.stat.src.flags import (
     FILE_ATTRIBUTE_ARCHIVE,
     FILE_ATTRIBUTE_COMPRESSED,
     FILE_ATTRIBUTE_DEVICE,
@@ -27,12 +27,10 @@ from backlib.internal.backports.py313.stat import (
     S_IFDOOR,
     S_IFIFO,
     S_IFLNK,
-    S_IFMT,
     S_IFPORT,
     S_IFREG,
     S_IFSOCK,
     S_IFWHT,
-    S_IMODE,
     S_IREAD,
     S_IRGRP,
     S_IROTH,
@@ -40,19 +38,9 @@ from backlib.internal.backports.py313.stat import (
     S_IRWXG,
     S_IRWXO,
     S_IRWXU,
-    S_ISBLK,
-    S_ISCHR,
-    S_ISDIR,
-    S_ISDOOR,
-    S_ISFIFO,
     S_ISGID,
-    S_ISLNK,
-    S_ISPORT,
-    S_ISREG,
-    S_ISSOCK,
     S_ISUID,
     S_ISVTX,
-    S_ISWHT,
     S_IWGRP,
     S_IWOTH,
     S_IWRITE,
@@ -91,8 +79,22 @@ from backlib.internal.backports.py313.stat import (
     UF_OPAQUE,
     UF_SETTABLE,
     UF_TRACKED,
-    filemode,
 )
+from backlib.internal.backports.py313.stat.src.ismode import (
+    S_IFMT,
+    S_IMODE,
+    S_ISBLK,
+    S_ISCHR,
+    S_ISDIR,
+    S_ISDOOR,
+    S_ISFIFO,
+    S_ISLNK,
+    S_ISPORT,
+    S_ISREG,
+    S_ISSOCK,
+    S_ISWHT,
+)
+from backlib.internal.backports.py313.stat.src.rendering import filemode
 
 
 __all__: list[str] = [
@@ -190,3 +192,20 @@ __all__: list[str] = [
     "UF_TRACKED",
     "filemode",
 ]
+
+__backlib__: str = "backlib.py313.stat"
+
+
+S_IMODE.__module__ = __backlib__
+S_IFMT.__module__ = __backlib__
+S_ISDIR.__module__ = __backlib__
+S_ISCHR.__module__ = __backlib__
+S_ISBLK.__module__ = __backlib__
+S_ISREG.__module__ = __backlib__
+S_ISFIFO.__module__ = __backlib__
+S_ISLNK.__module__ = __backlib__
+S_ISSOCK.__module__ = __backlib__
+S_ISDOOR.__module__ = __backlib__
+S_ISPORT.__module__ = __backlib__
+S_ISWHT.__module__ = __backlib__
+filemode.__module__ = __backlib__

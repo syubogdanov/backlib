@@ -1,7 +1,7 @@
 from typing import Literal, Protocol, TypeVar
 
-from backlib.internal.collections import Buffer
-from backlib.internal.typing import Self, TypeAlias
+from backlib.internal.stdlib.collections import Buffer
+from backlib.internal.stdlib.typing import Self, TypeAlias
 
 
 __all__: list[str] = [
