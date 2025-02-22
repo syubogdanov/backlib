@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from abc import ABC
-from contextlib import closing
 from threading import Lock
 from typing import TYPE_CHECKING, Any, NoReturn
 
@@ -1879,8 +1878,198 @@ class BufferedRWPair(BufferedIOBase):
         return self.writer.closed
 
 
-class BufferedRandom:
-    pass
+class BufferedRandom(BufferedWriter, BufferedReader):
+    """A buffered binary stream.
+
+    See Also
+    --------
+    * `io.BufferedRandom`.
+
+    Version
+    -------
+    * Python 3.13.
+    """
+
+    def __init__(self: Self, raw: RawIOBase, buffer_size: int = DEFAULT_BUFFER_SIZE) -> None:
+        """Initialize the object.
+
+        See Also
+        --------
+        * `io.BufferedRandom.__init__`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        if not raw.seekable():
+            detail = "File or stream is not seekable."
+            raise UnsupportedOperation(detail)
+
+        BufferedReader.__init__(self, raw, buffer_size)
+        BufferedWriter.__init__(self, raw, buffer_size)
+
+    def seek(self: Self, pos: int, whence: int = SEEK_SET, /) -> int:
+        """Change the stream position to the given byte offset.
+
+        See Also
+        --------
+        * `io.BufferedWriter.seek`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        if whence not in SEEK_FLAGS:
+            detail = "invalid whence value"
+            raise ValueError(detail)
+
+        if self.raw is None:
+            detail = "seek() on a detached stream"
+            raise AttributeError(detail)
+
+        self.flush()
+
+        if self._read_buf:
+            with self._read_lock:
+                offset = self._read_pos - len(self._read_buf)
+                self.raw.seek(offset, SEEK_CUR)
+
+        pos = self.raw.seek(pos, whence)
+
+        with self._read_lock:
+            self._reset_read_buf()
+
+        if pos < 0:
+            detail = "seek() returned invalid position"
+            raise OSError(detail)
+
+        return pos
+
+    def tell(self: Self) -> int:
+        """Return the current stream position.
+
+        See Also
+        --------
+        * `io.BufferedRandom.tell`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        base = BufferedWriter if self._write_buf else BufferedReader
+        return base.tell(self)
+
+    def truncate(self: Self, pos: int | None = None, /) -> int:
+        """Resize the stream to the given size in bytes.
+
+        See Also
+        --------
+        * `io.BufferedRandom.truncate`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        if pos is None:
+            pos = self.tell()
+
+        return BufferedWriter.truncate(self, pos)
+
+    def read(self: Self, size: int | None = None, /) -> bytes:
+        """Read and return up to `size` bytes.
+
+        See Also
+        --------
+        * `io.BufferedRandom.read`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        if size is None:
+            size = -1
+
+        self.flush()
+        return BufferedReader.read(self, size)
+
+    def readinto(self: Self, buffer: WriteableBuffer, /) -> int:
+        """Read bytes into a pre-allocated, writable bytes-like object.
+
+        See Also
+        --------
+        * `io.BufferedRandom.readinto`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        self.flush()
+        return BufferedReader.readinto(self, buffer)
+
+    def peek(self: Self, size: int = 0, /) -> bytes:
+        """Return bytes from the stream without advancing the position.
+
+        See Also
+        --------
+        * `io.BufferedRandom.peek`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        self.flush()
+        return BufferedReader.peek(self, size)
+
+    def read1(self: Self, size: int | None = None, /) -> bytes:
+        """Read and return up to `size` bytes, with at most one call.
+
+        See Also
+        --------
+        * `io.BufferedRandom.read1`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        self.flush()
+        return BufferedReader.read1(self, size)
+
+    def readinto1(self: Self, buffer: WriteableBuffer, /) -> int:
+        """Read bytes into a pre-allocated, writable bytes-like object, with at most one call.
+
+        See Also
+        --------
+        * `io.BufferedRandom.readinto1`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        self.flush()
+        return BufferedReader.readinto1(self, buffer)
+
+    def write(self: Self, buffer: ReadableBuffer, /) -> int:
+        """Write the given bytes-like object.
+
+        See Also
+        --------
+        * `io.BufferedRandom.write`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        if self.raw is None:
+            detail = "write() on a detached stream"
+            raise AttributeError(detail)
+
+        if self._read_buf:
+            with self._read_lock:
+                offset = self._read_pos - len(self._read_buf)
+                self.raw.seek(offset, SEEK_CUR)
+                self._reset_read_buf()
+
+        return BufferedWriter.write(self, buffer)
 
 
 class FileIO:
