@@ -14,7 +14,7 @@ from backlib.internal.utils.typing import ReadableBuffer, WriteableBuffer
 
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Iterable, Iterator
     from types import TracebackType
 
 
@@ -39,6 +39,12 @@ SEEK_FLAGS = {SEEK_SET, SEEK_CUR, SEEK_END, SEEK_DATA, SEEK_HOLE}
 
 class IOBase(ABC, Generic[AnyStr]):
     """The abstract base class for all I/O classes.
+
+    Notes
+    -----
+    * As opposed to `io.IOBase`:
+        - is generic with `AnyStr` constraint;
+        - has `read` and `write` methods defined.
 
     See Also
     --------
@@ -242,7 +248,7 @@ class IOBase(ABC, Generic[AnyStr]):
         for line in lines:
             self.write(line)
 
-    def read(self: Self, size: int | None = None, /) -> AnyStr:
+    def read(self: Self, size: int | None = None, /) -> AnyStr | None:
         """Read and return up to `size` bytes.
 
         See Also
@@ -256,7 +262,7 @@ class IOBase(ABC, Generic[AnyStr]):
         aware.unused(size)
         self._unsupported("read")
 
-    def write(self: Self, buffer: AnyStr, /) -> int:
+    def write(self: Self, buffer: AnyStr, /) -> int | None:
         """Write the given object to the underlying raw stream.
 
         See Also
@@ -336,7 +342,7 @@ class IOBase(ABC, Generic[AnyStr]):
         """
         self.close()
 
-    def __iter__(self: Self) -> Self:
+    def __iter__(self: Self) -> Iterator[AnyStr]:
         """Return self.
 
         See Also
@@ -361,9 +367,9 @@ class IOBase(ABC, Generic[AnyStr]):
         -------
         * Python 3.13.
         """
-        if not (line := self.readline()):
-            raise StopIteration
-        return line
+        if line := self.readline():
+            return line
+        raise StopIteration
 
     def _check_closed(self: Self, message: str | None = None) -> None:
         """Raise a ValueError if file is closed."""
@@ -434,6 +440,11 @@ class BinaryIOBase(IOBase[bytes]):
 class RawIOBase(BinaryIOBase):
     """Base class for raw binary streams.
 
+    Notes
+    -----
+    * As opposed to `io.RawIOBase`, has `name` and `mode` properties defined.
+
+
     See Also
     --------
     * `io.RawIOBase`.
@@ -443,7 +454,7 @@ class RawIOBase(BinaryIOBase):
     * Python 3.13.
     """
 
-    def read(self: Self, size: int | None = None, /) -> bytes:
+    def read(self: Self, size: int | None = None, /) -> bytes | None:
         """Read up to size bytes from the object and return them.
 
         See Also
@@ -465,7 +476,7 @@ class RawIOBase(BinaryIOBase):
 
         return bytes(buffer[:count])
 
-    def readall(self: Self) -> bytes:
+    def readall(self: Self) -> bytes | None:
         """Read and return all the bytes from the stream until EOF.
 
         See Also
@@ -482,11 +493,11 @@ class RawIOBase(BinaryIOBase):
             buffer += data
 
         if not buffer:
-            return b""
+            return data
 
         return bytes(buffer)
 
-    def readinto(self: Self, buffer: WriteableBuffer, /) -> int:
+    def readinto(self: Self, buffer: WriteableBuffer, /) -> int | None:
         """Read bytes into a pre-allocated, writable bytes-like object.
 
         See Also
@@ -500,7 +511,7 @@ class RawIOBase(BinaryIOBase):
         aware.unused(buffer)
         self._unsupported("readinto")
 
-    def write(self: Self, buffer: ReadableBuffer, /) -> int:
+    def write(self: Self, buffer: ReadableBuffer, /) -> int | None:
         """Write the given bytes-like object to the underlying raw stream.
 
         See Also
@@ -513,6 +524,34 @@ class RawIOBase(BinaryIOBase):
         """
         aware.unused(buffer)
         self._unsupported("write")
+
+    @property
+    def name(self: Self) -> int | str | bytes:
+        """The file name.
+
+        See Also
+        --------
+        * `io.RawIOBase.name`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        self._unsupported("name")
+
+    @property
+    def mode(self: Self) -> str:
+        """The mode as given in the constructor.
+
+        See Also
+        --------
+        * `io.RawIOBase.mode`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        self._unsupported("mode")
 
 
 class BufferedIOBase(BinaryIOBase):
@@ -527,7 +566,7 @@ class BufferedIOBase(BinaryIOBase):
     * Python 3.13.
     """
 
-    def read(self: Self, size: int | None = None, /) -> bytes:
+    def read(self: Self, size: int | None = None, /) -> bytes | None:
         """Read and return up to `size` bytes.
 
         See Also
@@ -541,7 +580,7 @@ class BufferedIOBase(BinaryIOBase):
         aware.unused(size)
         self._unsupported("read")
 
-    def read1(self: Self, size: int | None = None, /) -> bytes:
+    def read1(self: Self, size: int | None = None, /) -> bytes | None:
         """Read and return up to `size` bytes, with at most one call.
 
         See Also
@@ -555,7 +594,7 @@ class BufferedIOBase(BinaryIOBase):
         aware.unused(size)
         self._unsupported("read1")
 
-    def readinto(self: Self, buffer: WriteableBuffer, /) -> int:
+    def readinto(self: Self, buffer: WriteableBuffer, /) -> int | None:
         """Read bytes into a pre-allocated, writable bytes-like object.
 
         See Also
@@ -568,7 +607,7 @@ class BufferedIOBase(BinaryIOBase):
         """
         return self._readinto(buffer, read1=False)
 
-    def readinto1(self: Self, buffer: WriteableBuffer, /) -> int:
+    def readinto1(self: Self, buffer: WriteableBuffer, /) -> int | None:
         """Read bytes into a pre-allocated, writable bytes-like object, with at most one call.
 
         See Also
@@ -608,7 +647,7 @@ class BufferedIOBase(BinaryIOBase):
         """
         self._unsupported("detach")
 
-    def _readinto(self: Self, buffer: WriteableBuffer, *, read1: bool) -> int:
+    def _readinto(self: Self, buffer: WriteableBuffer, *, read1: bool) -> int | None:
         """Read bytes into a pre-allocated, writable bytes-like object."""
         if not isinstance(buffer, memoryview):
             buffer = memoryview(buffer)
@@ -617,6 +656,9 @@ class BufferedIOBase(BinaryIOBase):
 
         reader = self.read1 if read1 else self.read
         data = reader(len(buffer))
+
+        if data is None:
+            return None
 
         count = len(data)
         buffer[:count] = data
@@ -879,7 +921,7 @@ class BufferedIOMixin(BufferedIOBase):
             detail = "accessing 'name' on a detached stream"
             raise AttributeError(detail)
 
-        return self.raw.name  # type: ignore[attr-defined]
+        return self.raw.name
 
     @property
     def mode(self: Self) -> str:
@@ -897,7 +939,7 @@ class BufferedIOMixin(BufferedIOBase):
             detail = "accessing 'mode' on a detached stream"
             raise AttributeError(detail)
 
-        return self.raw.mode  # type: ignore[attr-defined]
+        return self.raw.mode
 
     def __getstate__(self: Self) -> dict[str, Any]:
         """Return the state of the object.
@@ -1309,7 +1351,7 @@ class BufferedReader(BufferedIOMixin):
 
         return self.raw.readable()
 
-    def read(self: Self, size: int | None = None, /) -> bytes:
+    def read(self: Self, size: int | None = None, /) -> bytes | None:
         """Read and return up to `size` bytes.
 
         See Also
@@ -1342,7 +1384,7 @@ class BufferedReader(BufferedIOMixin):
         with self._read_lock:
             return self._peek_unlocked(size)
 
-    def read1(self: Self, size: int | None = None, /) -> bytes:
+    def read1(self: Self, size: int | None = None, /) -> bytes | None:
         """Read and return up to `size` bytes, with at most one call.
 
         See Also
@@ -1427,7 +1469,7 @@ class BufferedReader(BufferedIOMixin):
         return self._read_buf[self._read_pos:]
 
     @todo.refactor
-    def _read_unlocked(self: Self, n: int | None = None) -> bytes:
+    def _read_unlocked(self: Self, n: int | None = None) -> bytes | None:
         """Read and return up to `n` bytes."""
         if self.raw is None:
             detail = "read() on a detached stream"
@@ -1452,10 +1494,10 @@ class BufferedReader(BufferedIOMixin):
                 # Read until EOF or until read() would block.
                 chunk = self.raw.read()
                 if chunk in empty_values:
-                    nodata_val = chunk
+                    nodata_val = chunk  # type: ignore[assignment]
                     break
-                current_size += len(chunk)
-                chunks.append(chunk)
+                current_size += len(chunk)  # type: ignore[arg-type]
+                chunks.append(chunk)  # type: ignore[arg-type]
             return b"".join(chunks) or nodata_val
 
         # The number of bytes to read is specified, return at most n bytes.
@@ -1471,10 +1513,10 @@ class BufferedReader(BufferedIOMixin):
         while avail < n:
             chunk = self.raw.read(wanted)
             if chunk in empty_values:
-                nodata_val = chunk
+                nodata_val = chunk  # type: ignore[assignment]
                 break
-            avail += len(chunk)
-            chunks.append(chunk)
+            avail += len(chunk)  # type: ignore[arg-type]
+            chunks.append(chunk)  # type: ignore[arg-type]
         # n is more than avail only when an EOF occurred or when
         # read() would have blocked.
         n = min(n, avail)
@@ -1786,7 +1828,7 @@ class BufferedRWPair(BufferedIOBase):
         self.reader = BufferedReader(reader, buffer_size)
         self.writer = BufferedWriter(writer, buffer_size)
 
-    def read(self: Self, size: int | None = None, /) -> bytes:
+    def read(self: Self, size: int | None = None, /) -> bytes | None:
         """Read and return up to `size` bytes.
 
         See Also
@@ -1801,7 +1843,7 @@ class BufferedRWPair(BufferedIOBase):
             size = -1
         return self.reader.read(size)
 
-    def readinto(self: Self, buffer: WriteableBuffer, /) -> int:
+    def readinto(self: Self, buffer: WriteableBuffer, /) -> int | None:
         """Read bytes into a pre-allocated, writable bytes-like object.
 
         See Also
@@ -1840,7 +1882,7 @@ class BufferedRWPair(BufferedIOBase):
         """
         return self.reader.peek(size)
 
-    def read1(self: Self, size: int | None = None, /) -> bytes:
+    def read1(self: Self, size: int | None = None, /) -> bytes | None:
         """Read and return up to `size` bytes, with at most one call.
 
         See Also
@@ -1853,7 +1895,7 @@ class BufferedRWPair(BufferedIOBase):
         """
         return self.reader.read1(size)
 
-    def readinto1(self: Self, buffer: WriteableBuffer, /) -> int:
+    def readinto1(self: Self, buffer: WriteableBuffer, /) -> int | None:
         """Read bytes into a pre-allocated, writable bytes-like object, with at most one call.
 
         See Also
@@ -2046,7 +2088,7 @@ class BufferedRandom(BufferedWriter, BufferedReader):
 
         return BufferedWriter.truncate(self, pos)
 
-    def read(self: Self, size: int | None = None, /) -> bytes:
+    def read(self: Self, size: int | None = None, /) -> bytes | None:
         """Read and return up to `size` bytes.
 
         See Also
@@ -2063,7 +2105,7 @@ class BufferedRandom(BufferedWriter, BufferedReader):
         self.flush()
         return BufferedReader.read(self, size)
 
-    def readinto(self: Self, buffer: WriteableBuffer, /) -> int:
+    def readinto(self: Self, buffer: WriteableBuffer, /) -> int | None:
         """Read bytes into a pre-allocated, writable bytes-like object.
 
         See Also
@@ -2091,7 +2133,7 @@ class BufferedRandom(BufferedWriter, BufferedReader):
         self.flush()
         return BufferedReader.peek(self, size)
 
-    def read1(self: Self, size: int | None = None, /) -> bytes:
+    def read1(self: Self, size: int | None = None, /) -> bytes | None:
         """Read and return up to `size` bytes, with at most one call.
 
         See Also
@@ -2105,7 +2147,7 @@ class BufferedRandom(BufferedWriter, BufferedReader):
         self.flush()
         return BufferedReader.read1(self, size)
 
-    def readinto1(self: Self, buffer: WriteableBuffer, /) -> int:
+    def readinto1(self: Self, buffer: WriteableBuffer, /) -> int | None:
         """Read bytes into a pre-allocated, writable bytes-like object, with at most one call.
 
         See Also
