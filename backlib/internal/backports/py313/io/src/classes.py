@@ -8,7 +8,7 @@ from backlib.internal.backports.py313.errno import EAGAIN
 from backlib.internal.backports.py313.io.src.constants import DEFAULT_BUFFER_SIZE
 from backlib.internal.backports.py313.io.src.errors import UnsupportedOperation
 from backlib.internal.backports.py313.os import SEEK_CUR, SEEK_DATA, SEEK_END, SEEK_HOLE, SEEK_SET
-from backlib.internal.markers import todo
+from backlib.internal.markers import aware, todo
 from backlib.internal.stdlib.typing import AnyStr, Self
 from backlib.internal.utils.typing import ReadableBuffer, WriteableBuffer
 
@@ -51,7 +51,7 @@ class IOBase(ABC, Generic[AnyStr]):
 
     _is_closed: bool = False
 
-    def seek(self: Self, pos: int, whence: int = SEEK_SET, /) -> int:  # noqa: ARG002
+    def seek(self: Self, pos: int, whence: int = SEEK_SET, /) -> int:
         """Change the stream position to the given byte offset.
 
         See Also
@@ -62,6 +62,7 @@ class IOBase(ABC, Generic[AnyStr]):
         -------
         * Python 3.13.
         """
+        aware.unused(pos, whence)
         self._unsupported("seek")
 
     def tell(self: Self) -> int:
@@ -77,7 +78,7 @@ class IOBase(ABC, Generic[AnyStr]):
         """
         return self.seek(0, SEEK_CUR)
 
-    def truncate(self: Self, pos: int | None = None, /) -> int:  # noqa: ARG002
+    def truncate(self: Self, pos: int | None = None, /) -> int:
         """Resize the stream to the given size in bytes.
 
         See Also
@@ -88,6 +89,7 @@ class IOBase(ABC, Generic[AnyStr]):
         -------
         * Python 3.13.
         """
+        aware.unused(pos)
         self._unsupported("truncate")
 
     def flush(self: Self) -> None:
@@ -186,7 +188,7 @@ class IOBase(ABC, Generic[AnyStr]):
         self._check_closed()
         return False
 
-    def readline(self: Self, size: int | None = None, /) -> AnyStr:  # noqa: ARG002
+    def readline(self: Self, size: int | None = None, /) -> AnyStr:
         """Read and return one line from the stream.
 
         See Also
@@ -197,6 +199,7 @@ class IOBase(ABC, Generic[AnyStr]):
         -------
         * Python 3.13.
         """
+        aware.unused(size)
         self._unsupported("readline")
 
     def readlines(self: Self, hint: int | None = None, /) -> list[AnyStr]:
@@ -239,7 +242,7 @@ class IOBase(ABC, Generic[AnyStr]):
         for line in lines:
             self.write(line)
 
-    def read(self: Self, size: int | None = None, /) -> AnyStr:  # noqa: ARG002
+    def read(self: Self, size: int | None = None, /) -> AnyStr:
         """Read and return up to `size` bytes.
 
         See Also
@@ -250,9 +253,10 @@ class IOBase(ABC, Generic[AnyStr]):
         -------
         * Python 3.13.
         """
+        aware.unused(size)
         self._unsupported("read")
 
-    def write(self: Self, buffer: AnyStr, /) -> int:  # noqa: ARG002
+    def write(self: Self, buffer: AnyStr, /) -> int:
         """Write the given object to the underlying raw stream.
 
         See Also
@@ -263,6 +267,7 @@ class IOBase(ABC, Generic[AnyStr]):
         -------
         * Python 3.13.
         """
+        aware.unused(buffer)
         self._unsupported("write")
 
     @property
@@ -481,7 +486,7 @@ class RawIOBase(BinaryIOBase):
 
         return bytes(buffer)
 
-    def readinto(self: Self, buffer: WriteableBuffer, /) -> int:  # noqa: ARG002
+    def readinto(self: Self, buffer: WriteableBuffer, /) -> int:
         """Read bytes into a pre-allocated, writable bytes-like object.
 
         See Also
@@ -492,9 +497,10 @@ class RawIOBase(BinaryIOBase):
         -------
         * Python 3.13.
         """
+        aware.unused(buffer)
         self._unsupported("readinto")
 
-    def write(self: Self, buffer: ReadableBuffer, /) -> int:  # noqa: ARG002
+    def write(self: Self, buffer: ReadableBuffer, /) -> int:
         """Write the given bytes-like object to the underlying raw stream.
 
         See Also
@@ -505,6 +511,7 @@ class RawIOBase(BinaryIOBase):
         -------
         * Python 3.13.
         """
+        aware.unused(buffer)
         self._unsupported("write")
 
 
@@ -520,7 +527,7 @@ class BufferedIOBase(BinaryIOBase):
     * Python 3.13.
     """
 
-    def read(self: Self, size: int | None = None, /) -> bytes:  # noqa: ARG002
+    def read(self: Self, size: int | None = None, /) -> bytes:
         """Read and return up to `size` bytes.
 
         See Also
@@ -531,9 +538,10 @@ class BufferedIOBase(BinaryIOBase):
         -------
         * Python 3.13.
         """
+        aware.unused(size)
         self._unsupported("read")
 
-    def read1(self: Self, size: int | None = None, /) -> bytes:  # noqa: ARG002
+    def read1(self: Self, size: int | None = None, /) -> bytes:
         """Read and return up to `size` bytes, with at most one call.
 
         See Also
@@ -544,6 +552,7 @@ class BufferedIOBase(BinaryIOBase):
         -------
         * Python 3.13.
         """
+        aware.unused(size)
         self._unsupported("read1")
 
     def readinto(self: Self, buffer: WriteableBuffer, /) -> int:
@@ -572,7 +581,7 @@ class BufferedIOBase(BinaryIOBase):
         """
         return self._readinto(buffer, read1=True)
 
-    def write(self: Self, buffer: ReadableBuffer, /) -> int:  # noqa: ARG002
+    def write(self: Self, buffer: ReadableBuffer, /) -> int:
         """Write the given bytes-like object.
 
         See Also
@@ -583,6 +592,7 @@ class BufferedIOBase(BinaryIOBase):
         -------
         * Python 3.13.
         """
+        aware.unused(buffer)
         self._unsupported("write")
 
     def detach(self: Self) -> RawIOBase:
