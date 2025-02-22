@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from abc import ABC
 from threading import Lock
-from typing import TYPE_CHECKING, Any, NoReturn
+from typing import TYPE_CHECKING, Any, Generic, NoReturn
 
 from backlib.internal.backports.py313.errno import EAGAIN
 from backlib.internal.backports.py313.io.src.constants import DEFAULT_BUFFER_SIZE
 from backlib.internal.backports.py313.io.src.errors import UnsupportedOperation
 from backlib.internal.backports.py313.os import SEEK_CUR, SEEK_DATA, SEEK_END, SEEK_HOLE, SEEK_SET
 from backlib.internal.markers import todo
-from backlib.internal.stdlib.typing import Self
+from backlib.internal.stdlib.typing import AnyStr, Self
 from backlib.internal.utils.typing import ReadableBuffer, WriteableBuffer
 
 
@@ -37,7 +37,7 @@ __all__: list[str] = [
 SEEK_FLAGS = {SEEK_SET, SEEK_CUR, SEEK_END, SEEK_DATA, SEEK_HOLE}
 
 
-class IOBase(ABC):  # noqa: B024
+class IOBase(ABC, Generic[AnyStr]):
     """The abstract base class for all I/O classes.
 
     See Also
@@ -186,7 +186,7 @@ class IOBase(ABC):  # noqa: B024
         self._check_closed()
         return False
 
-    def readline(self: Self, size: int | None = None, /) -> bytes:
+    def readline(self: Self, size: int | None = None, /) -> AnyStr:  # noqa: ARG002
         """Read and return one line from the stream.
 
         See Also
@@ -197,28 +197,9 @@ class IOBase(ABC):  # noqa: B024
         -------
         * Python 3.13.
         """
-        if size is None:
-            size = -1
+        self._unsupported("readline")
 
-        if not hasattr(size, "__index__"):
-            detail = f"{size!r} is not an integer"
-            raise TypeError(detail)
-
-        size = size.__index__()
-        buffer = bytearray()
-
-        while size < 0 or len(buffer) < size:
-            if not (char := self.read(1)):  # type: ignore[attr-defined]
-                break
-
-            buffer += char
-
-            if char == b"\n":
-                break
-
-        return bytes(buffer)
-
-    def readlines(self: Self, hint: int | None = None, /) -> list[bytes]:
+    def readlines(self: Self, hint: int | None = None, /) -> list[AnyStr]:
         """Read and return a list of lines from the stream.
 
         See Also
@@ -232,7 +213,7 @@ class IOBase(ABC):  # noqa: B024
         if hint is None or hint <= 0:
             return list(self)
 
-        lines: list[bytes] = []
+        lines: list[AnyStr] = []
         length: int = 0
 
         for line in self:
@@ -243,7 +224,7 @@ class IOBase(ABC):  # noqa: B024
 
         return lines
 
-    def writelines(self: Self, lines: Iterable[ReadableBuffer], /) -> None:
+    def writelines(self: Self, lines: Iterable[AnyStr], /) -> None:
         """Write a list of lines to the stream.
 
         See Also
@@ -256,7 +237,33 @@ class IOBase(ABC):  # noqa: B024
         """
         self._check_closed()
         for line in lines:
-            self.write(line)  # type: ignore[attr-defined]
+            self.write(line)
+
+    def read(self: Self, size: int | None = None, /) -> AnyStr:  # noqa: ARG002
+        """Read and return up to `size` bytes.
+
+        See Also
+        --------
+        * `io.IOBase.read`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        self._unsupported("read")
+
+    def write(self: Self, buffer: AnyStr, /) -> int:  # noqa: ARG002
+        """Write the given object to the underlying raw stream.
+
+        See Also
+        --------
+        * `io.IOBase.write`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        self._unsupported("write")
 
     @property
     def closed(self: Self) -> bool:
@@ -325,12 +332,30 @@ class IOBase(ABC):  # noqa: B024
         self.close()
 
     def __iter__(self: Self) -> Self:
-        """Return self."""
+        """Return self.
+
+        See Also
+        --------
+        * `io.IOBase.__iter__`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
         self._check_closed()
         return self
 
-    def __next__(self: Self) -> bytes:
-        """Return the next line."""
+    def __next__(self: Self) -> AnyStr:
+        """Return the next line.
+
+        See Also
+        --------
+        * `io.IOBase.__next__`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
         if not (line := self.readline()):
             raise StopIteration
         return line
@@ -365,7 +390,43 @@ class IOBase(ABC):  # noqa: B024
         raise OSError(detail)
 
 
-class RawIOBase(IOBase):
+class BinaryIOBase(IOBase[bytes]):
+    """Base class for binary I/O."""
+
+    def readline(self: Self, size: int | None = None, /) -> bytes:
+        """Read and return one line from the stream.
+
+        See Also
+        --------
+        * `io.IOBase.readline`.
+
+        Version
+        -------
+        * Python 3.13.
+        """
+        if size is None:
+            size = -1
+
+        if not hasattr(size, "__index__"):
+            detail = f"{size!r} is not an integer"
+            raise TypeError(detail)
+
+        size = size.__index__()
+        buffer = bytearray()
+
+        while size < 0 or len(buffer) < size:
+            if not (char := self.read(1)):
+                break
+
+            buffer += char
+
+            if char == b"\n":
+                break
+
+        return bytes(buffer)
+
+
+class RawIOBase(BinaryIOBase):
     """Base class for raw binary streams.
 
     See Also
@@ -447,7 +508,7 @@ class RawIOBase(IOBase):
         self._unsupported("write")
 
 
-class BufferedIOBase(IOBase):
+class BufferedIOBase(BinaryIOBase):
     """Base class for binary streams that support some kind of buffering.
 
     See Also
@@ -2072,17 +2133,17 @@ class BufferedRandom(BufferedWriter, BufferedReader):
         return BufferedWriter.write(self, buffer)
 
 
-class FileIO:
+class FileIO(RawIOBase):
     pass
 
 
-class TextIOBase:
+class TextIOBase(IOBase[str]):
     pass
 
 
-class TextIOWrapper:
+class TextIOWrapper(TextIOBase):
     pass
 
 
-class StringIO:
+class StringIO(TextIOWrapper):
     pass
