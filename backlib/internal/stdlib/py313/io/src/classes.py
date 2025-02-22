@@ -582,7 +582,11 @@ class BufferedIOMixin(BufferedIOBase):
         -------
         * Python 3.13.
         """
-        offset = self.raw.seek(pos, whence)  # type: ignore[union-attr]
+        if self.raw is None:
+            detail = "seek() on a detached stream"
+            raise AttributeError(detail)
+
+        offset = self.raw.seek(pos, whence)
 
         if offset < 0:
             detail = "seek() returned an invalid position"
@@ -601,7 +605,11 @@ class BufferedIOMixin(BufferedIOBase):
         -------
         * Python 3.13.
         """
-        offset = self.raw.tell()  # type: ignore[union-attr]
+        if self.raw is None:
+            detail = "tell() on a detached stream"
+            raise AttributeError(detail)
+
+        offset = self.raw.tell()
 
         if offset < 0:
             detail = "tell() returned an invalid position"
@@ -620,6 +628,10 @@ class BufferedIOMixin(BufferedIOBase):
         -------
         * Python 3.13.
         """
+        if self.raw is None:
+            detail = "truncate() on a detached stream"
+            raise AttributeError(detail)
+
         self._check_closed()
         self._check_writable()
 
@@ -628,7 +640,7 @@ class BufferedIOMixin(BufferedIOBase):
         if pos is None:
             pos = self.tell()
 
-        return self.raw.truncate(pos)  # type: ignore[union-attr]
+        return self.raw.truncate(pos)
 
     def flush(self: Self) -> None:
         """Flush the write buffers of the stream if applicable.
@@ -641,10 +653,15 @@ class BufferedIOMixin(BufferedIOBase):
         -------
         * Python 3.13.
         """
+        if self.raw is None:
+            detail = "flush() on a detached stream"
+            raise AttributeError(detail)
+
         if self.closed:
             detail = "flush on closed file"
             raise ValueError(detail)
-        self.raw.flush()  # type: ignore[union-attr]
+
+        self.raw.flush()
 
     def close(self: Self) -> None:
         """Flush and close this stream.
@@ -674,7 +691,7 @@ class BufferedIOMixin(BufferedIOBase):
         -------
         * Python 3.13.
         """
-        raw = self._raw
+        raw = self.raw
 
         if raw is None:
             detail = "raw stream already detached"
@@ -696,7 +713,11 @@ class BufferedIOMixin(BufferedIOBase):
         -------
         * Python 3.13.
         """
-        return self.raw.seekable()  # type: ignore[union-attr]
+        if self.raw is None:
+            detail = "seekable() on a detached stream"
+            raise AttributeError(detail)
+
+        return self.raw.seekable()
 
     def fileno(self: Self) -> int:
         """Return the underlying file descriptor (an integer) of the stream if it exists.
@@ -709,7 +730,11 @@ class BufferedIOMixin(BufferedIOBase):
         -------
         * Python 3.13.
         """
-        return self.raw.fileno()  # type: ignore[union-attr]
+        if self.raw is None:
+            detail = "fileno() on a detached stream"
+            raise AttributeError(detail)
+
+        return self.raw.fileno()
 
     def isatty(self: Self) -> bool:
         """Return `True` if the stream is interactive.
@@ -722,7 +747,11 @@ class BufferedIOMixin(BufferedIOBase):
         -------
         * Python 3.13.
         """
-        return self.raw.isatty()  # type: ignore[union-attr]
+        if self.raw is None:
+            detail = "isatty() on a detached stream"
+            raise AttributeError(detail)
+
+        return self.raw.isatty()
 
     @property
     def raw(self: Self) -> RawIOBase | None:
@@ -750,7 +779,11 @@ class BufferedIOMixin(BufferedIOBase):
         -------
         * Python 3.13.
         """
-        return self.raw.closed  # type: ignore[union-attr]
+        if self.raw is None:
+            detail = "accessing 'closed' on a detached stream"
+            raise AttributeError(detail)
+
+        return self.raw.closed
 
     @property
     def name(self: Self) -> int | str | bytes:
@@ -764,7 +797,11 @@ class BufferedIOMixin(BufferedIOBase):
         -------
         * Python 3.13.
         """
-        return self.raw.name  # type: ignore[union-attr]
+        if self.raw is None:
+            detail = "accessing 'name' on a detached stream"
+            raise AttributeError(detail)
+
+        return self.raw.name  # type: ignore[attr-defined]
 
     @property
     def mode(self: Self) -> str:
@@ -778,7 +815,11 @@ class BufferedIOMixin(BufferedIOBase):
         -------
         * Python 3.13.
         """
-        return self.raw.mode  # type: ignore[union-attr]
+        if self.raw is None:
+            detail = "accessing 'mode' on a detached stream"
+            raise AttributeError(detail)
+
+        return self.raw.mode  # type: ignore[attr-defined]
 
     def __getstate__(self: Self) -> dict[str, Any]:
         """Return the state of the object.
