@@ -296,8 +296,7 @@ def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:
 
     Notes
     -----
-    * As opposed to `posixpath`, `isreserved` is defined;
-    * `False` is always returned.
+    * As opposed to `posixpath`, `isreserved` is defined.
 
     See Also
     --------
