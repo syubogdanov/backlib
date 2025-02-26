@@ -4,16 +4,6 @@ from typing import TypeVar
 T = TypeVar("T")
 
 
-def alias(debt: T) -> T:
-    """Mark the object as an alias.
-
-    Notes
-    -----
-    * Aliases are not actual backports.
-    """
-    return debt
-
-
 def platform(debt: T) -> T:
     """Mark the object as platform-specific.
 
