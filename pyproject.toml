@@ -22,6 +22,7 @@ keywords = [
     "json",
     "ntpath",
     "os",
+    "pathlib",
     "posixpath",
     "shutil",
     "stat",
@@ -51,15 +52,15 @@ typing-extensions = {version = "^4.12", python = "<3.11"}
 optional = true
 
 [tool.poetry.group.lint.dependencies]
-black = "^25.1"
-mypy = "^1.15"
-ruff = "^0.7"
+black = "~25.1"
+mypy = "~1.15"
+ruff = "~0.7"
 
 [tool.poetry.group.test]
 optional = true
 
 [tool.poetry.group.test.dependencies]
-pytest = "^8.3"
+pytest = "~8.3"
 
 [tool.black]
 line-length = 100
@@ -73,25 +74,20 @@ disallow_untyped_decorators = true
 disallow_untyped_defs = true
 explicit_package_bases = true
 no_implicit_optional = true
+python_version = "3.9"
 strict_equality = true
 warn_unused_ignores = true
-python_version = "3.9"
 
 [tool.ruff]
 line-length = 100
 target-version = "py39"
 
 [tool.ruff.lint]
+ignore = ["A005", "ANN401", "D100", "D104"]
 select = ["ALL"]
-ignore = ["A005", "D100", "D104"]
 
 [tool.ruff.lint.flake8-type-checking]
-exempt-modules = [
-    "backlib.internal.stdlib.typing",
-    "backlib.internal.utils.typing",
-    "typing",
-    "typing_extensions",
-]
+exempt-modules = ["typing", "typing_extensions"]
 
 [tool.ruff.lint.isort]
 lines-after-imports = 2
