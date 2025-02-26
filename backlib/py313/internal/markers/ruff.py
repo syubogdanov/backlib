@@ -1,10 +1,11 @@
 from typing import Any
 
 
-def unused(*_: Any, **__: Any) -> None:
-    """Mark the objects as unused.
+def mute(*_: Any, **__: Any) -> None:
+    """Mute the `ruff` rule.
 
     See Also
     --------
-    * Ruff: `ARG002`.
+    * `ARG002`.
+    * `F401`.
     """
