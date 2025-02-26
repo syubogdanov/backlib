@@ -8,7 +8,7 @@ from sys import getfilesystemencodeerrors, getfilesystemencoding, stdout
 from typing import TYPE_CHECKING, TypeVar
 
 from backlib.py313.internal.backports.os.internal.structs import stat_result, terminal_size
-from backlib.py313.internal.markers import depends_on
+from backlib.py313.internal.markers import techdebt
 from backlib.py313.internal.utils import alias
 from backlib.py313.internal.utils.platform import is_nt, is_posix
 
@@ -174,7 +174,7 @@ def fstat(fd: int) -> stat_result:
     return stat(fd)
 
 
-@depends_on.platform
+@techdebt.platform
 def ftruncate(fd: int, length: int, /) -> None:
     """Truncate the file corresponding to file descriptor `fd`.
 
@@ -209,7 +209,7 @@ def get_inheritable(fd: int, /) -> bool:
     return py_get_inheritable(fd)
 
 
-@depends_on.platform
+@techdebt.platform
 def get_terminal_size(fd: int | None = None, /) -> terminal_size:
     """Return the size of the terminal window as `(columns, lines)`.
 
@@ -279,7 +279,7 @@ def isatty(fd: int, /) -> bool:
     return py_isatty(fd)
 
 
-@depends_on.platform
+@techdebt.platform
 def link(
     src: AnyStr | PathLike[AnyStr],
     dst: AnyStr | PathLike[AnyStr],
@@ -393,7 +393,7 @@ def read(fd: int, length: int, /) -> bytes:
     return py_read(fd, length)
 
 
-@depends_on.platform
+@techdebt.platform
 def readlink(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> AnyStr:
     """Return a string representing the path to which the symbolic link points.
 
@@ -534,7 +534,7 @@ def stat(
     )
 
 
-@depends_on.platform
+@techdebt.platform
 def symlink(
     src: AnyStr | PathLike[AnyStr],
     dst: AnyStr | PathLike[AnyStr],

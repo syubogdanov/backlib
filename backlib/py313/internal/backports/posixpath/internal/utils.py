@@ -1,7 +1,7 @@
 from typing import Any
 
 
-def check_arg_types(funcname: str, *args: Any) -> None:  # noqa: ANN401
+def check_arg_types(funcname: str, *args: Any) -> None:
     """Check the types of the arguments to a function."""
     has_str = False
     has_bytes = False
