@@ -1,3 +1,0 @@
-# json — JSON encoder and decoder
-
-...

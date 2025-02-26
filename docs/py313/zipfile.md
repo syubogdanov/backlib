@@ -1,3 +1,0 @@
-# zipfile — Work with ZIP archives
-
-...
