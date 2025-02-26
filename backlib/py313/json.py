@@ -1,2 +1,20 @@
-_detail = "The 'backlib.py313.json' has not been implemented yet"
-raise NotImplementedError(_detail)
+from backlib.py313.internal.backports.json import (
+    JSONDecodeError,
+    JSONDecoder,
+    JSONEncoder,
+    dump,
+    dumps,
+    load,
+    loads,
+)
+
+
+__all__: list[str] = [
+    "JSONDecodeError",
+    "JSONDecoder",
+    "JSONEncoder",
+    "dump",
+    "dumps",
+    "load",
+    "loads",
+]

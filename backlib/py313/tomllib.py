@@ -1,2 +1,4 @@
-_detail = "The 'backlib.py313.tomllib' has not been implemented yet"
-raise NotImplementedError(_detail)
+from backlib.py313.internal.backports.tomllib import TOMLDecodeError, load, loads
+
+
+__all__: list[str] = ["TOMLDecodeError", "load", "loads"]
