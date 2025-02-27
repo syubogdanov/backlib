@@ -186,19 +186,19 @@ MIT License, Copyright (c) 2025 Sergei Y. Bogdanov. See [LICENSE][github/license
 
 <!-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- -->
 
-[docs/errno]: https://youtu.be/dQw4w9WgXcQ
-[docs/io]: https://youtu.be/dQw4w9WgXcQ
-[docs/json]: https://youtu.be/dQw4w9WgXcQ
-[docs/ntpath]: https://youtu.be/dQw4w9WgXcQ
-[docs/os]: https://youtu.be/dQw4w9WgXcQ
-[docs/os.path]: https://youtu.be/dQw4w9WgXcQ
-[docs/pathlib]: https://youtu.be/dQw4w9WgXcQ
-[docs/posixpath]: https://youtu.be/dQw4w9WgXcQ
-[docs/shutil]: https://youtu.be/dQw4w9WgXcQ
-[docs/stat]: https://youtu.be/dQw4w9WgXcQ
-[docs/tarfile]: https://youtu.be/dQw4w9WgXcQ
-[docs/tomllib]: https://youtu.be/dQw4w9WgXcQ
-[docs/zipfile]: https://youtu.be/dQw4w9WgXcQ
+[docs/errno]: https://backlib.readthedocs.io/en/latest/backports/python313/errno.html
+[docs/io]: https://backlib.readthedocs.io/en/latest/backports/python313/io.html
+[docs/json]: https://backlib.readthedocs.io/en/latest/backports/python313/json.html
+[docs/ntpath]: https://backlib.readthedocs.io/en/latest/backports/python313/ntpath.html
+[docs/os]: https://backlib.readthedocs.io/en/latest/backports/python313/os.html
+[docs/os.path]: https://backlib.readthedocs.io/en/latest/backports/python313/os.path.html
+[docs/pathlib]: https://backlib.readthedocs.io/en/latest/backports/python313/pathlib.html
+[docs/posixpath]: https://backlib.readthedocs.io/en/latest/backports/python313/posixpath.html
+[docs/shutil]: https://backlib.readthedocs.io/en/latest/backports/python313/shutil.html
+[docs/stat]: https://backlib.readthedocs.io/en/latest/backports/python313/stat.html
+[docs/tarfile]: https://backlib.readthedocs.io/en/latest/backports/python313/tarfile.html
+[docs/tomllib]: https://backlib.readthedocs.io/en/latest/backports/python313/tomllib.html
+[docs/zipfile]: https://backlib.readthedocs.io/en/latest/backports/python313/zipfile.html
 
 [github/license]: https://github.com/syubogdanov/backlib/tree/main/LICENSE
 

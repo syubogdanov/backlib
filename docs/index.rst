@@ -28,7 +28,7 @@ Usage
 errno
 ^^^^^
 
-For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/errno.html>`__.
 
 .. code:: python
 
@@ -39,7 +39,7 @@ For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
 io
 ^^
 
-For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/io.html>`__.
 
 .. code:: python
 
@@ -52,7 +52,7 @@ For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
 json
 ^^^^
 
-For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/json.html>`__.
 
 .. code:: python
 
@@ -65,7 +65,7 @@ For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
 ntpath
 ^^^^^^
 
-For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/ntpath.html>`__.
 
 .. code:: python
 
@@ -78,7 +78,7 @@ For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
 os
 ^^
 
-For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/os.html>`__.
 
 .. code:: python
 
@@ -91,7 +91,7 @@ For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
 os.path
 ^^^^^^^
 
-For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/os.path.html>`__.
 
 .. code:: python
 
@@ -104,7 +104,7 @@ For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
 pathlib
 ^^^^^^^
 
-For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/pathlib.html>`__.
 
 .. code:: python
 
@@ -118,7 +118,7 @@ For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
 posixpath
 ^^^^^^^^^
 
-For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/posixpath.html>`__.
 
 .. code:: python
 
@@ -131,7 +131,7 @@ For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
 shutil
 ^^^^^^
 
-For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/shutil.html>`__.
 
 .. code:: python
 
@@ -145,7 +145,7 @@ For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
 stat
 ^^^^
 
-For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/stat.html>`__.
 
 .. code:: python
 
@@ -156,7 +156,7 @@ For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
 tarfile
 ^^^^^^^
 
-For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/tarfile.html>`__.
 
 .. code:: python
 
@@ -169,7 +169,7 @@ For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
 tomllib
 ^^^^^^^
 
-For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/tomllib.html>`__.
 
 .. code:: python
 
@@ -182,7 +182,7 @@ For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
 zipfile
 ^^^^^^^
 
-For more, see the `documentation <https://youtu.be/dQw4w9WgXcQ>`__.
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/zipfile.html>`__.
 
 .. code:: python
 
