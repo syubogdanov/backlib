@@ -182,7 +182,7 @@ if not zipfile.is_zipfile("./backlib.zip"):
 
 ## License
 
-MIT License, Copyright (c) 2025 Sergei Bogdanov. See [LICENSE][github/license] file.
+MIT License, Copyright (c) 2025 Sergei Y. Bogdanov. See [LICENSE][github/license] file.
 
 <!-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- -->
 
