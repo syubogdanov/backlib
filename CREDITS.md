@@ -11,6 +11,7 @@
 | [cpython][25]           | [@python][26]                        | [GitHub][27]               | [PSF License][28]                |
 | [pytest][29]            | [@pytest-dev][30]                    | [GitHub][31]               | [MIT][32]                        |
 | [black][33]             | [@psf][34]                           | [GitHub][35]               | [MIT][36]                        |
+| [sphinx][37]            | [@sphinx-doc][38]                    | [GitHub][39]               | [BSD-2-Clause][40]               |
 
 [01]: https://www.contributor-covenant.org/version/2/1/code_of_conduct
 [02]: https://where.coraline.codes
@@ -56,3 +57,8 @@
 [34]: https://github.com/psf
 [35]: https://github.com
 [36]: https://github.com/psf/black/blob/main/LICENSE
+
+[37]: https://github.com/sphinx-doc/sphinx
+[38]: https://github.com/sphinx-doc
+[39]: https://github.com
+[40]: https://github.com/sphinx-doc/sphinx/blob/master/LICENSE.rst
