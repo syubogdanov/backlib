@@ -25,6 +25,18 @@ The library is available as `backlib <https://pypi.org/project/backlib/>`__ on P
 Usage
 ~~~~~
 
+builtins
+^^^^^^^^
+
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/builtins.html>`__.
+
+.. code:: python
+
+   from backlib.py313 import builtins
+
+   message = "This is a backported warning!"
+   warn(message, builtins.EncodingWarning, stacklevel=2)
+
 errno
 ^^^^^
 

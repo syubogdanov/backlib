@@ -26,6 +26,17 @@ pip install backlib
 
 ### Usage
 
+#### builtins [SOON]
+
+For more, see the [documentation][docs/builtins].
+
+```python
+from backlib.py313 import builtins
+
+message = "This is a backported warning!"
+warn(message, builtins.EncodingWarning, stacklevel=2)
+```
+
 #### errno [UNRELEASED]
 
 For more, see the [documentation][docs/errno].
@@ -186,6 +197,7 @@ MIT License, Copyright (c) 2025 Sergei Y. Bogdanov. See [LICENSE][github/license
 
 <!-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- -->
 
+[docs/builtins]: https://backlib.readthedocs.io/en/latest/backports/python313/builtins.html
 [docs/errno]: https://backlib.readthedocs.io/en/latest/backports/python313/errno.html
 [docs/io]: https://backlib.readthedocs.io/en/latest/backports/python313/io.html
 [docs/json]: https://backlib.readthedocs.io/en/latest/backports/python313/json.html
