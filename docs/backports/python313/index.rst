@@ -5,6 +5,7 @@
 .. toctree::
     :maxdepth: 1
 
+    builtins
     errno
     io
     json
