@@ -151,7 +151,7 @@ from backlib.py313.internal.backports.os import (
     lstat,
     mkdir,
     name,
-    open,  # noqa: A004
+    open,
     pardir,
     pathsep,
     read,

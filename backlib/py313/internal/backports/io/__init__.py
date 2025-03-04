@@ -14,16 +14,12 @@ from backlib.py313.internal.backports.io.internal.classes import (
 )
 from backlib.py313.internal.backports.io.internal.constants import DEFAULT_BUFFER_SIZE
 from backlib.py313.internal.backports.io.internal.encoding import text_encoding
-from backlib.py313.internal.backports.io.internal.errors import (
-    BlockingIOError,  # noqa: A004
-    UnsupportedOperation,
-)
-from backlib.py313.internal.backports.io.internal.openers import open, open_code  # noqa: A004
+from backlib.py313.internal.backports.io.internal.errors import UnsupportedOperation
+from backlib.py313.internal.backports.io.internal.openers import open, open_code
 
 
 __all__: list[str] = [
     "DEFAULT_BUFFER_SIZE",
-    "BlockingIOError",
     "BufferedIOBase",
     "BufferedRWPair",
     "BufferedRandom",

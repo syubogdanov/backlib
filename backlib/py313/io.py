@@ -1,6 +1,7 @@
+from builtins import BlockingIOError
+
 from backlib.py313.internal.backports.io import (
     DEFAULT_BUFFER_SIZE,
-    BlockingIOError,  # noqa: A004
     BufferedIOBase,
     BufferedRandom,
     BufferedReader,
@@ -14,7 +15,7 @@ from backlib.py313.internal.backports.io import (
     TextIOBase,
     TextIOWrapper,
     UnsupportedOperation,
-    open,  # noqa: A004
+    open,
     open_code,
     text_encoding,
 )

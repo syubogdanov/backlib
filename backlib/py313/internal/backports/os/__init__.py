@@ -161,7 +161,7 @@ from backlib.py313.internal.backports.os.internal.functions import (
     lseek,
     lstat,
     mkdir,
-    open,  # noqa: A004
+    open,
     read,
     readlink,
     rename,

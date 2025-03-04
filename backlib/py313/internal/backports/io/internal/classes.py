@@ -1128,7 +1128,7 @@ class BytesIO(BufferedIOBase):
             padding = b"\x00" * length
             self._buffer += padding
 
-        self._buffer[self._pos:self._pos + nbytes] = bytes(buffer)
+        self._buffer[self._pos : self._pos + nbytes] = bytes(buffer)
         self._pos += nbytes
 
         return nbytes
@@ -1458,10 +1458,10 @@ class BufferedReader(BufferedIOMixin):
             current = self.raw.read(to_read)
 
             if current:
-                self._read_buf = self._read_buf[self._read_pos:] + current
+                self._read_buf = self._read_buf[self._read_pos :] + current
                 self._read_pos = 0
 
-        return self._read_buf[self._read_pos:]
+        return self._read_buf[self._read_pos :]
 
     @techdebt.refactor
     def _read_unlocked(self: Self, n: int | None = None) -> bytes | None:
@@ -1500,7 +1500,7 @@ class BufferedReader(BufferedIOMixin):
         if n <= avail:
             # Fast path: the data to read is fully buffered.
             self._read_pos += n
-            return buf[pos:pos+n]
+            return buf[pos : pos + n]
         # Slow path: read from the stream until enough bytes are read,
         # or until an EOF occurs or until read() would block.
         chunks = [buf[pos:]]
@@ -1541,8 +1541,9 @@ class BufferedReader(BufferedIOMixin):
         with self._read_lock:
             while written < len(buffer):
                 if avail := min(len(self._read_buf) - self._read_pos, len(buffer)):
-                    buffer[written:written+avail] = \
-                        self._read_buf[self._read_pos:self._read_pos+avail]
+                    buffer[written : written + avail] = self._read_buf[
+                        self._read_pos : self._read_pos + avail
+                    ]
                     self._read_pos += avail
                     written += avail
                     if written == len(buffer):
@@ -1556,7 +1557,7 @@ class BufferedReader(BufferedIOMixin):
 
                 elif not (read1 and written):
                     if not self._peek_unlocked(1):
-                        break # eof
+                        break  # eof
 
                 if read1 and written:
                     break
@@ -1661,7 +1662,7 @@ class BufferedWriter(BufferedIOMixin):
                 if len(self._write_buf) > self.buffer_size:
                     overage = len(self._write_buf) - self.buffer_size
                     written -= overage
-                    self._write_buf = self._write_buf[:self.buffer_size]
+                    self._write_buf = self._write_buf[: self.buffer_size]
                     raise BlockingIOError(exception.errno, exception.strerror, written) from None
 
             return written

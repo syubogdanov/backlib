@@ -357,7 +357,7 @@ def mkdir(path: AnyStr | PathLike[AnyStr], mode: int = 0o777, *, dir_fd: int | N
     return py_mkdir(path, mode, dir_fd=dir_fd)
 
 
-def open(  # noqa: A001
+def open(
     path: AnyStr | PathLike[AnyStr],
     flags: int,
     mode: int = 0o777,

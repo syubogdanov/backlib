@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from backlib.py313.internal.backports.os import PathLike
 
 
-def open(  # noqa: A001
+def open(
     file: int | bytes | str | PathLike[bytes] | PathLike[str],
     mode: str = "r",
     buffering: int = -1,
