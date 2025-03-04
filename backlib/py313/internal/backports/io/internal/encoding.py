@@ -5,6 +5,7 @@ import sys
 from warnings import warn
 
 from backlib.py313.internal.backports.builtins import EncodingWarning
+from backlib.py313.internal.backports.os import environ
 from backlib.py313.internal.utils import alias
 
 
@@ -25,7 +26,10 @@ def text_encoding(encoding: str | None, stacklevel: int = 2) -> str:
     if encoding is not None:
         return encoding
 
-    if alias.or_default(sys.flags, "warn_default_encoding", otherwise=False):
+    has_flag = alias.or_default(sys.flags, "warn_default_encoding", otherwise=False)
+    has_env = environ.get("PYTHONWARNDEFAULTENCODING", default=False)
+
+    if has_flag or has_env:
         message = "'encoding' argument not specified."
         warn(message, EncodingWarning, stacklevel=(stacklevel + 1))
 
