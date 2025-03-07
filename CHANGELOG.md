@@ -8,10 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 * Added `backlib.py313.errno`;
-* Added `backlib.py313.ntpath`;
 * Added `backlib.py313.os`;
-* Added `backlib.py313.ospath`;
-* Added `backlib.py313.posixpath`.
+* Added `backlib.py313.os.path`;
 
 ## [0.0.0] - 2025-01-03
 

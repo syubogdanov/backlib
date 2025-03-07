@@ -71,18 +71,6 @@ data = json.loads("{\"backlib\": \"pypi\"}")
 assert data == {"backlib": "pypi"}
 ```
 
-#### ntpath [UNRELEASED]
-
-For more, see the [documentation][docs/ntpath].
-
-```python
-from backlib.py313 import ntpath
-
-is_reserved = ntpath.isreserved("./backlib")
-
-assert not is_reserved
-```
-
 #### os [UNRELEASED]
 
 For more, see the [documentation][docs/os].
@@ -118,18 +106,6 @@ path = pathlib.Path("./backlib")
 
 if not path.exists():
     path.mkdir(exist_ok=True)
-```
-
-#### posixpath [UNRELEASED]
-
-For more, see the [documentation][docs/posixpath].
-
-```python
-from backlib.py313 import posixpath
-
-is_reserved = posixpath.isreserved("./backlib")
-
-assert not is_reserved
 ```
 
 #### shutil [SOON]
@@ -201,11 +177,9 @@ MIT License, Copyright (c) 2025 Sergei Y. Bogdanov. See [LICENSE][github/license
 [docs/errno]: https://backlib.readthedocs.io/en/latest/backports/python313/errno.html
 [docs/io]: https://backlib.readthedocs.io/en/latest/backports/python313/io.html
 [docs/json]: https://backlib.readthedocs.io/en/latest/backports/python313/json.html
-[docs/ntpath]: https://backlib.readthedocs.io/en/latest/backports/python313/ntpath.html
 [docs/os]: https://backlib.readthedocs.io/en/latest/backports/python313/os.html
 [docs/os.path]: https://backlib.readthedocs.io/en/latest/backports/python313/os.path.html
 [docs/pathlib]: https://backlib.readthedocs.io/en/latest/backports/python313/pathlib.html
-[docs/posixpath]: https://backlib.readthedocs.io/en/latest/backports/python313/posixpath.html
 [docs/shutil]: https://backlib.readthedocs.io/en/latest/backports/python313/shutil.html
 [docs/stat]: https://backlib.readthedocs.io/en/latest/backports/python313/stat.html
 [docs/tarfile]: https://backlib.readthedocs.io/en/latest/backports/python313/tarfile.html

@@ -74,19 +74,6 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 
    assert data == {"backlib": "pypi"}
 
-ntpath
-^^^^^^
-
-For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/ntpath.html>`__.
-
-.. code:: python
-
-   from backlib.py313 import ntpath
-
-   is_reserved = ntpath.isreserved("./backlib")
-
-   assert not is_reserved
-
 os
 ^^
 
@@ -126,19 +113,6 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 
    if not path.exists():
        path.mkdir(exist_ok=True)
-
-posixpath
-^^^^^^^^^
-
-For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/posixpath.html>`__.
-
-.. code:: python
-
-   from backlib.py313 import posixpath
-
-   is_reserved = posixpath.isreserved("./backlib")
-
-   assert not is_reserved
 
 shutil
 ^^^^^^
