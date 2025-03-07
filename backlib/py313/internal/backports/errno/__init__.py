@@ -171,7 +171,11 @@ __all__: list[str] = [
 ]
 
 
-# Python 3.9+, May be undefined
+# ---
+# Version: Python 3.9+
+# Explain: May be undefined.
+# ---
+
 E2BIG: Final[int] = alias.or_platform(
     py_errno,
     "E2BIG",
@@ -1618,7 +1622,11 @@ EXFULL: Final[int] = alias.or_platform(
 )
 
 
-# Python 3.11+
+# ---
+# Version: Python 3.11+
+# Explain: Added in Python 3.11. May be undefined also.
+# ---
+
 ENOTCAPABLE: Final[int] = alias.or_platform(
     py_errno,
     "ENOTCAPABLE",
@@ -1633,7 +1641,12 @@ EQFULL: Final[int] = alias.or_platform(
     otherwise=darwin1.EQFULL,
 )
 
-# Python 3.11+, `ENOTCAPABLE` and `EQFULL`
+
+# ---
+# Version: Python 3.9+
+# Explain: Use the entire `errno`.
+# ---
+
 errorcode = {
     E2BIG: "E2BIG",
     EACCES: "EACCES",

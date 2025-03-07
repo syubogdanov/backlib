@@ -101,12 +101,22 @@ __all__: list[str] = [
     "filemode",
 ]
 
-# Python 3.9+, May be defined as `0`
+
+# ---
+# Version: Python 3.9+
+# Explain: May be defined as `0`.
+# ---
+
 S_IFDOOR: Final[int] = alias.to(py_stat.S_IFDOOR) or 0o150000
 S_IFPORT: Final[int] = alias.to(py_stat.S_IFPORT) or 0o160000
 S_IFWHT: Final[int] = alias.to(py_stat.S_IFWHT) or 0o160000
 
-# Python 3.9+, Windows
+
+# ---
+# Version: Python 3.9+
+# Explain: Available on Windows.
+# ---
+
 FILE_ATTRIBUTE_ARCHIVE: Final[int] = 32
 FILE_ATTRIBUTE_COMPRESSED: Final[int] = 2048
 FILE_ATTRIBUTE_DEVICE: Final[int] = 64
@@ -125,27 +135,46 @@ FILE_ATTRIBUTE_SYSTEM: Final[int] = 4
 FILE_ATTRIBUTE_TEMPORARY: Final[int] = 256
 FILE_ATTRIBUTE_VIRTUAL: Final[int] = 65536
 
-# Python 3.9+, Windows
+
+# ---
+# Version: Python 3.9+
+# Explain: Available on Windows.
+# ---
+
 IO_REPARSE_TAG_SYMLINK: Final[int] = 0xA000000C
 IO_REPARSE_TAG_MOUNT_POINT: Final[int] = 0xA0000003
 IO_REPARSE_TAG_APPEXECLINK: Final[int] = 0x8000001B
 
-# Python 3.13+, macOS
+
+# ---
+# Version: Python 3.13+
+# Explain: Available on macOS
+# ---
+
 SF_SUPPORTED: Final[int] = 0x9F0000
 SF_SYNTHETIC: Final[int] = 0xC0000000
 
-# Python 3.13+
+
+# ---
+# Version: Python 3.13+
+# Explain: Added in Python 3.13.
+# ---
+
 SF_DATALESS: Final[int] = 0x40000000
 SF_FIRMLINK: Final[int] = 0x00800000
 SF_RESTRICTED: Final[int] = 0x00080000
 SF_SETTABLE: Final[int] = 0xFFFF0000
 
-# Python 3.13+
 UF_DATAVAULT: Final[int] = 0x00000080
 UF_SETTABLE: Final[int] = 0x0000FFFF
 UF_TRACKED: Final[int] = 0x00000040
 
-# Python 3.9+
+
+# ---
+# Version: Python 3.9+
+# Explain: No changes required.
+# ---
+
 SF_APPEND = alias.to(py_stat.SF_APPEND)
 SF_ARCHIVED = alias.to(py_stat.SF_ARCHIVED)
 SF_IMMUTABLE = alias.to(py_stat.SF_IMMUTABLE)

@@ -14,7 +14,11 @@ __all__: list[str] = [
 ]
 
 
-# Python 3.9+
+# ---
+# Version: Python 3.9+
+# Explain: No changes required.
+# ---
+
 JSONDecodeError = alias.to(py_json.JSONDecodeError)
 JSONDecoder = alias.to(py_json.JSONDecoder)
 JSONEncoder = alias.to(py_json.JSONEncoder)
