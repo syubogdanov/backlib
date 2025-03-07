@@ -91,8 +91,3 @@ def or_default(
 ) -> T:
     """Get a named attribute if exists, otherwise the default value."""
     return getattr(object_, name, otherwise)
-
-
-def to(object_: T) -> T:
-    """Mark an object as an alias."""
-    return object_

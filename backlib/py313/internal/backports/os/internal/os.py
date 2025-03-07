@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import os as py_os
 
-from typing import Final
+from math import ceil
+from typing import Final, NamedTuple, TypeVar
 
 from backlib.py313.internal.backports.os.internal import linux5
+from backlib.py313.internal.markers import techdebt
 from backlib.py313.internal.utils import alias
 
 
@@ -132,54 +134,97 @@ __all__: list[str] = [
     "XATTR_CREATE",
     "XATTR_REPLACE",
     "X_OK",
+    "DirEntry",
     "PathLike",
+    "abort",
     "access",
     "altsep",
     "chdir",
+    "chmod",
     "close",
     "closerange",
+    "cpu_count",
     "curdir",
     "defpath",
+    "device_encoding",
     "devnull",
     "environ",
     "environb",
     "error",
     "extsep",
+    "fchdir",
+    "fchmod",
+    "fdopen",
     "fsdecode",
     "fsencode",
     "fspath",
     "fstat",
+    "fsync",
     "ftruncate",
+    "get_blocking",
+    "get_exec_path",
     "get_inheritable",
     "get_terminal_size",
     "getcwd",
     "getcwdb",
+    "getpid",
+    "getppid",
     "isatty",
     "linesep",
     "link",
+    "listdir",
     "lseek",
     "lstat",
+    "major",
+    "makedev",
+    "makedirs",
+    "minor",
     "mkdir",
     "name",
     "open",
     "pardir",
     "pathsep",
+    "pipe",
+    "process_cpu_count",
+    "putenv",
     "read",
     "readlink",
+    "remove",
+    "removedirs",
     "rename",
+    "renames",
     "replace",
     "rmdir",
+    "scandir",
     "sep",
+    "set_blocking",
     "set_inheritable",
     "stat",
     "stat_result",
     "strerror",
     "supports_bytes_environ",
+    "supports_dir_fd",
+    "supports_effective_ids",
+    "supports_fd",
+    "supports_follow_symlinks",
     "symlink",
     "terminal_size",
+    "times",
+    "truncate",
+    "umask",
     "unlink",
+    "unsetenv",
+    "urandom",
+    "utime",
+    "walk",
     "write",
 ]
+
+__backlib__: str = "backlib.py313.os"
+
+
+AnyStr = TypeVar("AnyStr", str, bytes)
+
 
 # ---
 # Version: Python 3.9+
@@ -199,7 +244,10 @@ PRIO_PGRP: Final[int] = alias.or_platform(
     otherwise=linux5.PRIO_PGRP,
 )
 PRIO_USER: Final[int] = alias.or_platform(
-    py_os, "PRIO_USER", linux=linux5.PRIO_USER, otherwise=linux5.PRIO_USER
+    py_os,
+    "PRIO_USER",
+    linux=linux5.PRIO_USER,
+    otherwise=linux5.PRIO_USER,
 )
 
 
@@ -466,7 +514,137 @@ O_TRUNC: Final[int] = alias.or_platform(
 
 # ---
 # Version: Python 3.9+
-# Explain: May be undefined.
+# Explain: May be incomplete.
+# ---
+
+@techdebt.simplified
+class stat_result(NamedTuple):  # noqa: N801
+    """Object whose attributes correspond roughly to the members of the `stat` structure.
+
+    See Also
+    --------
+    * `os.stat_result`.
+
+    Technical Debt
+    --------------
+    * This class is a `NamedTuple`, not `structeq[float]`.
+    """
+
+    st_mode: int
+    st_ino: int
+    st_dev: int
+    st_nlink: int
+    st_uid: int
+    st_gid: int
+    st_size: int
+
+    st_atime: float
+    st_mtime: float
+    st_ctime: float
+
+    st_atime_ns: int
+    st_mtime_ns: int
+    st_ctime_ns: int
+
+    st_birthtime: float
+    st_birthtime_ns: int
+
+    # Unix
+    st_blocks: int
+    st_blksize: int
+    st_rdev: int
+    st_flags: int
+
+    # FreeBSD
+    st_gen: int
+
+    # Solaris
+    st_fstype: str
+
+    # macOS
+    st_rsize: int
+    st_creator: int
+    st_type: int
+
+    # Windows
+    st_file_attributes: int
+    st_reparse_tag: int
+
+
+def stat(
+    path: int | AnyStr | PathLike[AnyStr],
+    *,
+    dir_fd: int | None = None,
+    follow_symlinks: bool = True,
+) -> stat_result:
+    """Get the status of a file or a file descriptor.
+
+    See Also
+    --------
+    * `os.stat`.
+    """
+    st = py_os.stat(path, dir_fd=dir_fd, follow_symlinks=follow_symlinks)  # noqa: PTH116
+
+    return stat_result(
+        st_mode=st.st_mode,
+        st_ino=st.st_ino,
+        st_dev=st.st_dev,
+        st_nlink=st.st_nlink,
+        st_uid=st.st_uid,
+        st_gid=st.st_gid,
+        st_size=st.st_size,
+        st_atime=st.st_atime,
+        st_mtime=st.st_mtime,
+        st_ctime=st.st_ctime,
+        st_atime_ns=st.st_atime_ns,
+        st_mtime_ns=st.st_mtime_ns,
+        st_ctime_ns=st.st_ctime_ns,
+        st_birthtime=alias.or_default(st, "st_birthtime", otherwise=st.st_ctime),
+        st_birthtime_ns=alias.or_default(st, "st_birthtime_ns", otherwise=st.st_ctime_ns),
+        st_blocks=alias.or_default(st, "st_blocks", otherwise=ceil(st.st_size / 512)),
+        st_blksize=alias.or_default(st, "st_blksize", otherwise=512),
+        st_rdev=alias.or_default(st, "st_rdev", otherwise=0),
+        st_flags=alias.or_default(st, "st_flags", otherwise=0),
+        st_gen=alias.or_default(st, "st_gen", otherwise=0),
+        st_fstype=alias.or_default(st, "st_fstype", otherwise=""),
+        st_rsize=alias.or_default(st, "st_rsize", otherwise=st.st_size),
+        st_creator=alias.or_default(st, "st_creator", otherwise=0),
+        st_type=alias.or_default(st, "st_type", otherwise=0),
+        st_file_attributes=alias.or_default(st, "st_file_attributes", otherwise=0),
+        st_reparse_tag=alias.or_default(st, "st_reparse_tag", otherwise=0),
+    )
+
+
+def fstat(fd: int) -> stat_result:
+    """Get the status of the file descriptor `fd`.
+
+    See Also
+    --------
+    * `os.fstat`.
+    """
+    return stat(fd)
+
+
+def lstat(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> stat_result:
+    """Perform the equivalent of an `lstat()` system call on the given path.
+
+    See Also
+    --------
+    * `os.lstat`.
+    """
+    return stat(path, dir_fd=dir_fd, follow_symlinks=False)
+
+
+stat_result.__module__ = __backlib__
+
+stat.__module__ = __backlib__
+fstat.__module__ = __backlib__
+lstat.__module__ = __backlib__
+
+
+# ---
+# Version: Python 3.9+
+# Explain: May be undefined by the C library.
 # ---
 
 O_ASYNC: Final[int] = alias.or_platform(
@@ -993,29 +1171,121 @@ TFD_TIMER_CANCEL_ON_SET: Final[int] = alias.or_platform(
 
 
 # ---
+# Version: Python 3.13+
+# Explain: Changed in Python 3.13.
+# ---
+
+def cpu_count() -> int | None:
+    """Return the number of logical CPUs in the system.
+
+    See Also
+    --------
+    * `os.cpu_count`.
+    """
+    if count := environ.get("PYTHON_CPU_COUNT"):
+        return int(count)
+    return py_os.cpu_count()
+
+
+@techdebt.simplified
+def process_cpu_count() -> int | None:
+    """Get the number of logical CPUs usable by the calling thread of the current process.
+
+    See Also
+    --------
+    * `os.process_cpu_count`.
+
+    Technical Debt
+    --------------
+    * This is an alias to `cpu_count`.
+    """
+    return cpu_count()
+
+
+cpu_count.__module__ = __backlib__
+process_cpu_count.__module__ = __backlib__
+
+
+# ---
 # Version: Python 3.9+
 # Explain: No changes required.
 # ---
 
-curdir = alias.to(py_os.curdir)
-pardir = alias.to(py_os.pardir)
-extsep = alias.to(py_os.extsep)
+error = py_os.error
 
-name = alias.to(py_os.name)
-linesep = alias.to(py_os.linesep)
+curdir = py_os.curdir
+pardir = py_os.pardir
+extsep = py_os.extsep
 
-sep = alias.to(py_os.sep)
-pathsep = alias.to(py_os.pathsep)
-altsep = alias.to(py_os.altsep)
+name = py_os.name
+linesep = py_os.linesep
 
-defpath = alias.to(py_os.defpath)
-devnull = alias.to(py_os.devnull)
+sep = py_os.sep
+pathsep = py_os.pathsep
+altsep = py_os.altsep
 
-F_OK = alias.to(py_os.F_OK)
-R_OK = alias.to(py_os.R_OK)
-W_OK = alias.to(py_os.W_OK)
-X_OK = alias.to(py_os.X_OK)
+defpath = py_os.defpath
+devnull = py_os.devnull
 
-SEEK_CUR = alias.to(py_os.SEEK_CUR)
-SEEK_END = alias.to(py_os.SEEK_END)
-SEEK_SET = alias.to(py_os.SEEK_SET)
+F_OK = py_os.F_OK
+R_OK = py_os.R_OK
+W_OK = py_os.W_OK
+X_OK = py_os.X_OK
+
+SEEK_CUR = py_os.SEEK_CUR
+SEEK_END = py_os.SEEK_END
+SEEK_SET = py_os.SEEK_SET
+
+PathLike = py_os.PathLike
+
+terminal_size = py_os.terminal_size
+
+abort = py_os.abort
+access = py_os.access
+chdir = py_os.chdir
+close = py_os.close
+closerange = py_os.closerange
+environ = py_os.environ
+fchdir = py_os.fchdir
+fdopen = py_os.fdopen
+fsdecode = py_os.fsdecode
+fsencode = py_os.fsencode
+fspath = py_os.fspath
+fsync = py_os.fsync
+ftruncate = py_os.ftruncate
+get_blocking = py_os.get_blocking
+get_exec_path = py_os.get_exec_path
+get_inheritable = py_os.get_inheritable
+get_terminal_size = py_os.get_terminal_size
+getcwd = py_os.getcwd
+getcwdb = py_os.getcwdb
+getpid = py_os.getpid
+getppid = py_os.getppid
+isatty = py_os.isatty
+link = py_os.link
+listdir = py_os.listdir
+lseek = py_os.lseek
+major = py_os.major
+makedev = py_os.makedev
+makedirs = py_os.makedirs
+minor = py_os.minor
+pipe = py_os.pipe
+putenv = py_os.putenv
+read = py_os.read
+readlink = py_os.readlink
+remove = py_os.remove
+removedirs = py_os.removedirs
+rename = py_os.rename
+renames = py_os.renames
+replace = py_os.replace
+rmdir = py_os.rmdir
+set_inheritable = py_os.set_inheritable
+supports_bytes_environ = py_os.supports_bytes_environ
+symlink = py_os.symlink
+times = py_os.times
+truncate = py_os.truncate
+umask = py_os.umask
+unlink = py_os.unlink
+unsetenv = py_os.unsetenv
+utime = py_os.utime
+write = py_os.write

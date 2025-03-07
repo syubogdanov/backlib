@@ -2,8 +2,6 @@ import stat as py_stat
 
 from typing import Final
 
-from backlib.py313.internal.utils import alias
-
 
 __all__: list[str] = [
     "FILE_ATTRIBUTE_ARCHIVE",
@@ -107,9 +105,9 @@ __all__: list[str] = [
 # Explain: May be defined as `0`.
 # ---
 
-S_IFDOOR: Final[int] = alias.to(py_stat.S_IFDOOR) or 0o150000
-S_IFPORT: Final[int] = alias.to(py_stat.S_IFPORT) or 0o160000
-S_IFWHT: Final[int] = alias.to(py_stat.S_IFWHT) or 0o160000
+S_IFDOOR: Final[int] = py_stat.S_IFDOOR or 0o150000
+S_IFPORT: Final[int] = py_stat.S_IFPORT or 0o160000
+S_IFWHT: Final[int] = py_stat.S_IFWHT or 0o160000
 
 
 # ---
@@ -175,68 +173,68 @@ UF_TRACKED: Final[int] = 0x00000040
 # Explain: No changes required.
 # ---
 
-SF_APPEND = alias.to(py_stat.SF_APPEND)
-SF_ARCHIVED = alias.to(py_stat.SF_ARCHIVED)
-SF_IMMUTABLE = alias.to(py_stat.SF_IMMUTABLE)
-SF_NOUNLINK = alias.to(py_stat.SF_NOUNLINK)
-SF_SNAPSHOT = alias.to(py_stat.SF_SNAPSHOT)
+SF_APPEND = py_stat.SF_APPEND
+SF_ARCHIVED = py_stat.SF_ARCHIVED
+SF_IMMUTABLE = py_stat.SF_IMMUTABLE
+SF_NOUNLINK = py_stat.SF_NOUNLINK
+SF_SNAPSHOT = py_stat.SF_SNAPSHOT
 
-ST_ATIME = alias.to(py_stat.ST_ATIME)
-ST_CTIME = alias.to(py_stat.ST_CTIME)
-ST_DEV = alias.to(py_stat.ST_DEV)
-ST_GID = alias.to(py_stat.ST_GID)
-ST_INO = alias.to(py_stat.ST_INO)
-ST_MODE = alias.to(py_stat.ST_MODE)
-ST_MTIME = alias.to(py_stat.ST_MTIME)
-ST_NLINK = alias.to(py_stat.ST_NLINK)
-ST_SIZE = alias.to(py_stat.ST_SIZE)
-ST_UID = alias.to(py_stat.ST_UID)
+ST_ATIME = py_stat.ST_ATIME
+ST_CTIME = py_stat.ST_CTIME
+ST_DEV = py_stat.ST_DEV
+ST_GID = py_stat.ST_GID
+ST_INO = py_stat.ST_INO
+ST_MODE = py_stat.ST_MODE
+ST_MTIME = py_stat.ST_MTIME
+ST_NLINK = py_stat.ST_NLINK
+ST_SIZE = py_stat.ST_SIZE
+ST_UID = py_stat.ST_UID
 
-S_ENFMT = alias.to(py_stat.S_ENFMT)
-S_IEXEC = alias.to(py_stat.S_IEXEC)
-S_IFBLK = alias.to(py_stat.S_IFBLK)
-S_IFCHR = alias.to(py_stat.S_IFCHR)
-S_IFDIR = alias.to(py_stat.S_IFDIR)
-S_IFIFO = alias.to(py_stat.S_IFIFO)
-S_IFLNK = alias.to(py_stat.S_IFLNK)
-S_IFMT = alias.to(py_stat.S_IFMT)
-S_IFREG = alias.to(py_stat.S_IFREG)
-S_IFSOCK = alias.to(py_stat.S_IFSOCK)
-S_IMODE = alias.to(py_stat.S_IMODE)
-S_IREAD = alias.to(py_stat.S_IREAD)
-S_IRGRP = alias.to(py_stat.S_IRGRP)
-S_IROTH = alias.to(py_stat.S_IROTH)
-S_IRUSR = alias.to(py_stat.S_IRUSR)
-S_IRWXG = alias.to(py_stat.S_IRWXG)
-S_IRWXO = alias.to(py_stat.S_IRWXO)
-S_IRWXU = alias.to(py_stat.S_IRWXU)
-S_ISBLK = alias.to(py_stat.S_ISBLK)
-S_ISCHR = alias.to(py_stat.S_ISCHR)
-S_ISDIR = alias.to(py_stat.S_ISDIR)
-S_ISDOOR = alias.to(py_stat.S_ISDOOR)
-S_ISFIFO = alias.to(py_stat.S_ISFIFO)
-S_ISGID = alias.to(py_stat.S_ISGID)
-S_ISLNK = alias.to(py_stat.S_ISLNK)
-S_ISPORT = alias.to(py_stat.S_ISPORT)
-S_ISREG = alias.to(py_stat.S_ISREG)
-S_ISSOCK = alias.to(py_stat.S_ISSOCK)
-S_ISUID = alias.to(py_stat.S_ISUID)
-S_ISVTX = alias.to(py_stat.S_ISVTX)
-S_ISWHT = alias.to(py_stat.S_ISWHT)
-S_IWGRP = alias.to(py_stat.S_IWGRP)
-S_IWOTH = alias.to(py_stat.S_IWOTH)
-S_IWRITE = alias.to(py_stat.S_IWRITE)
-S_IWUSR = alias.to(py_stat.S_IWUSR)
-S_IXGRP = alias.to(py_stat.S_IXGRP)
-S_IXOTH = alias.to(py_stat.S_IXOTH)
-S_IXUSR = alias.to(py_stat.S_IXUSR)
+S_ENFMT = py_stat.S_ENFMT
+S_IEXEC = py_stat.S_IEXEC
+S_IFBLK = py_stat.S_IFBLK
+S_IFCHR = py_stat.S_IFCHR
+S_IFDIR = py_stat.S_IFDIR
+S_IFIFO = py_stat.S_IFIFO
+S_IFLNK = py_stat.S_IFLNK
+S_IFMT = py_stat.S_IFMT
+S_IFREG = py_stat.S_IFREG
+S_IFSOCK = py_stat.S_IFSOCK
+S_IMODE = py_stat.S_IMODE
+S_IREAD = py_stat.S_IREAD
+S_IRGRP = py_stat.S_IRGRP
+S_IROTH = py_stat.S_IROTH
+S_IRUSR = py_stat.S_IRUSR
+S_IRWXG = py_stat.S_IRWXG
+S_IRWXO = py_stat.S_IRWXO
+S_IRWXU = py_stat.S_IRWXU
+S_ISBLK = py_stat.S_ISBLK
+S_ISCHR = py_stat.S_ISCHR
+S_ISDIR = py_stat.S_ISDIR
+S_ISDOOR = py_stat.S_ISDOOR
+S_ISFIFO = py_stat.S_ISFIFO
+S_ISGID = py_stat.S_ISGID
+S_ISLNK = py_stat.S_ISLNK
+S_ISPORT = py_stat.S_ISPORT
+S_ISREG = py_stat.S_ISREG
+S_ISSOCK = py_stat.S_ISSOCK
+S_ISUID = py_stat.S_ISUID
+S_ISVTX = py_stat.S_ISVTX
+S_ISWHT = py_stat.S_ISWHT
+S_IWGRP = py_stat.S_IWGRP
+S_IWOTH = py_stat.S_IWOTH
+S_IWRITE = py_stat.S_IWRITE
+S_IWUSR = py_stat.S_IWUSR
+S_IXGRP = py_stat.S_IXGRP
+S_IXOTH = py_stat.S_IXOTH
+S_IXUSR = py_stat.S_IXUSR
 
-UF_APPEND = alias.to(py_stat.UF_APPEND)
-UF_COMPRESSED = alias.to(py_stat.UF_COMPRESSED)
-UF_HIDDEN = alias.to(py_stat.UF_HIDDEN)
-UF_IMMUTABLE = alias.to(py_stat.UF_IMMUTABLE)
-UF_NODUMP = alias.to(py_stat.UF_NODUMP)
-UF_NOUNLINK = alias.to(py_stat.UF_NOUNLINK)
-UF_OPAQUE = alias.to(py_stat.UF_OPAQUE)
+UF_APPEND = py_stat.UF_APPEND
+UF_COMPRESSED = py_stat.UF_COMPRESSED
+UF_HIDDEN = py_stat.UF_HIDDEN
+UF_IMMUTABLE = py_stat.UF_IMMUTABLE
+UF_NODUMP = py_stat.UF_NODUMP
+UF_NOUNLINK = py_stat.UF_NOUNLINK
+UF_OPAQUE = py_stat.UF_OPAQUE
 
-filemode = alias.to(py_stat.filemode)
+filemode = py_stat.filemode
