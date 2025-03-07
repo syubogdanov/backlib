@@ -148,7 +148,7 @@ IO_REPARSE_TAG_APPEXECLINK: Final[int] = 0x8000001B
 
 # ---
 # Version: Python 3.13+
-# Explain: Available on macOS
+# Explain: Available on macOS.
 # ---
 
 SF_SUPPORTED: Final[int] = 0x9F0000

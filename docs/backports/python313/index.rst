@@ -9,11 +9,9 @@
     errno
     io
     json
-    ntpath
     os.path
     os
     pathlib
-    posixpath
     shutil
     stat
     tarfile
