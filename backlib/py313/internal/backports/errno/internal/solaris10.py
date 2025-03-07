@@ -1,4 +1,4 @@
-"""Error codes for Solaris 10.0+.
+"""`errno` for Solaris 10.0+.
 
 See Also
 --------

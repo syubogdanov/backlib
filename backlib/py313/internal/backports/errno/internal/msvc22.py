@@ -1,4 +1,4 @@
-"""Error codes for Visual Studio 22.
+"""`errno` for Visual Studio 22.
 
 See Also
 --------

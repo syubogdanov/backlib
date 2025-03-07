@@ -1,4 +1,4 @@
-"""Error codes for POSIX 88.
+"""`errno` for POSIX 88.
 
 See Also
 --------

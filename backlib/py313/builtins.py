@@ -1,5 +1,2 @@
-from backlib.py313.internal.backports.builtins import EncodingWarning
-from backlib.py313.internal.backports.io import open
-
-
-__all__: list[str] = ["EncodingWarning", "open"]
+_detail = "The 'backlib.py313.builtins' has not been implemented yet"
+raise NotImplementedError(_detail)
