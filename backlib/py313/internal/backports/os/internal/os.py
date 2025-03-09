@@ -844,7 +844,7 @@ def mkdir(
     * This function may not support `mode=0o700`.
     """
     if sys.version_info < (3, 13) and mode == OWNER_RWX:
-        detail = f"{__backlib__}.mkdir() does not support `mode=0o700`"
+        detail = f"{__backlib__}.mkdir() does not support mode=0o700"
         warn(detail, RuntimeWarning, stacklevel=2)
 
     py_os.mkdir(path, mode, dir_fd=dir_fd)  # noqa: PTH102
@@ -867,7 +867,7 @@ def makedirs(
     * This function may not support `mode=0o700`.
     """
     if sys.version_info < (3, 13) and mode == OWNER_RWX:
-        detail = f"{__backlib__}.makedirs() does not support `mode=0o700`"
+        detail = f"{__backlib__}.makedirs() does not support mode=0o700"
         warn(detail, RuntimeWarning, stacklevel=2)
 
     py_os.makedirs(name, mode, exist_ok=exist_ok)  # noqa: PTH103
