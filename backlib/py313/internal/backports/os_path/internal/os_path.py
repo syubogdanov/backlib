@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING, TypeVar
 from warnings import warn
 
 from backlib.py313.internal.backports import os
-from backlib.py313.internal.backports.os_path.internal import ntpath, posixpath
+from backlib.py313.internal.backports.os_path.internal.cpython import ntpath, posixpath
 from backlib.py313.internal.markers import techdebt
 from backlib.py313.internal.utils.platform import is_nt, is_posix
 

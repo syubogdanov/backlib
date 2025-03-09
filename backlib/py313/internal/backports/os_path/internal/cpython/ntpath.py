@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, TypeVar
 
 from backlib.py313.internal.backports import os, stat
-from backlib.py313.internal.backports.os_path.internal import genericpath
+from backlib.py313.internal.backports.os_path.internal.cpython import genericpath
 
 
 if TYPE_CHECKING:
