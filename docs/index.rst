@@ -8,7 +8,7 @@ Key Features
 
 -  Provides backports for the standard library;
 -  Compatible with Python 3.9+;
--  Almost dependency-free.
+-  Dependency-free.
 
 Getting Started
 ---------------
