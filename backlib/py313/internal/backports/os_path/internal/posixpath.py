@@ -177,10 +177,10 @@ def commonpath(paths: Iterable[AnyStr | os.PathLike[AnyStr]]) -> AnyStr:
         detail = "commonpath() arg is an empty sequence"
         raise ValueError(detail)
 
-    first_path = fspaths[0]
+    first_fspath = fspaths[0]
 
-    sep = b"/" if isinstance(first_path, bytes) else "/"
-    curdir = b"." if isinstance(first_path, bytes) else "."
+    sep = b"/" if isinstance(first_fspath, bytes) else "/"
+    curdir = b"." if isinstance(first_fspath, bytes) else "."
 
     try:
         split_paths: list[list[AnyStr]] = [fspath.split(sep) for fspath in fspaths]
@@ -211,7 +211,7 @@ def commonpath(paths: Iterable[AnyStr | os.PathLike[AnyStr]]) -> AnyStr:
         return prefix + sep.join(common)
 
     except (TypeError, AttributeError):
-        genericpath.check_arg_types("commonpath", *paths)
+        genericpath.check_arg_types("commonpath", *fspaths)
         raise
 
 

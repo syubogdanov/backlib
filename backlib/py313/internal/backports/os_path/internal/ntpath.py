@@ -36,55 +36,47 @@ def splitroot(path: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:
     --------
     * `ntpath.splitroot`.
     """
-    path = os.fspath(path)
-    if isinstance(path, bytes):
-        sep = b"\\"
-        altsep = b"/"
-        colon = b":"
-        unc_prefix = b"\\\\?\\UNC\\"
-        empty = b""
-    else:
-        sep = "\\"
-        altsep = "/"
-        colon = ":"
-        unc_prefix = "\\\\?\\UNC\\"
-        empty = ""
-    normp = path.replace(altsep, sep)
-    if normp[:1] == sep:
-        if normp[1:2] == sep:
-            # UNC drives, e.g. \\server\share or \\?\UNC\server\share
-            # Device drives, e.g. \\.\device or \\?\device
-            start = 8 if normp[:8].upper() == unc_prefix else 2
-            index = normp.find(sep, start)
-            if index == -1:
-                return path, empty, empty
-            index2 = normp.find(sep, index + 1)
-            if index2 == -1:
-                return path, empty, empty
-            return path[:index2], path[index2 : index2 + 1], path[index2 + 1 :]
-        else:
-            # Relative path with root, e.g. \Windows
-            return empty, path[:1], path[1:]
-    elif normp[1:2] == colon:
-        if normp[2:3] == sep:
-            # Absolute drive-letter path, e.g. X:\Windows
-            return path[:2], path[2:3], path[3:]
-        else:
-            # Relative path with drive, e.g. X:Windows
-            return path[:2], empty, path[2:]
-    else:
-        # Relative path, e.g. Windows
-        return empty, empty, path
+    fspath = os.fspath(path)
+
+    sep = b"\\" if isinstance(fspath, bytes) else "\\"
+    double_sep = b"\\\\" if isinstance(fspath, bytes) else "\\\\"
+    altsep = b"/" if isinstance(fspath, bytes) else "/"
+    colon = b":" if isinstance(fspath, bytes) else ":"
+    unc_prefix = b"\\\\?\\UNC\\" if isinstance(fspath, bytes) else "\\\\?\\UNC\\"
+
+    normalized = fspath.replace(altsep, sep)
+
+    if normalized.startswith(double_sep):
+        prefix = normalized[: len(unc_prefix)]
+        start = 8 if prefix.upper() == unc_prefix else 2
+
+        if ((index1 := normalized.find(sep, start)) == -1) or (
+            (index2 := normalized.find(sep, index1 + 1)) == -1
+        ):
+            return (fspath, fspath[:0], fspath[:0])
+
+        return (fspath[:index2], fspath[index2 : index2 + 1], fspath[index2 + 1 :])
+
+    if normalized.startswith(sep):
+        return (fspath[:0], fspath[:1], fspath[1:])
+
+    if normalized[1:2] != colon:
+        return (fspath[:0], fspath[:0], fspath)
+
+    if normalized[2:3] == sep:
+        return (fspath[:2], fspath[2:3], fspath[3:])
+
+    return fspath[:2], fspath[:0], fspath[2:]
 
 
 _reserved_chars = frozenset(
-    {chr(i) for i in range(32)} | {'"', "*", ":", "<", ">", "?", "|", "/", "\\"}
+    {chr(i) for i in range(32)} | {'"', "*", ":", "<", ">", "?", "|", "/", "\\"},
 )
 
 _reserved_names = frozenset(
     {"CON", "PRN", "AUX", "NUL", "CONIN$", "CONOUT$"}
     | {f"COM{c}" for c in "123456789\xb9\xb2\xb3"}
-    | {f"LPT{c}" for c in "123456789\xb9\xb2\xb3"}
+    | {f"LPT{c}" for c in "123456789\xb9\xb2\xb3"},
 )
 
 
@@ -97,11 +89,11 @@ def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:
     """
     # Refer to "Naming Files, Paths, and Namespaces":
     # https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
-    path = os.fsdecode(splitroot(path)[2]).replace("/", "\\")
-    return any(_isreservedname(name) for name in reversed(path.split("\\")))
+    fspath = os.fsdecode(splitroot(path)[2]).replace("/", "\\")
+    return any(_isreservedname(name) for name in reversed(fspath.split("\\")))
 
 
-def _isreservedname(name):
+def _isreservedname(name: str) -> bool:
     """Return true if the filename is reserved by the system."""
     # Trailing dots and spaces are reserved.
     if name[-1:] in (".", " "):
@@ -124,53 +116,57 @@ def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
     --------
     * `ntpath.commonpath`.
     """
-    paths = tuple(map(os.fspath, paths))
-    if not paths:
-        raise ValueError("commonpath() arg is an empty iterable")
+    fspaths = [os.fspath(path) for path in paths]
 
-    if isinstance(paths[0], bytes):
-        sep = b"\\"
-        altsep = b"/"
-        curdir = b"."
-    else:
-        sep = "\\"
-        altsep = "/"
-        curdir = "."
+    if not fspaths:
+        detail = "commonpath() arg is an empty iterable"
+        raise ValueError(detail)
+
+    first_fspath = fspaths[0]
+
+    sep = b"\\" if isinstance(first_fspath, bytes) else "\\"
+    altsep = b"/" if isinstance(first_fspath, bytes) else "/"
+    curdir = b"." if isinstance(first_fspath, bytes) else "."
 
     try:
-        drivesplits = [splitroot(p.replace(altsep, sep).lower()) for p in paths]
-        split_paths = [p.split(sep) for d, r, p in drivesplits]
+        drivesplits = [splitroot(fspath.replace(altsep, sep).lower()) for fspath in fspaths]
+        split_paths = [fspath.split(sep) for _, _, fspath in drivesplits]
 
-        # Check that all drive letters or UNC paths match. The check is made only
-        # now otherwise type errors for mixing strings and bytes would not be
-        # caught.
-        if len({d for d, r, p in drivesplits}) != 1:
-            raise ValueError("Paths don't have the same drive")
+        if len({d for d, _, _ in drivesplits}) != 1:
+            detail = "Paths don't have the same drive"
+            raise ValueError(detail)
 
-        drive, root, path = splitroot(paths[0].replace(altsep, sep))
-        if len({r for d, r, p in drivesplits}) != 1:
-            if drive:
-                raise ValueError("Can't mix absolute and relative paths")
-            else:
-                raise ValueError("Can't mix rooted and not-rooted paths")
+        drive, root, path = splitroot(fspaths[0].replace(altsep, sep))
+
+        if len({r for _, r, _ in drivesplits}) != 1:
+            type1 = "absolute" if drive else "rooted"
+            type2 = "relative" if drive else "not-rooted"
+            detail = f"Can't mix {type1} and {type2} paths"
+            raise ValueError(detail)
 
         common = path.split(sep)
-        common = [c for c in common if c and c != curdir]
+        common = [component for component in common if component and component != curdir]
 
-        split_paths = [[c for c in s if c and c != curdir] for s in split_paths]
+        split_paths = [
+            [common for common in split_path if common and common != curdir]
+            for split_path in split_paths
+        ]
+
         s1 = min(split_paths)
         s2 = max(split_paths)
-        for i, c in enumerate(s1):
-            if c != s2[i]:
-                common = common[:i]
+
+        for index, component in enumerate(s1):
+            if component != s2[index]:
+                common = common[:index]
                 break
         else:
             common = common[: len(s1)]
 
-        return drive + root + sep.join(common)
     except (TypeError, AttributeError):
-        genericpath.check_arg_types("commonpath", *paths)
+        genericpath.check_arg_types("commonpath", *fspaths)
         raise
+
+    return drive + root + sep.join(common)
 
 
 def isabs(path: AnyStr | PathLike[AnyStr]) -> bool:
@@ -180,17 +176,13 @@ def isabs(path: AnyStr | PathLike[AnyStr]) -> bool:
     --------
     * `ntpath.isabs`.
     """
-    s = os.fspath(path)
-    if isinstance(s, bytes):
-        sep = b"\\"
-        altsep = b"/"
-        colon_sep = b":\\"
-        double_sep = b"\\\\"
-    else:
-        sep = "\\"
-        altsep = "/"
-        colon_sep = ":\\"
-        double_sep = "\\\\"
-    s = s[:3].replace(altsep, sep)
-    # Absolute: UNC, device, and paths with a drive and root.
-    return s.startswith(colon_sep, 1) or s.startswith(double_sep)
+    fspath = os.fspath(path)
+
+    sep = b"\\" if isinstance(fspath, bytes) else "\\"
+    altsep = b"/" if isinstance(fspath, bytes) else "/"
+
+    colon_sep = b":\\" if isinstance(fspath, bytes) else ":\\"
+    double_sep = b"\\\\" if isinstance(fspath, bytes) else "\\\\"
+
+    prefix = fspath[:3].replace(altsep, sep)
+    return prefix.startswith(double_sep) or prefix.endswith(colon_sep)
