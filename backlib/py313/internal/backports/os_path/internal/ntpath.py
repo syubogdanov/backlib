@@ -97,8 +97,8 @@ def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:
     """
     # Refer to "Naming Files, Paths, and Namespaces":
     # https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file
-    path = os.fsdecode(splitroot(path)[2]).replace(altsep, sep)
-    return any(_isreservedname(name) for name in reversed(path.split(sep)))
+    path = os.fsdecode(splitroot(path)[2]).replace("/", "\\")
+    return any(_isreservedname(name) for name in reversed(path.split("\\")))
 
 
 def _isreservedname(name):

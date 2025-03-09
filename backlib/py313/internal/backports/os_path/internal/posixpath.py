@@ -2,12 +2,13 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, TypeVar
 
-from backlib.py313.internal.backports import errno, os
+from backlib.py313.internal.backports import errno, os, stat
 from backlib.py313.internal.backports.os_path.internal import genericpath
+from backlib.py313.internal.markers import techdebt
 
 
 if TYPE_CHECKING:
-    from collections.abc import Iterable
+    from collections.abc import Callable, Iterable
 
 
 AnyStr = TypeVar("AnyStr", str, bytes)
@@ -21,20 +22,25 @@ def realpath(path: AnyStr | os.PathLike[AnyStr], *, strict: bool = False) -> Any
     * posixpath.realpath
     """
     filename = os.fspath(path)
-    if isinstance(filename, bytes):
-        sep = b"/"
-        curdir = b"."
-        pardir = b".."
-        getcwd = os.getcwdb
-    else:
-        sep = "/"
-        curdir = "."
-        pardir = ".."
-        getcwd = os.getcwd
-    return _realpath(filename, strict, sep, curdir, pardir, getcwd)
+
+    sep = b"/" if isinstance(filename, bytes) else "/"
+    curdir = b"." if isinstance(filename, bytes) else "."
+    pardir = b".." if isinstance(filename, bytes) else ".."
+    getcwd = os.getcwdb if isinstance(filename, bytes) else os.getcwd
+
+    return _realpath(filename, sep, curdir, pardir, getcwd, strict=strict)
 
 
-def _realpath(filename, strict, sep, curdir, pardir, getcwd):
+@techdebt.refactor
+def _realpath(  # noqa: C901
+    filename: AnyStr,
+    sep: AnyStr,
+    curdir: AnyStr,
+    pardir: AnyStr,
+    getcwd: Callable[[], AnyStr],
+    *,
+    strict: bool,
+) -> AnyStr:
     # The stack of unresolved path parts. When popped, a special value of None
     # indicates that a symlink target has been resolved, and that the original
     # symlink path can be retrieved by popping again. The [::-1] slice is a
@@ -53,11 +59,7 @@ def _realpath(filename, strict, sep, curdir, pardir, getcwd):
     # symlink is encountered but not yet resolved, the value is None. This is
     # used both to detect symlink loops and to speed up repeated traversals of
     # the same links.
-    seen = {}
-
-    # Number of symlinks traversed. When the number of traversals is limited
-    # by *maxlinks*, this is used instead of *seen* to detect symlink loops.
-    link_count = 0
+    seen = {}  # type: ignore[var-annotated]
 
     while part_count:
         name = rest.pop()
@@ -73,19 +75,17 @@ def _realpath(filename, strict, sep, curdir, pardir, getcwd):
             # parent dir
             path = path[: path.rindex(sep)] or sep
             continue
-        if path == sep:
-            newpath = path + name
-        else:
-            newpath = path + sep + name
+        newpath = path + name if path == sep else path + sep + name
         try:
             st_mode = os.lstat(newpath).st_mode
-            if not os.stat.S_ISLNK(st_mode):
-                if strict and part_count and not os.stat.S_ISDIR(st_mode):
-                    raise OSError(errno.ENOTDIR, os.strerror(errno.ENOTDIR), newpath)
+            if not stat.S_ISLNK(st_mode):
+                if strict and part_count and not stat.S_ISDIR(st_mode):
+                    message = os.strerror(errno.ENOTDIR)
+                    raise OSError(errno.ENOTDIR, message, newpath)  # noqa: TRY301
                 path = newpath
                 continue
 
-            elif newpath in seen:
+            if newpath in seen:
                 # Already seen this path
                 path = seen[newpath]
                 if path is not None:
@@ -93,7 +93,7 @@ def _realpath(filename, strict, sep, curdir, pardir, getcwd):
                     continue
                 # The symlink is not resolved, so we must have a symlink loop.
                 if strict:
-                    raise OSError(errno.ELOOP, os.strerror(errno.ELOOP), newpath)
+                    raise OSError(errno.ELOOP, os.strerror(errno.ELOOP), newpath)  # noqa: TRY301
                 path = newpath
                 continue
             target = os.readlink(newpath)
@@ -113,7 +113,7 @@ def _realpath(filename, strict, sep, curdir, pardir, getcwd):
         # by also pushing None. When these entries are popped, we'll
         # record the fully-resolved symlink target in the 'seen' mapping.
         rest.append(newpath)
-        rest.append(None)
+        rest.append(None)  # type: ignore[arg-type]
         # Push the unresolved symlink target parts onto the stack.
         target_parts = target.split(sep)[::-1]
         rest.extend(target_parts)
@@ -140,23 +140,17 @@ def splitroot(path: AnyStr | os.PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnySt
     --------
     * `posixpath.splitroot`.
     """
-    path = os.fspath(path)
-    if isinstance(path, bytes):
-        sep = b"/"
-        empty = b""
-    else:
-        sep = "/"
-        empty = ""
-    if path[:1] != sep:
-        # Relative path, e.g.: 'foo'
-        return empty, empty, path
-    elif path[1:2] != sep or path[2:3] == sep:
-        # Absolute path, e.g.: '/foo', '///foo', '////foo', etc.
-        return empty, sep, path[1:]
-    else:
-        # Precisely two leading slashes, e.g.: '//foo'. Implementation defined per POSIX, see
-        # https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_13
-        return empty, path[:2], path[2:]
+    fspath = os.fspath(path)
+
+    sep = b"/" if isinstance(fspath, bytes) else "/"
+
+    if fspath[:1] != sep:
+        return (fspath[:0], fspath[:0], fspath)
+
+    if fspath[1:2] != sep or fspath[2:3] == sep:
+        return (fspath[:0], sep, fspath[1:])
+
+    return (fspath[:0], fspath[:2], fspath[2:])
 
 
 def isreserved(path: AnyStr | os.PathLike[AnyStr]) -> bool:
@@ -177,37 +171,45 @@ def commonpath(paths: Iterable[AnyStr | os.PathLike[AnyStr]]) -> AnyStr:
     --------
     * `posixpath.commonpath`.
     """
-    paths = tuple(map(os.fspath, paths))
+    fspaths = [os.fspath(path) for path in paths]
 
-    if not paths:
-        raise ValueError("commonpath() arg is an empty sequence")
+    if not fspaths:
+        detail = "commonpath() arg is an empty sequence"
+        raise ValueError(detail)
 
-    if isinstance(paths[0], bytes):
-        sep = b"/"
-        curdir = b"."
-    else:
-        sep = "/"
-        curdir = "."
+    first_path = fspaths[0]
+
+    sep = b"/" if isinstance(first_path, bytes) else "/"
+    curdir = b"." if isinstance(first_path, bytes) else "."
 
     try:
-        split_paths = [path.split(sep) for path in paths]
+        split_paths: list[list[AnyStr]] = [fspath.split(sep) for fspath in fspaths]
 
-        try:
-            (isabs,) = {p.startswith(sep) for p in paths}
-        except ValueError:
-            raise ValueError("Can't mix absolute and relative paths") from None
+        has_absolute = any(fspath.startswith(sep) for fspath in fspaths)
+        all_absolute = all(fspath.startswith(sep) for fspath in fspaths)
 
-        split_paths = [[c for c in s if c and c != curdir] for s in split_paths]
+        if has_absolute and not all_absolute:
+            detail = "Can't mix absolute and relative paths"
+            raise ValueError(detail) from None
+
+        split_paths = [
+            [component for component in split_path if component and component != curdir]
+            for split_path in split_paths
+        ]
+
         s1 = min(split_paths)
         s2 = max(split_paths)
+
         common = s1
-        for i, c in enumerate(s1):
-            if c != s2[i]:
-                common = s1[:i]
+
+        for index, component in enumerate(s1):
+            if component != s2[index]:
+                common = s1[:index]
                 break
 
-        prefix = sep if isabs else sep[:0]
+        prefix = sep if all_absolute else sep[:0]
         return prefix + sep.join(common)
+
     except (TypeError, AttributeError):
         genericpath.check_arg_types("commonpath", *paths)
         raise
