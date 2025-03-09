@@ -1,13 +1,21 @@
 from __future__ import annotations
 
 import os as py_os
+import sys
 
 from math import ceil
-from typing import Final, NamedTuple, TypeVar
+from typing import TYPE_CHECKING, Final, NamedTuple, TypeVar
+from warnings import warn
 
+from backlib.py313.internal.backports import errno
 from backlib.py313.internal.backports.os.internal import linux5
 from backlib.py313.internal.markers import techdebt
 from backlib.py313.internal.utils import alias
+from backlib.py313.internal.utils.platform import is_nt, is_unix
+
+
+if TYPE_CHECKING:
+    from collections.abc import MutableMapping
 
 
 __all__: list[str] = [
@@ -225,10 +233,12 @@ __backlib__: str = "backlib.py313.os"
 
 AnyStr = TypeVar("AnyStr", str, bytes)
 
+OWNER_RWX: Final[int] = 0o700
+
 
 # ---
 # Version: Python 3.9+
-# Explain: Available on Unix (not WASI).
+# Explain: Available on Unix, not WASI.
 # ---
 
 PRIO_PROCESS: Final[int] = alias.or_platform(
@@ -517,6 +527,7 @@ O_TRUNC: Final[int] = alias.or_platform(
 # Explain: May be incomplete.
 # ---
 
+
 @techdebt.simplified
 class stat_result(NamedTuple):  # noqa: N801
     """Object whose attributes correspond roughly to the members of the `stat` structure.
@@ -635,11 +646,302 @@ def lstat(path: AnyStr | PathLike[AnyStr], *, dir_fd: int | None = None) -> stat
     return stat(path, dir_fd=dir_fd, follow_symlinks=False)
 
 
+def strerror(code: int, /) -> str:
+    """Return the error message corresponding to the error code in `code`.
+
+    See Also
+    --------
+    * `os.strerror`.
+    """
+    messages = {
+        errno.EPERM: "Operation not permitted",
+        errno.ENOENT: "No such file or directory",
+        errno.ESRCH: "No such process",
+        errno.EINTR: "Interrupted system call",
+        errno.EIO: "I/O error",
+        errno.ENXIO: "No such device or address",
+        errno.E2BIG: "Arg list too long",
+        errno.ENOEXEC: "Exec format error",
+        errno.EBADF: "Bad file number",
+        errno.ECHILD: "No child processes",
+        errno.EAGAIN: "Try again",
+        errno.ENOMEM: "Out of memory",
+        errno.EACCES: "Permission denied",
+        errno.EFAULT: "Bad address",
+        errno.ENOTBLK: "Block device required",
+        errno.EBUSY: "Device or resource busy",
+        errno.EEXIST: "File exists",
+        errno.EXDEV: "Cross-device link",
+        errno.ENODEV: "No such device",
+        errno.ENOTDIR: "Not a directory",
+        errno.EISDIR: "Is a directory",
+        errno.EINVAL: "Invalid argument",
+        errno.ENFILE: "File table overflow",
+        errno.EMFILE: "Too many open files",
+        errno.ENOTTY: "Not a typewriter",
+        errno.ETXTBSY: "Text file busy",
+        errno.EFBIG: "File too large",
+        errno.ENOSPC: "No space left on device",
+        errno.ESPIPE: "Illegal seek",
+        errno.EROFS: "Read-only file system",
+        errno.EMLINK: "Too many links",
+        errno.EPIPE: "Broken pipe",
+        errno.EDOM: "Math argument out of domain of func",
+        errno.ERANGE: "Math result not representable",
+        errno.EDEADLK: "Resource deadlock would occur",
+        errno.ENAMETOOLONG: "File name too long",
+        errno.ENOLCK: "No record locks available",
+        errno.ENOSYS: "Function not implemented",
+        errno.ENOTEMPTY: "Directory not empty",
+        errno.ELOOP: "Too many symbolic links encountered",
+        errno.EWOULDBLOCK: "Operation would block",
+        errno.ENOMSG: "No message of desired type",
+        errno.EIDRM: "Identifier removed",
+        errno.ECHRNG: "Channel number out of range",
+        errno.EL2NSYNC: "Level 2 not synchronized",
+        errno.EL3HLT: "Level 3 halted",
+        errno.EL3RST: "Level 3 reset",
+        errno.ELNRNG: "Link number out of range",
+        errno.EUNATCH: "Protocol driver not attached",
+        errno.ENOCSI: "No CSI structure available",
+        errno.EL2HLT: "Level 2 halted",
+        errno.EBADE: "Invalid exchange",
+        errno.EBADR: "Invalid request descriptor",
+        errno.EXFULL: "Exchange full",
+        errno.ENOANO: "No anode",
+        errno.EBADRQC: "Invalid request code",
+        errno.EBADSLT: "Invalid slot",
+        errno.EDEADLOCK: "File locking deadlock error",
+        errno.EBFONT: "Bad font file format",
+        errno.ENOSTR: "Device not a stream",
+        errno.ENODATA: "No data available",
+        errno.ETIME: "Timer expired",
+        errno.ENOSR: "Out of streams resources",
+        errno.ENONET: "Machine is not on the network",
+        errno.ENOPKG: "Package not installed",
+        errno.EREMOTE: "Object is remote",
+        errno.ENOLINK: "Link has been severed",
+        errno.EADV: "Advertise error",
+        errno.ESRMNT: "Srmount error",
+        errno.ECOMM: "Communication error on send",
+        errno.EPROTO: "Protocol error",
+        errno.EMULTIHOP: "Multihop attempted",
+        errno.EDOTDOT: "RFS specific error",
+        errno.EBADMSG: "Not a data message",
+        errno.EOVERFLOW: "Value too large for defined data type",
+        errno.ENOTUNIQ: "Name not unique on network",
+        errno.EBADFD: "File descriptor in bad state",
+        errno.EREMCHG: "Remote address changed",
+        errno.ELIBACC: "Can not access a needed shared library",
+        errno.ELIBBAD: "Accessing a corrupted shared library",
+        errno.ELIBSCN: ".lib section in a.out corrupted",
+        errno.ELIBMAX: "Attempting to link in too many shared libraries",
+        errno.ELIBEXEC: "Cannot exec a shared library directly",
+        errno.EILSEQ: "Illegal byte sequence",
+        errno.ERESTART: "Interrupted system call should be restarted",
+        errno.ESTRPIPE: "Streams pipe error",
+        errno.EUSERS: "Too many users",
+        errno.ENOTSOCK: "Socket operation on non-socket",
+        errno.EDESTADDRREQ: "Destination address required",
+        errno.EMSGSIZE: "Message too long",
+        errno.EPROTOTYPE: "Protocol wrong type for socket",
+        errno.ENOPROTOOPT: "Protocol not available",
+        errno.EPROTONOSUPPORT: "Protocol not supported",
+        errno.ESOCKTNOSUPPORT: "Socket type not supported",
+        errno.EOPNOTSUPP: "Operation not supported on transport endpoint",
+        errno.ENOTSUP: "Operation not supported",
+        errno.EPFNOSUPPORT: "Protocol family not supported",
+        errno.EAFNOSUPPORT: "Address family not supported by protocol",
+        errno.EADDRINUSE: "Address already in use",
+        errno.EADDRNOTAVAIL: "Cannot assign requested address",
+        errno.ENETDOWN: "Network is down",
+        errno.ENETUNREACH: "Network is unreachable",
+        errno.ENETRESET: "Network dropped connection because of reset",
+        errno.ECONNABORTED: "Software caused connection abort",
+        errno.ECONNRESET: "Connection reset by peer",
+        errno.ENOBUFS: "No buffer space available",
+        errno.EISCONN: "Transport endpoint is already connected",
+        errno.ENOTCONN: "Transport endpoint is not connected",
+        errno.ESHUTDOWN: "Cannot send after transport endpoint shutdown",
+        errno.ETOOMANYREFS: "Too many references: cannot splice",
+        errno.ETIMEDOUT: "Connection timed out",
+        errno.ECONNREFUSED: "Connection refused",
+        errno.EHOSTDOWN: "Host is down",
+        errno.EHOSTUNREACH: "No route to host",
+        errno.EALREADY: "Operation already in progress",
+        errno.EINPROGRESS: "Operation now in progress",
+        errno.ESTALE: "Stale NFS file handle",
+        errno.EUCLEAN: "Structure needs cleaning",
+        errno.ENOTNAM: "Not a XENIX named type file",
+        errno.ENAVAIL: "No XENIX semaphores available",
+        errno.EISNAM: "Is a named type file",
+        errno.EREMOTEIO: "Remote I/O error",
+        errno.EDQUOT: "Quota exceeded",
+        errno.EQFULL: "Interface output queue is full",
+        errno.ENOMEDIUM: "No medium found",
+        errno.EMEDIUMTYPE: "Wrong medium type",
+        errno.ENOKEY: "Required key not available",
+        errno.EKEYEXPIRED: "Key has expired",
+        errno.EKEYREVOKED: "Key has been revoked",
+        errno.EKEYREJECTED: "Key was rejected by service",
+        errno.ERFKILL: "Operation not possible due to RF-kill",
+        errno.ELOCKUNMAPPED: "Locked lock was unmapped",
+        errno.ENOTACTIVE: "Facility is not active",
+        errno.EAUTH: "Authentication error",
+        errno.EBADARCH: "Bad CPU type in executable",
+        errno.EBADEXEC: "Bad executable (or shared library)",
+        errno.EBADMACHO: "Malformed Mach-o file",
+        errno.EDEVERR: "Device error",
+        errno.EFTYPE: "Inappropriate file type or format",
+        errno.ENEEDAUTH: "Need authenticator",
+        errno.ENOATTR: "Attribute not found",
+        errno.ENOPOLICY: "Policy not found",
+        errno.EPROCLIM: "Too many processes",
+        errno.EPROCUNAVAIL: "Bad procedure for program",
+        errno.EPROGMISMATCH: "Program version wrong",
+        errno.EPROGUNAVAIL: "RPC prog. not avail",
+        errno.EPWROFF: "Device power is off",
+        errno.EBADRPC: "RPC struct is bad",
+        errno.ERPCMISMATCH: "RPC version wrong",
+        errno.ESHLIBVERS: "Shared library version mismatch",
+        errno.ENOTCAPABLE: "Capabilities insufficient",
+        errno.ECANCELED: "Operation canceled",
+        errno.EOWNERDEAD: "Owner died",
+        errno.ENOTRECOVERABLE: "State not recoverable",
+    }
+
+    if code in messages:
+        return messages[code]
+
+    detail = f"Unknown error: {code!r}"
+    raise ValueError(detail)
+
+
+def device_encoding(fd: int) -> str | None:
+    """Return a string describing the encoding of the device associated with `fd`.
+
+    See Also
+    --------
+    * `os.device_encoding`.
+    """
+    return_utf8 = is_unix() and bool(sys.flags.utf8_mode)
+    return "UTF-8" if return_utf8 else py_os.device_encoding(fd)
+
+
+@techdebt.simplified
+def mkdir(
+    path: int | AnyStr | PathLike[AnyStr],
+    mode: int = 0o777,
+    *,
+    dir_fd: int | None = None,
+) -> None:
+    """Create a directory named `path` with numeric mode `mode`.
+
+    See Also
+    --------
+    * `os.mkdir`.
+
+    Technical Debt
+    --------------
+    * This function may not support `mode=0o700`.
+    """
+    if sys.version_info < (3, 13) and mode == OWNER_RWX:
+        detail = f"{__backlib__}.mkdir() does not support `mode=0o700`"
+        warn(detail, RuntimeWarning, stacklevel=2)
+
+    py_os.mkdir(path, mode, dir_fd=dir_fd)  # noqa: PTH102
+
+
+@techdebt.simplified
+def makedirs(
+    name: int | AnyStr | PathLike[AnyStr],
+    mode: int = 0o777,
+    exist_ok: bool = False,  # noqa: FBT001, FBT002
+) -> None:
+    """Recursive directory creation function.
+
+    See Also
+    --------
+    * `os.makedirs`.
+
+    Technical Debt
+    --------------
+    * This function may not support `mode=0o700`.
+    """
+    if sys.version_info < (3, 13) and mode == OWNER_RWX:
+        detail = f"{__backlib__}.makedirs() does not support `mode=0o700`"
+        warn(detail, RuntimeWarning, stacklevel=2)
+
+    py_os.makedirs(name, mode, exist_ok=exist_ok)  # noqa: PTH103
+
+
+def fchmod(fd: int, mode: int) -> None:
+    """Change the mode of the file given by `fd` to the numeric `mode`.
+
+    See Also
+    --------
+    * `os.fchmod`.
+    """
+    chmod(fd, mode)
+
+
+@techdebt.simplified
+def set_blocking(fd: int, blocking: bool, /) -> None:  # noqa: FBT001
+    """Set the blocking mode of the specified file descriptor.
+
+    See Also
+    --------
+    * `os.set_blocking`.
+
+    Technical Debt
+    --------------
+    * Pipes may not be supported on Windows.
+    """
+    if sys.version_info < (3, 12) and is_nt():
+        detail = f"{__backlib__}.set_blocking() does not support pipes"
+        warn(detail, RuntimeWarning, stacklevel=2)
+
+    py_os.set_blocking(fd, blocking)
+
+
+supports_dir_fd = py_os.supports_dir_fd.copy()
+
+if py_os.stat in py_os.supports_dir_fd:
+    supports_dir_fd.add(stat)
+
+if py_os.mkdir in py_os.supports_dir_fd:
+    supports_dir_fd.add(mkdir)
+
+
+supports_fd = py_os.supports_fd.copy()
+
+if py_os.stat in py_os.supports_fd:
+    supports_fd.add(stat)
+
+if py_os.lstat in py_os.supports_fd:
+    supports_fd.add(lstat)
+
+if py_os.mkdir in py_os.supports_fd:
+    supports_fd.add(mkdir)
+
+
+supports_follow_symlinks = py_os.supports_follow_symlinks.copy()
+
+if py_os.stat in py_os.supports_follow_symlinks:
+    supports_follow_symlinks.add(stat)
+
+
 stat_result.__module__ = __backlib__
 
-stat.__module__ = __backlib__
+device_encoding.__module__ = __backlib__
 fstat.__module__ = __backlib__
 lstat.__module__ = __backlib__
+fchmod.__module__ = __backlib__
+makedirs.__module__ = __backlib__
+mkdir.__module__ = __backlib__
+set_blocking.__module__ = __backlib__
+stat.__module__ = __backlib__
+strerror.__module__ = __backlib__
 
 
 # ---
@@ -690,6 +992,14 @@ O_TMPFILE: Final[int] = alias.or_platform(
     linux=linux5.O_TMPFILE,
     otherwise=linux5.O_TMPFILE,
 )
+
+
+# ---
+# Version: Python 3.9+
+# Explain: May be undefined.
+# ---
+
+environb: MutableMapping[bytes, bytes] = alias.or_default(py_os, "environb", otherwise={})
 
 
 # ---
@@ -1175,6 +1485,7 @@ TFD_TIMER_CANCEL_ON_SET: Final[int] = alias.or_platform(
 # Explain: Changed in Python 3.13.
 # ---
 
+
 def cpu_count() -> int | None:
     """Return the number of logical CPUs in the system.
 
@@ -1243,6 +1554,7 @@ terminal_size = py_os.terminal_size
 abort = py_os.abort
 access = py_os.access
 chdir = py_os.chdir
+chmod = py_os.chmod
 close = py_os.close
 closerange = py_os.closerange
 environ = py_os.environ
@@ -1267,8 +1579,8 @@ listdir = py_os.listdir
 lseek = py_os.lseek
 major = py_os.major
 makedev = py_os.makedev
-makedirs = py_os.makedirs
 minor = py_os.minor
+open = py_os.open
 pipe = py_os.pipe
 putenv = py_os.putenv
 read = py_os.read
@@ -1281,11 +1593,14 @@ replace = py_os.replace
 rmdir = py_os.rmdir
 set_inheritable = py_os.set_inheritable
 supports_bytes_environ = py_os.supports_bytes_environ
+supports_effective_ids = py_os.supports_effective_ids
 symlink = py_os.symlink
 times = py_os.times
 truncate = py_os.truncate
 umask = py_os.umask
 unlink = py_os.unlink
 unsetenv = py_os.unsetenv
+urandom = py_os.urandom
 utime = py_os.utime
+walk = py_os.walk
 write = py_os.write
