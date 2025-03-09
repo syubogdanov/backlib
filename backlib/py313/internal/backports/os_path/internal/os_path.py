@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os.path as py_os_path
+import sys
 
 from typing import TYPE_CHECKING, TypeVar
 from warnings import warn
@@ -72,28 +73,22 @@ def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr
 
     See Also
     --------
-    * os.path.realpath
+    * `os.path.realpath`
 
     Technical Debt
     --------------
-    * `backlib.py313.realpath` is an alias to `backlib.py313.abspath` on Windows.
+    * This may be an alias to `backlib.py313.os.path.abspath` (Windows, Python 3.9).
     """
-    path = os.fspath(path)
+    if sys.version_info >= (3, 10):
+        return py_os_path.realpath(path, strict=strict)
 
     if is_posix():
         return posixpath.realpath(path, strict=strict)
 
-    try:
-        path = abspath(path)
+    detail = f"{__backlib__}.realpath() is an alias to {__backlib__}.abspath()"
+    warn(detail, RuntimeWarning, stacklevel=2)
 
-        detail = f"{__backlib__}.realpath() is an alias to {__backlib__}.abspath()"
-        warn(detail, RuntimeWarning, stacklevel=2)
-
-    except OSError:
-        if strict:
-            raise
-
-    return path
+    return os.fspath(path)
 
 
 realpath.__module__ = __backlib__
@@ -128,8 +123,11 @@ def isdevdrive(path: AnyStr | PathLike[AnyStr]) -> bool:
     --------------
     * Always returns `False` on Windows.
     """
+    if sys.version_info >= (3, 12):
+        return py_os_path.isdevdrive(path)
+
     if is_nt():
-        detail = f"{__backlib__}.isdevdrive() always returns False"
+        detail = f"{__backlib__}.isdevdrive() is returned as False"
         warn(detail, RuntimeWarning, stacklevel=2)
 
     os.fspath(path)
