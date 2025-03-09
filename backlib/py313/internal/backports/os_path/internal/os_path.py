@@ -88,7 +88,7 @@ def realpath(path: AnyStr | PathLike[AnyStr], *, strict: bool = False) -> AnyStr
     detail = f"{__backlib__}.realpath() is an alias to {__backlib__}.abspath()"
     warn(detail, RuntimeWarning, stacklevel=2)
 
-    return os.fspath(path)
+    return py_os_path.abspath(path)  # noqa: PTH100
 
 
 realpath.__module__ = __backlib__
