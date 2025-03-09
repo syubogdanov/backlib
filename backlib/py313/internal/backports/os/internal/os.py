@@ -830,7 +830,7 @@ def device_encoding(fd: int) -> str | None:
 
 @techdebt.simplified
 def mkdir(
-    path: int | AnyStr | PathLike[AnyStr],
+    path: AnyStr | PathLike[AnyStr],
     mode: int = 0o777,
     *,
     dir_fd: int | None = None,
@@ -854,7 +854,7 @@ def mkdir(
 
 @techdebt.simplified
 def makedirs(
-    name: int | AnyStr | PathLike[AnyStr],
+    name: AnyStr | PathLike[AnyStr],
     mode: int = 0o777,
     exist_ok: bool = False,  # noqa: FBT001, FBT002
 ) -> None:
@@ -909,9 +909,6 @@ supports_dir_fd = py_os.supports_dir_fd.copy()
 if py_os.stat in py_os.supports_dir_fd:
     supports_dir_fd.add(stat)
 
-if py_os.mkdir in py_os.supports_dir_fd:
-    supports_dir_fd.add(mkdir)
-
 
 supports_fd = py_os.supports_fd.copy()
 
@@ -920,9 +917,6 @@ if py_os.stat in py_os.supports_fd:
 
 if py_os.lstat in py_os.supports_fd:
     supports_fd.add(lstat)
-
-if py_os.mkdir in py_os.supports_fd:
-    supports_fd.add(mkdir)
 
 
 supports_follow_symlinks = py_os.supports_follow_symlinks.copy()
