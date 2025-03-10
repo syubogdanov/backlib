@@ -10,7 +10,7 @@ from warnings import warn
 from backlib.py313.internal.backports import errno
 from backlib.py313.internal.backports.os.internal import linux5
 from backlib.py313.internal.markers import techdebt
-from backlib.py313.internal.utils import conversions, alias
+from backlib.py313.internal.utils import alias, conversions
 from backlib.py313.internal.utils.platform import is_nt, is_unix
 
 
@@ -1498,18 +1498,15 @@ def cpu_count() -> int | None:
     return py_os.cpu_count()
 
 
-@techdebt.simplified
 def process_cpu_count() -> int | None:
     """Get the number of logical CPUs usable by the calling thread of the current process.
 
     See Also
     --------
     * `os.process_cpu_count`.
-
-    Technical Debt
-    --------------
-    * This is an alias to `cpu_count`.
     """
+    if sys.version_info >= (3, 13):
+        return py_os.process_cpu_count()
     return cpu_count()
 
 
