@@ -10,7 +10,7 @@ from warnings import warn
 from backlib.py313.internal.backports import errno
 from backlib.py313.internal.backports.os.internal import linux5
 from backlib.py313.internal.markers import techdebt
-from backlib.py313.internal.utils import alias
+from backlib.py313.internal.utils import conversions, alias
 from backlib.py313.internal.utils.platform import is_nt, is_unix
 
 
@@ -1481,12 +1481,20 @@ TFD_TIMER_CANCEL_ON_SET: Final[int] = alias.or_platform(
 def cpu_count() -> int | None:
     """Return the number of logical CPUs in the system.
 
+    Notes
+    -----
+    * Supports `PYTHON_CPU_COUNT` on Python 3.9 to Python 3.12.
+
     See Also
     --------
     * `os.cpu_count`.
     """
-    if count := environ.get("PYTHON_CPU_COUNT"):
-        return int(count)
+    env_var = environ.get("PYTHON_CPU_COUNT")
+    count = conversions.int_or_none(env_var)
+
+    if count is not None and count > 0:
+        return count
+
     return py_os.cpu_count()
 
 
