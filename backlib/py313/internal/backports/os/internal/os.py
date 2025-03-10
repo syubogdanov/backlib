@@ -1481,10 +1481,6 @@ TFD_TIMER_CANCEL_ON_SET: Final[int] = alias.or_platform(
 def cpu_count() -> int | None:
     """Return the number of logical CPUs in the system.
 
-    Notes
-    -----
-    * Supports `PYTHON_CPU_COUNT` on Python 3.9 to Python 3.12.
-
     See Also
     --------
     * `os.cpu_count`.
