@@ -1,4 +1,4 @@
-from backlib.py313.internal.backports.io import (
+from backlib.py313.internal.backports.io.internal.io import (
     DEFAULT_BUFFER_SIZE,
     BlockingIOError,
     BufferedIOBase,
