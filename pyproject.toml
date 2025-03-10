@@ -18,15 +18,9 @@ keywords = [
     "backport",
     "stdlib",
     "errno",
-    "io",
     "json",
-    "os",
-    "pathlib",
-    "shutil",
     "stat",
-    "tarfile",
     "tomllib",
-    "zipfile",
 ]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
@@ -80,7 +74,12 @@ line-length = 100
 target-version = "py39"
 
 [tool.ruff.lint]
-ignore = ["A005", "ANN401", "D100", "D104"]
+ignore = [
+    "A005",    # Module {name} shadows a Python standard-library module
+    "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed in {name}
+    "D100",    # Missing docstring in public module
+    "D104",    # Missing docstring in public package
+]
 select = ["ALL"]
 
 [tool.ruff.lint.flake8-builtins]
