@@ -26,7 +26,7 @@ pip install backlib
 
 ### Usage
 
-#### errno [UNRELEASED]
+#### errno
 
 For more, see the [documentation][docs/errno].
 
