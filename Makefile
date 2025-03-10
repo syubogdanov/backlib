@@ -1,5 +1,7 @@
-LIBRARY = backlib
 VENV = poetry run
+
+LIBRARY = backlib
+TESTS = tests
 
 
 # Linters
@@ -9,11 +11,11 @@ mypy:
 	$(VENV) mypy ./$(LIBRARY)/
 
 ruff:
-	$(VENV) ruff check ./$(LIBRARY)/
+	$(VENV) ruff check ./$(LIBRARY)/ ./$(TESTS)/
 
 
 # Tests
 test: unit-tests
 
 unit-tests:
-	$(VENV) pytest ./tests/
+	$(VENV) pytest ./$(TESTS)/
