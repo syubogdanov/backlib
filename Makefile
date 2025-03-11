@@ -8,7 +8,7 @@ TESTS = tests
 publish: publish-test publish-prod
 
 publish-prod:
-	poetry publish --dry-run --repository=pypi
+	poetry publish --dry-run
 
 publish-test:
 	poetry publish --dry-run --repository=test-pypi
