@@ -4,6 +4,16 @@ LIBRARY = backlib
 TESTS = tests
 
 
+# CD
+publish: publish-test publish-prod
+
+publish-prod:
+	poetry publish --dry-run --repository=test-pypi
+
+publish-test:
+	poetry publish --dry-run --repository=pypi
+
+
 # Linters
 lint: ruff mypy
 
