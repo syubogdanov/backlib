@@ -5,8 +5,6 @@ TESTS = tests
 
 
 # CD
-publish: publish-test publish-prod
-
 publish-prod:
 	poetry publish --dry-run
 
