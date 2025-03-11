@@ -8,10 +8,10 @@ TESTS = tests
 publish: publish-test publish-prod
 
 publish-prod:
-	poetry publish --dry-run --repository=test-pypi
+	poetry publish --dry-run --repository=pypi
 
 publish-test:
-	poetry publish --dry-run --repository=pypi
+	poetry publish --dry-run --repository=test-pypi
 
 
 # Linters
