@@ -26,6 +26,16 @@ pip install backlib
 
 ### Usage
 
+#### builtins
+
+For more, see the [documentation][docs/builtins].
+
+```python
+from backlib.py313 import builtins
+
+assert issubclass(builtins.EncodingWarning, Warning)
+```
+
 #### errno
 
 For more, see the [documentation][docs/errno].
@@ -76,6 +86,7 @@ MIT License, Copyright (c) 2025 Sergei Y. Bogdanov. See [LICENSE][github/license
 
 <!-- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- -->
 
+[docs/builtins]: https://backlib.readthedocs.io/en/latest/backports/python313/builtins.html
 [docs/errno]: https://backlib.readthedocs.io/en/latest/backports/python313/errno.html
 [docs/json]: https://backlib.readthedocs.io/en/latest/backports/python313/json.html
 [docs/stat]: https://backlib.readthedocs.io/en/latest/backports/python313/stat.html
