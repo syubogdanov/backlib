@@ -7,7 +7,7 @@ from __future__ import annotations
 import string
 
 from types import MappingProxyType
-from typing import TYPE_CHECKING, Any, BinaryIO, NamedTuple
+from typing import TYPE_CHECKING, Any, NamedTuple
 
 from backlib.py313.internal.backports.tomllib.internal.cpython.re import (
     RE_DATETIME,
@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
 
     from backlib.py313.internal.backports.tomllib.internal.cpython.types import Key, ParseFloat, Pos
+    from backlib.py313.internal.typing import SupportsRead
 
 
 ASCII_CTRL = frozenset(chr(i) for i in range(32)) | frozenset(chr(127))
@@ -65,7 +66,7 @@ class TOMLDecodeError(ValueError):
     """
 
 
-def load(fp: BinaryIO, /, *, parse_float: ParseFloat = float) -> dict[str, Any]:
+def load(fp: SupportsRead[bytes], /, *, parse_float: ParseFloat = float) -> dict[str, Any]:
     """Parse TOML from a binary file object.
 
     See Also
