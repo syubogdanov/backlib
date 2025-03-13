@@ -27,7 +27,7 @@ class Undefined(Enum):
 
 def or_platform(  # noqa: C901, PLR0911, PLR0913
     container: Any,
-    name: str,
+    attribute_name: str,
     /,
     *,
     darwin: T | Undefined = Undefined.DEFAULT,
@@ -49,7 +49,7 @@ def or_platform(  # noqa: C901, PLR0911, PLR0913
       example, *FreeBSD* is chosen over *POSIX* because it provides a more precise match for the
       target environment.
     """
-    value = getattr(container, name, Undefined.DEFAULT)
+    value = getattr(container, attribute_name, Undefined.DEFAULT)
 
     if not isinstance(value, Undefined):
         return value
@@ -85,9 +85,10 @@ def or_platform(  # noqa: C901, PLR0911, PLR0913
 
 
 def or_default(
-    object_: object,
-    name: str,
+    container: object,
+    attribute_name: str,
+    /,
     otherwise: T,
 ) -> T:
     """Get a named attribute if exists, otherwise the default value."""
-    return getattr(object_, name, otherwise)
+    return getattr(container, attribute_name, otherwise)
