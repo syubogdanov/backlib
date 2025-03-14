@@ -1,11 +1,7 @@
-import builtins
+class EncodingWarning(Warning):
+    """Base class for warnings related to encodings.
 
-from backlib.py313.internal.backports.builtins.internal import warnings
-from backlib.py313.internal.utils import alias
-
-
-EncodingWarning: type[Warning] = alias.or_default(
-    builtins,
-    "EncodingWarning",
-    otherwise=warnings.EncodingWarning,
-)
+    See Also
+    --------
+    * `builtins.EncodingWarning`.
+    """
