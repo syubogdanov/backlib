@@ -2,14 +2,14 @@ import errno as py_errno
 
 from typing import Final
 
-from backlib.internal.utils import alias
-from backlib.py313.internal.backports.errno.internal import (
+from backlib.internal.backports.py310.errno.internal import (
     darwin1,
     freebsd13,
     msvc22,
     posix88,
     solaris10,
 )
+from backlib.internal.utils import alias
 
 
 __all__: list[str] = [
@@ -115,7 +115,6 @@ __all__: list[str] = [
     "ENOSYS",
     "ENOTACTIVE",
     "ENOTBLK",
-    "ENOTCAPABLE",
     "ENOTCONN",
     "ENOTDIR",
     "ENOTEMPTY",
@@ -140,7 +139,6 @@ __all__: list[str] = [
     "EPROTONOSUPPORT",
     "EPROTOTYPE",
     "EPWROFF",
-    "EQFULL",
     "ERANGE",
     "EREMCHG",
     "EREMOTE",
@@ -170,11 +168,6 @@ __all__: list[str] = [
     "errorcode",
 ]
 
-
-# ---
-# Version: Python 3.9+
-# Explain: May be undefined.
-# ---
 
 E2BIG: Final[int] = alias.or_platform(
     py_errno,
@@ -1623,26 +1616,6 @@ EXFULL: Final[int] = alias.or_platform(
 
 
 # ---
-# Version: Python 3.11+
-# Explain: Added in Python 3.11. May be undefined also.
-# ---
-
-ENOTCAPABLE: Final[int] = alias.or_platform(
-    py_errno,
-    "ENOTCAPABLE",
-    freebsd=freebsd13.ENOTCAPABLE,
-    otherwise=freebsd13.ENOTCAPABLE,
-)
-
-EQFULL: Final[int] = alias.or_platform(
-    py_errno,
-    "EQFULL",
-    darwin=darwin1.EQFULL,
-    otherwise=darwin1.EQFULL,
-)
-
-
-# ---
 # Version: Python 3.9+
 # Explain: Use the entire `errno`.
 # ---
@@ -1750,7 +1723,6 @@ errorcode = {
     ENOSYS: "ENOSYS",
     ENOTACTIVE: "ENOTACTIVE",
     ENOTBLK: "ENOTBLK",
-    ENOTCAPABLE: "ENOTCAPABLE",
     ENOTCONN: "ENOTCONN",
     ENOTDIR: "ENOTDIR",
     ENOTEMPTY: "ENOTEMPTY",
@@ -1775,7 +1747,6 @@ errorcode = {
     EPROTONOSUPPORT: "EPROTONOSUPPORT",
     EPROTOTYPE: "EPROTOTYPE",
     EPWROFF: "EPWROFF",
-    EQFULL: "EQFULL",
     ERANGE: "ERANGE",
     EREMCHG: "EREMCHG",
     EREMOTE: "EREMOTE",

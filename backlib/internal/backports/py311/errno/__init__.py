@@ -1,4 +1,4 @@
-from backlib.internal.backports.py313.errno import (
+from backlib.internal.backports.py310.errno import (
     E2BIG,
     EACCES,
     EADDRINUSE,
@@ -101,7 +101,6 @@ from backlib.internal.backports.py313.errno import (
     ENOSYS,
     ENOTACTIVE,
     ENOTBLK,
-    ENOTCAPABLE,
     ENOTCONN,
     ENOTDIR,
     ENOTEMPTY,
@@ -126,7 +125,6 @@ from backlib.internal.backports.py313.errno import (
     EPROTONOSUPPORT,
     EPROTOTYPE,
     EPWROFF,
-    EQFULL,
     ERANGE,
     EREMCHG,
     EREMOTE,
@@ -153,8 +151,8 @@ from backlib.internal.backports.py313.errno import (
     EWOULDBLOCK,
     EXDEV,
     EXFULL,
-    errorcode,
 )
+from backlib.internal.backports.py311.errno.internal.errno import ENOTCAPABLE, EQFULL, errorcode
 
 
 __all__: list[str] = [

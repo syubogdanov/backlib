@@ -74,7 +74,6 @@ EPROTO: Final[int] = 100
 EPROTONOSUPPORT: Final[int] = 43
 EPROTOTYPE: Final[int] = 41
 EPWROFF: Final[int] = 82
-EQFULL: Final[int] = 106
 ERANGE: Final[int] = 34
 EREMOTE: Final[int] = 71
 ERESTART: Final[int] = -1

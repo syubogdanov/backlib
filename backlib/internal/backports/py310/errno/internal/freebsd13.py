@@ -60,7 +60,6 @@ ENOPROTOOPT: Final[int] = 42
 ENOSPC: Final[int] = 28
 ENOSYS: Final[int] = 78
 ENOTBLK: Final[int] = 15
-ENOTCAPABLE: Final[int] = 93
 ENOTCONN: Final[int] = 57
 ENOTDIR: Final[int] = 20
 ENOTEMPTY: Final[int] = 66

@@ -6,6 +6,7 @@
     :maxdepth: 1
 
     builtins
+    errno
     json
     operator
     tomllib
