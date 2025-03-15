@@ -12,7 +12,7 @@ from backlib.internal.utils.platform import is_posix
 
 
 if TYPE_CHECKING:
-    from backlib.internal.backports.py310 import os
+    from backlib.internal.backports.py310.os import PathLike
 
 
 __all__: list[str] = ["realpath"]
@@ -25,7 +25,7 @@ AnyStr = TypeVar("AnyStr", bytes, str)
 
 @techdebt.refactor
 def realpath(
-    filename: AnyStr | os.PathLike[AnyStr],
+    filename: AnyStr | PathLike[AnyStr],
     *,
     strict: bool = False,
 ) -> AnyStr:

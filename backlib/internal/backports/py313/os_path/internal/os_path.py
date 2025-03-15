@@ -9,7 +9,7 @@ from backlib.internal.utils.platform import is_nt
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
-    from backlib.internal.backports.py313 import os
+    from backlib.internal.backports.py313.os import PathLike
 
 
 __all__: list[str] = ["commonpath", "isabs", "isreserved"]
@@ -20,7 +20,7 @@ __backlib__: str = "backlib.py313.os.path"
 AnyStr = TypeVar("AnyStr", str, bytes)
 
 
-def commonpath(paths: Iterable[AnyStr | os.PathLike[AnyStr]]) -> AnyStr:
+def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
     """Return the longest common sub-path of each pathname in the iterable paths.
 
     See Also
@@ -34,7 +34,7 @@ def commonpath(paths: Iterable[AnyStr | os.PathLike[AnyStr]]) -> AnyStr:
 commonpath.__module__ = __backlib__
 
 
-def isabs(path: AnyStr | os.PathLike[AnyStr]) -> bool:
+def isabs(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if `path` is an absolute pathname.
 
     See Also
@@ -48,7 +48,7 @@ def isabs(path: AnyStr | os.PathLike[AnyStr]) -> bool:
 isabs.__module__ = __backlib__
 
 
-def isreserved(path: AnyStr | os.PathLike[AnyStr]) -> bool:
+def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if `path` is a reserved pathname on the current system.
 
     See Also

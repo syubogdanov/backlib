@@ -9,7 +9,7 @@ from backlib.internal.utils.platform import is_nt
 
 
 if TYPE_CHECKING:
-    from backlib.internal.backports.py312 import os
+    from backlib.internal.backports.py312.os import PathLike
 
 
 __all__: list[str] = ["isdevdrive", "isjunction", "splitroot"]
@@ -20,7 +20,7 @@ __backlib__: str = "backlib.py312.os.path"
 AnyStr = TypeVar("AnyStr", str, bytes)
 
 
-def isjunction(path: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -> bool:
+def isjunction(path: str | bytes | PathLike[str] | PathLike[bytes]) -> bool:
     """Return `True` if `path` refers to an existing directory entry that is a junction.
 
     See Also
@@ -34,7 +34,7 @@ def isjunction(path: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -> boo
 isjunction.__module__ = __backlib__
 
 
-def isdevdrive(path: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -> bool:
+def isdevdrive(path: str | bytes | PathLike[str] | PathLike[bytes]) -> bool:
     """Return True if pathname path is located on a Windows Dev Drive.
 
     See Also
@@ -49,7 +49,7 @@ def isdevdrive(path: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -> boo
 isdevdrive.__module__ = __backlib__
 
 
-def splitroot(path: AnyStr | os.PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:
+def splitroot(path: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:
     """Split the pathname `path` into a 3-item tuple `(drive, root, tail)`.
 
     See Also
