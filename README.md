@@ -58,6 +58,18 @@ data = json.loads("{\"backlib\": \"pypi\"}")
 assert data == {"backlib": "pypi"}
 ```
 
+#### operator
+
+For more, see the [documentation][docs/operator].
+
+```python
+from backlib.py313 import operator
+
+value = operator.__call__(abs, -42)
+
+assert value == 42
+```
+
 #### stat
 
 For more, see the [documentation][docs/stat].
@@ -89,6 +101,7 @@ MIT License, Copyright (c) 2025 Sergei Y. Bogdanov. See [LICENSE][github/license
 [docs/builtins]: https://backlib.readthedocs.io/en/latest/backports/python313/builtins.html
 [docs/errno]: https://backlib.readthedocs.io/en/latest/backports/python313/errno.html
 [docs/json]: https://backlib.readthedocs.io/en/latest/backports/python313/json.html
+[docs/operator]: https://backlib.readthedocs.io/en/latest/backports/python313/operator.html
 [docs/stat]: https://backlib.readthedocs.io/en/latest/backports/python313/stat.html
 [docs/tomllib]: https://backlib.readthedocs.io/en/latest/backports/python313/tomllib.html
 

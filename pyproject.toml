@@ -88,7 +88,7 @@ ignore = [
 select = ["ALL"]
 
 [tool.ruff.lint.flake8-builtins]
-builtins-ignorelist = ["BlockingIOError", "open"]
+builtins-ignorelist = ["BlockingIOError", "abs", "open", "pow"]
 
 [tool.ruff.lint.isort]
 lines-after-imports = 2

@@ -60,6 +60,19 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 
    assert data == {"backlib": "pypi"}
 
+operator
+^^^^^^^^
+
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/operator.html>`__.
+
+.. code:: python
+
+   from backlib.py313 import operator
+
+   value = operator.__call__(abs, -42)
+
+   assert value == 42
+
 stat
 ^^^^
 

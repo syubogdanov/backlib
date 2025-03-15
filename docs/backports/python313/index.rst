@@ -8,5 +8,6 @@
     builtins
     errno
     json
+    operator
     stat
     tomllib
