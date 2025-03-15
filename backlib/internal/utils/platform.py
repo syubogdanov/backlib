@@ -1,7 +1,7 @@
 from functools import cache
 from sys import builtin_module_names, platform
 
-from backlib.py313.internal.markers import techdebt
+from backlib.internal.markers import techdebt
 
 
 @cache

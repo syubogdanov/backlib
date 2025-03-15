@@ -1,4 +1,4 @@
-from backlib.internal.backports.py313.json import (
+from backlib.internal.backports.py310.json import (
     JSONDecodeError,
     JSONDecoder,
     JSONEncoder,

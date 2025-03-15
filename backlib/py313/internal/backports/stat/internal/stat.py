@@ -2,7 +2,7 @@ import stat as py_stat
 
 from typing import Final
 
-from backlib.py313.internal.utils import alias
+from backlib.internal.utils import alias
 
 
 __all__: list[str] = [

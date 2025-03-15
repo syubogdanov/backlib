@@ -2,6 +2,7 @@ import errno as py_errno
 
 from typing import Final
 
+from backlib.internal.utils import alias
 from backlib.py313.internal.backports.errno.internal import (
     darwin1,
     freebsd13,
@@ -9,7 +10,6 @@ from backlib.py313.internal.backports.errno.internal import (
     posix88,
     solaris10,
 )
-from backlib.py313.internal.utils import alias
 
 
 __all__: list[str] = [

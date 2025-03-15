@@ -22,8 +22,8 @@ from backlib.py313.internal.backports.tomllib.internal.cpython.re import (
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
+    from backlib.internal.typing import SupportsRead
     from backlib.py313.internal.backports.tomllib.internal.cpython.types import Key, ParseFloat, Pos
-    from backlib.py313.internal.typing import SupportsRead
 
 
 ASCII_CTRL = frozenset(chr(i) for i in range(32)) | frozenset(chr(127))
