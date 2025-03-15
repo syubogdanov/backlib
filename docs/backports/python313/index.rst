@@ -9,5 +9,6 @@
     errno
     json
     operator
+    os
     stat
     tomllib
