@@ -26,7 +26,7 @@ Usage
 ~~~~~
 
 builtins
-^^^^^
+^^^^^^^^
 
 For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/builtins.html>`__.
 
