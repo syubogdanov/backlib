@@ -31,7 +31,7 @@ pip install backlib
 For more, see the [documentation][docs/builtins].
 
 ```python
-from backlib.py313 import builtins
+from backlib.py310 import builtins
 
 assert issubclass(builtins.EncodingWarning, Warning)
 ```
@@ -41,7 +41,7 @@ assert issubclass(builtins.EncodingWarning, Warning)
 For more, see the [documentation][docs/errno].
 
 ```python
-from backlib.py313 import errno
+from backlib.py311 import errno
 
 assert errno.ENOTCAPABLE == 93
 ```
@@ -63,7 +63,7 @@ assert data == {"backlib": "pypi"}
 For more, see the [documentation][docs/operator].
 
 ```python
-from backlib.py313 import operator
+from backlib.py311 import operator
 
 value = operator.__call__(abs, -42)
 
@@ -75,7 +75,7 @@ assert value == 42
 For more, see the [documentation][docs/os].
 
 ```python
-from backlib.py313 import os
+from backlib.py312 import os
 
 st = os.stat("pyproject.toml")
 
@@ -97,7 +97,7 @@ assert stat.SF_SYNTHETIC == 0xC0000000
 For more, see the [documentation][docs/tomllib].
 
 ```python
-from backlib.py313 import tomllib
+from backlib.py311 import tomllib
 
 data = tomllib.loads("\"backlib\" = \"pypi\"")
 
