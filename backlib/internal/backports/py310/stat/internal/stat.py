@@ -26,35 +26,15 @@ __all__: list[str] = [
     "IO_REPARSE_TAG_APPEXECLINK",
     "IO_REPARSE_TAG_MOUNT_POINT",
     "IO_REPARSE_TAG_SYMLINK",
-    "SF_DATALESS",
-    "SF_FIRMLINK",
-    "SF_RESTRICTED",
-    "SF_SETTABLE",
-    "SF_SUPPORTED",
-    "SF_SYNTHETIC",
     "S_IFDOOR",
     "S_IFPORT",
     "S_IFWHT",
-    "UF_DATAVAULT",
-    "UF_SETTABLE",
-    "UF_TRACKED",
 ]
 
-
-# ---
-# Version: Python 3.9+
-# Explain: May be defined as `0`.
-# ---
 
 S_IFDOOR: Final[int] = py_stat.S_IFDOOR or 0o150000
 S_IFPORT: Final[int] = py_stat.S_IFPORT or 0o160000
 S_IFWHT: Final[int] = py_stat.S_IFWHT or 0o160000
-
-
-# ---
-# Version: Python 3.9+
-# Explain: Available on Windows.
-# ---
 
 FILE_ATTRIBUTE_ARCHIVE: Final[int] = alias.or_default(
     py_stat,
@@ -142,12 +122,6 @@ FILE_ATTRIBUTE_VIRTUAL: Final[int] = alias.or_default(
     otherwise=65536,
 )
 
-
-# ---
-# Version: Python 3.9+
-# Explain: Available on Windows.
-# ---
-
 IO_REPARSE_TAG_SYMLINK: Final[int] = alias.or_default(
     py_stat,
     "IO_REPARSE_TAG_SYMLINK",
@@ -162,64 +136,4 @@ IO_REPARSE_TAG_APPEXECLINK: Final[int] = alias.or_default(
     py_stat,
     "IO_REPARSE_TAG_APPEXECLINK",
     0x8000001B,
-)
-
-
-# ---
-# Version: Python 3.13+
-# Explain: Available on macOS.
-# ---
-
-SF_SUPPORTED: Final[int] = alias.or_default(
-    py_stat,
-    "SF_SUPPORTED",
-    otherwise=0x9F0000,
-)
-SF_SYNTHETIC: Final[int] = alias.or_default(
-    py_stat,
-    "SF_SYNTHETIC",
-    otherwise=0xC0000000,
-)
-
-
-# ---
-# Version: Python 3.13+
-# Explain: Added in Python 3.13.
-# ---
-
-SF_DATALESS: Final[int] = alias.or_default(
-    py_stat,
-    "SF_DATALESS",
-    otherwise=0x40000000,
-)
-SF_FIRMLINK: Final[int] = alias.or_default(
-    py_stat,
-    "SF_FIRMLINK",
-    otherwise=0x00800000,
-)
-SF_RESTRICTED: Final[int] = alias.or_default(
-    py_stat,
-    "SF_RESTRICTED",
-    otherwise=0x00080000,
-)
-SF_SETTABLE: Final[int] = alias.or_default(
-    py_stat,
-    "SF_SETTABLE",
-    otherwise=0xFFFF0000,
-)
-
-UF_DATAVAULT: Final[int] = alias.or_default(
-    py_stat,
-    "UF_DATAVAULT",
-    otherwise=0x00000080,
-)
-UF_SETTABLE: Final[int] = alias.or_default(
-    py_stat,
-    "UF_SETTABLE",
-    otherwise=0x0000FFFF,
-)
-UF_TRACKED: Final[int] = alias.or_default(
-    py_stat,
-    "UF_TRACKED",
-    otherwise=0x00000040,
 )

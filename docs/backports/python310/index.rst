@@ -9,3 +9,4 @@
     errno
     json
     operator
+    stat

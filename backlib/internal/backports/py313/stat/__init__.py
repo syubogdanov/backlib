@@ -1,4 +1,4 @@
-from backlib.internal.backports.py313.stat import (
+from backlib.internal.backports.py312.stat import (
     FILE_ATTRIBUTE_ARCHIVE,
     FILE_ATTRIBUTE_COMPRESSED,
     FILE_ATTRIBUTE_DEVICE,
@@ -62,15 +62,9 @@ from backlib.internal.backports.py313.stat import (
     S_IXUSR,
     SF_APPEND,
     SF_ARCHIVED,
-    SF_DATALESS,
-    SF_FIRMLINK,
     SF_IMMUTABLE,
     SF_NOUNLINK,
-    SF_RESTRICTED,
-    SF_SETTABLE,
     SF_SNAPSHOT,
-    SF_SUPPORTED,
-    SF_SYNTHETIC,
     ST_ATIME,
     ST_CTIME,
     ST_DEV,
@@ -83,15 +77,23 @@ from backlib.internal.backports.py313.stat import (
     ST_UID,
     UF_APPEND,
     UF_COMPRESSED,
-    UF_DATAVAULT,
     UF_HIDDEN,
     UF_IMMUTABLE,
     UF_NODUMP,
     UF_NOUNLINK,
     UF_OPAQUE,
+    filemode,
+)
+from backlib.internal.backports.py313.stat.internal.stat import (
+    SF_DATALESS,
+    SF_FIRMLINK,
+    SF_RESTRICTED,
+    SF_SETTABLE,
+    SF_SUPPORTED,
+    SF_SYNTHETIC,
+    UF_DATAVAULT,
     UF_SETTABLE,
     UF_TRACKED,
-    filemode,
 )
 
 
