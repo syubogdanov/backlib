@@ -11,4 +11,5 @@ class EncodingWarning(Warning):
     * `builtins.EncodingWarning`.
     """
 
-    __module__ = __backlib__
+
+EncodingWarning.__module__ = __backlib__
