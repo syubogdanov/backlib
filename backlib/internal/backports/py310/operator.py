@@ -1,8 +1,7 @@
-from backlib.internal.backports.py313.operator import (
+from operator import (
     __abs__,
     __add__,
     __and__,
-    __call__,
     __concat__,
     __contains__,
     __delitem__,
@@ -49,7 +48,6 @@ from backlib.internal.backports.py313.operator import (
     add,
     and_,
     attrgetter,
-    call,
     concat,
     contains,
     countOf,
@@ -107,7 +105,6 @@ __all__: list[str] = [
     "__abs__",
     "__add__",
     "__and__",
-    "__call__",
     "__concat__",
     "__contains__",
     "__delitem__",
@@ -154,7 +151,6 @@ __all__: list[str] = [
     "add",
     "and_",
     "attrgetter",
-    "call",
     "concat",
     "contains",
     "countOf",

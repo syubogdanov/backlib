@@ -1,8 +1,9 @@
-from backlib.internal.backports.py313.operator import (
+import sys
+
+from backlib.internal.backports.py310.operator import (
     __abs__,
     __add__,
     __and__,
-    __call__,
     __concat__,
     __contains__,
     __delitem__,
@@ -49,7 +50,6 @@ from backlib.internal.backports.py313.operator import (
     add,
     and_,
     attrgetter,
-    call,
     concat,
     contains,
     countOf,
@@ -101,6 +101,13 @@ from backlib.internal.backports.py313.operator import (
     truth,
     xor,
 )
+
+
+if sys.version_info >= (3, 11):
+    from operator import __call__, call
+else:
+    from backlib.internal.backports.py311.operator.internal.operator import call
+    from backlib.internal.backports.py311.operator.internal.operator import call as __call__
 
 
 __all__: list[str] = [
