@@ -86,6 +86,17 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 
    assert st.st_birthtime_ns > 0
 
+os.path
+^^^^^^^
+
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/os.path.html>`__ (*latest*).
+
+.. code:: python
+
+   from backlib.py313 import os
+
+   assert os.path.isreserved("NUL")
+
 stat
 ^^^^
 

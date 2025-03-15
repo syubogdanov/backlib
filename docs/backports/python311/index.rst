@@ -10,5 +10,6 @@
     json
     operator
     os
+    os.path
     stat
     tomllib

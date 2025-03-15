@@ -10,4 +10,5 @@
     json
     operator
     os
+    os.path
     stat

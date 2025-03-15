@@ -182,6 +182,7 @@ from backlib.internal.backports.py313.os import (
     walk,
     write,
 )
+from backlib.py313.os import path
 
 
 __all__: list[str] = [
@@ -341,6 +342,7 @@ __all__: list[str] = [
     "name",
     "open",
     "pardir",
+    "path",
     "pathsep",
     "putenv",
     "read",

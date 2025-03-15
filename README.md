@@ -82,6 +82,16 @@ st = os.stat("pyproject.toml")
 assert st.st_birthtime_ns > 0
 ```
 
+#### os.path
+
+For more, see the [documentation][docs/os.path] (*latest*).
+
+```python
+from backlib.py313 import os
+
+assert os.path.isreserved("NUL")
+```
+
 #### stat
 
 For more, see the [documentation][docs/stat] (*latest*).
@@ -115,6 +125,7 @@ MIT License, Copyright (c) 2025 Sergei Y. Bogdanov. See [LICENSE][github/license
 [docs/json]: https://backlib.readthedocs.io/en/latest/backports/python313/json.html
 [docs/operator]: https://backlib.readthedocs.io/en/latest/backports/python313/operator.html
 [docs/os]: https://backlib.readthedocs.io/en/latest/backports/python313/os.html
+[docs/os.path]: https://backlib.readthedocs.io/en/latest/backports/python313/os.path.html
 [docs/stat]: https://backlib.readthedocs.io/en/latest/backports/python313/stat.html
 [docs/tomllib]: https://backlib.readthedocs.io/en/latest/backports/python313/tomllib.html
 
