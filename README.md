@@ -12,7 +12,7 @@
 
 * Provides backports for the standard library;
 * Compatible with Python 3.9+;
-* Dependency-free.
+* Almost dependency-free.
 
 ## Getting Started
 

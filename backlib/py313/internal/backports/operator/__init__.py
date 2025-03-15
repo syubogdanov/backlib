@@ -50,7 +50,6 @@ from operator import (
     add,
     and_,
     attrgetter,
-    call,
     concat,
     contains,
     countOf,
@@ -105,9 +104,10 @@ from operator import (
 
 
 if sys.version_info >= (3, 11):
-    from operator import __call__
+    from operator import __call__, call
 else:
-    from operator import call as __call__
+    from backlib.py313.internal.backports.operator.internal.operator import call
+    from backlib.py313.internal.backports.operator.internal.operator import call as __call__
 
 
 __all__: list[str] = [

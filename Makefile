@@ -12,6 +12,13 @@ publish-test:
 	poetry publish --dry-run --repository=test-pypi
 
 
+# Formatters
+format: black
+
+black:
+	$(VENV) black ./$(LIBRARY)/ ./$(TESTS)/
+
+
 # Linters
 lint: ruff mypy
 
