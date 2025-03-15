@@ -38,7 +38,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.14"
-typing-extensions = {version = "^4.12", python = "~3.9"}
+typing-extensions = "^4.12"
 
 [tool.poetry.group.lint]
 optional = true
