@@ -16,6 +16,7 @@ documentation = "https://backlib.readthedocs.io"
 keywords = [
     "python",
     "backport",
+    "operator",
     "stdlib",
     "errno",
     "json",
