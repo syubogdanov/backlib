@@ -8,3 +8,4 @@
     builtins
     json
     operator
+    tomllib

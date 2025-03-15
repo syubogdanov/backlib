@@ -4,7 +4,7 @@
 
 __all__: list[str] = ["TOMLDecodeError", "load", "loads"]
 
-from backlib.py313.internal.backports.tomllib.internal.cpython.parser import (
+from backlib.internal.backports.py311.tomllib.internal.cpython.parser import (
     TOMLDecodeError,
     load,
     loads,
