@@ -314,5 +314,3 @@ __all__: list[str] = [
     "EXFULL",
     "errorcode",
 ]
-
-__backlib__: str = "backlib.py313.errno"
