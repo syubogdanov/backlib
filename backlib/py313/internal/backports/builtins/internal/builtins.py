@@ -1,3 +1,8 @@
+__all__: list[str] = ["EncodingWarning"]
+
+__backlib__: str = "backlib.py313.builtins"
+
+
 class EncodingWarning(Warning):
     """Base class for warnings related to encodings.
 
@@ -5,3 +10,5 @@ class EncodingWarning(Warning):
     --------
     * `builtins.EncodingWarning`.
     """
+
+    __module__ = __backlib__

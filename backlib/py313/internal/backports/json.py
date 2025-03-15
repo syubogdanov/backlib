@@ -1,4 +1,4 @@
-from backlib.py313.internal.backports.json.internal.json import (
+from json import (
     JSONDecodeError,
     JSONDecoder,
     JSONEncoder,
@@ -18,5 +18,3 @@ __all__: list[str] = [
     "load",
     "loads",
 ]
-
-__backlib__: str = "backlib.py313.json"
