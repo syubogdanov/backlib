@@ -26,7 +26,7 @@ pip install backlib
 
 ### Usage
 
-#### builtins
+#### builtins [UNRELEASED]
 
 For more, see the [documentation][docs/builtins] (*latest*).
 
@@ -46,7 +46,7 @@ from backlib.py311 import errno
 assert errno.ENOTCAPABLE == 93
 ```
 
-#### io
+#### io [SOON]
 
 For more, see the [documentation][docs/io] (*latest*).
 
@@ -70,7 +70,7 @@ data = json.loads("{\"backlib\": \"pypi\"}")
 assert data == {"backlib": "pypi"}
 ```
 
-#### operator
+#### operator [UNRELEASED]
 
 For more, see the [documentation][docs/operator] (*latest*).
 
@@ -82,7 +82,7 @@ value = operator.__call__(abs, -42)
 assert value == 42
 ```
 
-#### os
+#### os [UNRELEASED]
 
 For more, see the [documentation][docs/os] (*latest*).
 
@@ -94,7 +94,7 @@ st = os.stat("pyproject.toml")
 assert st.st_birthtime_ns > 0
 ```
 
-#### os.path
+#### os.path [UNRELEASED]
 
 For more, see the [documentation][docs/os.path] (*latest*).
 
