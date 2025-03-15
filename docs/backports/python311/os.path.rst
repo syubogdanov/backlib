@@ -1,3 +1,3 @@
 =======================================
-os.path — Common pathname manipulations
+``os.path`` — Common pathname manipulations
 =======================================
