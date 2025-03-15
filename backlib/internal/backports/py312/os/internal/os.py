@@ -2,12 +2,16 @@ from __future__ import annotations
 
 import os as py_os
 
-from typing import Final, NamedTuple
+from typing import TYPE_CHECKING, Final, NamedTuple
 
 from backlib.internal.backports.py311 import os as py311_os
 from backlib.internal.backports.py312 import errno
 from backlib.internal.backports.py312.os.internal import linux5
 from backlib.internal.utils import alias
+
+
+if TYPE_CHECKING:
+    from backlib.internal.backports.py311.os import PathLike
 
 
 __all__: list[str] = [
@@ -185,7 +189,7 @@ stat_result.__module__ = __backlib__
 
 
 def stat(
-    path: int | str | bytes | py311_os.PathLike[str] | py311_os.PathLike[bytes],
+    path: int | str | bytes | PathLike[str] | PathLike[bytes],
     *,
     dir_fd: int | None = None,
     follow_symlinks: bool = True,
@@ -245,7 +249,7 @@ fstat.__module__ = __backlib__
 
 
 def lstat(
-    path: str | bytes | py311_os.PathLike[str] | py311_os.PathLike[bytes],
+    path: str | bytes | PathLike[str] | PathLike[bytes],
     *,
     dir_fd: int | None = None,
 ) -> stat_result:

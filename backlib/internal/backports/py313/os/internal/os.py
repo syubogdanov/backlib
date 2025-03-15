@@ -3,12 +3,16 @@ from __future__ import annotations
 import os as py_os
 import sys
 
-from typing import Final
+from typing import TYPE_CHECKING, Final
 from warnings import warn
 
 from backlib.internal.backports.py312 import os as py312_os
 from backlib.internal.backports.py313.os.internal import linux5
 from backlib.internal.utils import alias
+
+
+if TYPE_CHECKING:
+    from backlib.internal.backports.py312.os import PathLike
 
 
 __all__: list[str] = [
@@ -50,7 +54,7 @@ TFD_TIMER_CANCEL_ON_SET: Final[int] = alias.or_platform(
 
 
 def mkdir(
-    path: str | bytes | py312_os.PathLike[str] | py312_os.PathLike[bytes],
+    path: str | bytes | PathLike[str] | PathLike[bytes],
     mode: int = 0o777,
     *,
     dir_fd: int | None = None,
@@ -72,7 +76,7 @@ mkdir.__module__ = __backlib__
 
 
 def makedirs(
-    name: str | bytes | py312_os.PathLike[str] | py312_os.PathLike[bytes],
+    name: str | bytes | PathLike[str] | PathLike[bytes],
     mode: int = 0o777,
     exist_ok: bool = False,
 ) -> None:

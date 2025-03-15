@@ -9,7 +9,7 @@ from backlib.internal.utils.platform import is_nt
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
-    from backlib.internal.backports.py312 import os
+    from backlib.internal.backports.py313 import os
 
 
 AnyStr = TypeVar("AnyStr", str, bytes)
