@@ -80,7 +80,7 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 
    from backlib.py311 import operator
 
-   value = operator.__call__(abs, -42)
+   value = operator.call(abs, -42)
 
    assert value == 42
 

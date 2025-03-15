@@ -77,7 +77,7 @@ For more, see the [documentation][docs/operator] (*py313*).
 ```python
 from backlib.py311 import operator
 
-value = operator.__call__(abs, -42)
+value = operator.call(abs, -42)
 
 assert value == 42
 ```
