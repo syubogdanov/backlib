@@ -28,7 +28,7 @@ pip install backlib
 
 #### builtins
 
-For more, see the [documentation][docs/builtins].
+For more, see the [documentation][docs/builtins] (*latest*).
 
 ```python
 from backlib.py310 import builtins
@@ -38,7 +38,7 @@ assert issubclass(builtins.EncodingWarning, Warning)
 
 #### errno
 
-For more, see the [documentation][docs/errno].
+For more, see the [documentation][docs/errno] (*latest*).
 
 ```python
 from backlib.py311 import errno
@@ -48,10 +48,10 @@ assert errno.ENOTCAPABLE == 93
 
 #### json
 
-For more, see the [documentation][docs/json].
+For more, see the [documentation][docs/json] (*latest*).
 
 ```python
-from backlib.py313 import json
+from backlib.py310 import json
 
 data = json.loads("{\"backlib\": \"pypi\"}")
 
@@ -60,7 +60,7 @@ assert data == {"backlib": "pypi"}
 
 #### operator
 
-For more, see the [documentation][docs/operator].
+For more, see the [documentation][docs/operator] (*latest*).
 
 ```python
 from backlib.py311 import operator
@@ -72,7 +72,7 @@ assert value == 42
 
 #### os
 
-For more, see the [documentation][docs/os].
+For more, see the [documentation][docs/os] (*latest*).
 
 ```python
 from backlib.py312 import os
@@ -84,7 +84,7 @@ assert st.st_birthtime_ns > 0
 
 #### stat
 
-For more, see the [documentation][docs/stat].
+For more, see the [documentation][docs/stat] (*latest*).
 
 ```python
 from backlib.py313 import stat
@@ -94,7 +94,7 @@ assert stat.SF_SYNTHETIC == 0xC0000000
 
 #### tomllib
 
-For more, see the [documentation][docs/tomllib].
+For more, see the [documentation][docs/tomllib] (*latest*).
 
 ```python
 from backlib.py311 import tomllib
