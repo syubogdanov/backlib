@@ -11,21 +11,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `backlib.py310.json`;
 * Added `backlib.py310.operator`;
 * Added `backlib.py310.os`;
+* Added `backlib.py310.os.path`;
 * Added `backlib.py310.stat`;
 * Added `backlib.py311.errno`;
 * Added `backlib.py311.json`;
 * Added `backlib.py311.operator`;
 * Added `backlib.py311.os`;
+* Added `backlib.py311.os.path`;
 * Added `backlib.py311.stat`;
 * Added `backlib.py311.tomllib`;
 * Added `backlib.py312.errno`;
 * Added `backlib.py312.json`;
 * Added `backlib.py312.operator`;
 * Added `backlib.py312.os`;
+* Added `backlib.py312.os.path`;
 * Added `backlib.py312.stat`;
 * Added `backlib.py312.tomllib`;
 * Added `backlib.py313.operator`;
-* Added `backlib.py313.os`.
+* Added `backlib.py313.os`;
+* Added `backlib.py310.os.path`.
 
 ## [0.1.0] - 2025-03-11
 
