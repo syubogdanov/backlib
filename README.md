@@ -28,7 +28,7 @@ pip install backlib
 
 #### builtins [UNRELEASED]
 
-For more, see the [documentation][docs/builtins] (*latest*).
+For more, see the [documentation][docs/builtins] (*py313*).
 
 ```python
 from backlib.py310 import builtins
@@ -38,7 +38,7 @@ assert issubclass(builtins.EncodingWarning, Warning)
 
 #### errno
 
-For more, see the [documentation][docs/errno] (*latest*).
+For more, see the [documentation][docs/errno] (*py313*).
 
 ```python
 from backlib.py311 import errno
@@ -48,7 +48,7 @@ assert errno.ENOTCAPABLE == 93
 
 #### io [SOON]
 
-For more, see the [documentation][docs/io] (*latest*).
+For more, see the [documentation][docs/io] (*py313*).
 
 ```python
 from backlib.py311 import io
@@ -60,7 +60,7 @@ assert encoding == "utf-8"
 
 #### json
 
-For more, see the [documentation][docs/json] (*latest*).
+For more, see the [documentation][docs/json] (*py313*).
 
 ```python
 from backlib.py310 import json
@@ -72,7 +72,7 @@ assert data == {"backlib": "pypi"}
 
 #### operator [UNRELEASED]
 
-For more, see the [documentation][docs/operator] (*latest*).
+For more, see the [documentation][docs/operator] (*py313*).
 
 ```python
 from backlib.py311 import operator
@@ -84,7 +84,7 @@ assert value == 42
 
 #### os [UNRELEASED]
 
-For more, see the [documentation][docs/os] (*latest*).
+For more, see the [documentation][docs/os] (*py313*).
 
 ```python
 from backlib.py312 import os
@@ -96,7 +96,7 @@ assert st.st_birthtime_ns > 0
 
 #### os.path [UNRELEASED]
 
-For more, see the [documentation][docs/os.path] (*latest*).
+For more, see the [documentation][docs/os.path] (*py313*).
 
 ```python
 from backlib.py313 import os
@@ -106,7 +106,7 @@ assert os.path.isreserved("NUL")
 
 #### stat
 
-For more, see the [documentation][docs/stat] (*latest*).
+For more, see the [documentation][docs/stat] (*py313*).
 
 ```python
 from backlib.py313 import stat
@@ -116,7 +116,7 @@ assert stat.SF_SYNTHETIC == 0xC0000000
 
 #### tomllib
 
-For more, see the [documentation][docs/tomllib] (*latest*).
+For more, see the [documentation][docs/tomllib] (*py313*).
 
 ```python
 from backlib.py311 import tomllib
