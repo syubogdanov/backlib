@@ -73,6 +73,19 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 
    assert value == 42
 
+os
+^^
+
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/os.html>`__.
+
+.. code:: python
+
+   from backlib.py313 import os
+
+   st = os.stat("pyproject.toml")
+
+   assert st.st_birthtime_ns > 0
+
 stat
 ^^^^
 

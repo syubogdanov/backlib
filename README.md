@@ -70,6 +70,18 @@ value = operator.__call__(abs, -42)
 assert value == 42
 ```
 
+#### os
+
+For more, see the [documentation][docs/os].
+
+```python
+from backlib.py313 import os
+
+st = os.stat("pyproject.toml")
+
+assert st.st_birthtime_ns > 0
+```
+
 #### stat
 
 For more, see the [documentation][docs/stat].
@@ -102,6 +114,7 @@ MIT License, Copyright (c) 2025 Sergei Y. Bogdanov. See [LICENSE][github/license
 [docs/errno]: https://backlib.readthedocs.io/en/latest/backports/python313/errno.html
 [docs/json]: https://backlib.readthedocs.io/en/latest/backports/python313/json.html
 [docs/operator]: https://backlib.readthedocs.io/en/latest/backports/python313/operator.html
+[docs/os]: https://backlib.readthedocs.io/en/latest/backports/python313/os.html
 [docs/stat]: https://backlib.readthedocs.io/en/latest/backports/python313/stat.html
 [docs/tomllib]: https://backlib.readthedocs.io/en/latest/backports/python313/tomllib.html
 
