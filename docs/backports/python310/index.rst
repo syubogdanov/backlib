@@ -7,6 +7,7 @@
 
     builtins
     errno
+    io
     json
     operator
     os

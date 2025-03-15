@@ -47,6 +47,17 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 
    assert errno.ENOTCAPABLE == 93
 
+io
+^^
+
+.. code:: python
+
+   from backlib.py311 import io
+
+   encoding = io.text_encoding(None)
+
+   assert encoding == "utf-8"
+
 json
 ^^^^
 

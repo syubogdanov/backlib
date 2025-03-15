@@ -46,6 +46,18 @@ from backlib.py311 import errno
 assert errno.ENOTCAPABLE == 93
 ```
 
+#### io
+
+For more, see the [documentation][docs/io] (*latest*).
+
+```python
+from backlib.py311 import io
+
+encoding = io.text_encoding(None)
+
+assert encoding == "utf-8"
+```
+
 #### json
 
 For more, see the [documentation][docs/json] (*latest*).
@@ -122,6 +134,7 @@ MIT License, Copyright (c) 2025 Sergei Y. Bogdanov. See [LICENSE][github/license
 
 [docs/builtins]: https://backlib.readthedocs.io/en/latest/backports/python313/builtins.html
 [docs/errno]: https://backlib.readthedocs.io/en/latest/backports/python313/errno.html
+[docs/io]: https://backlib.readthedocs.io/en/latest/backports/python313/io.html
 [docs/json]: https://backlib.readthedocs.io/en/latest/backports/python313/json.html
 [docs/operator]: https://backlib.readthedocs.io/en/latest/backports/python313/operator.html
 [docs/os]: https://backlib.readthedocs.io/en/latest/backports/python313/os.html

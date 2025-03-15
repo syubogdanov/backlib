@@ -18,6 +18,7 @@ keywords = [
     "backport",
     "stdlib",
     "errno",
+    "io",
     "json",
     "operator",
     "os",
