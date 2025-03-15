@@ -14,6 +14,8 @@ if TYPE_CHECKING:
 
 __all__: list[str] = ["isdevdrive", "isjunction", "splitroot"]
 
+__backlib__: str = "backlib.py312.os.path"
+
 
 AnyStr = TypeVar("AnyStr", str, bytes)
 
@@ -29,6 +31,9 @@ def isjunction(path: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -> boo
     return os_isjunction(path)
 
 
+isjunction.__module__ = __backlib__
+
+
 def isdevdrive(path: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -> bool:
     """Return True if pathname path is located on a Windows Dev Drive.
 
@@ -41,6 +46,9 @@ def isdevdrive(path: str | bytes | os.PathLike[str] | os.PathLike[bytes]) -> boo
     return genericpath.isdevdrive(path)
 
 
+isdevdrive.__module__ = __backlib__
+
+
 def splitroot(path: AnyStr | os.PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:
     """Split the pathname `path` into a 3-item tuple `(drive, root, tail)`.
 
@@ -50,3 +58,6 @@ def splitroot(path: AnyStr | os.PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnySt
     """
     os_splitroot = ntpath.splitroot if is_nt() else posixpath.splitroot
     return os_splitroot(path)
+
+
+splitroot.__module__ = __backlib__

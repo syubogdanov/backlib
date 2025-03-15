@@ -12,6 +12,11 @@ if TYPE_CHECKING:
     from backlib.internal.backports.py313 import os
 
 
+__all__: list[str] = ["commonpath", "isabs", "isreserved"]
+
+__backlib__: str = "backlib.py313.os.path"
+
+
 AnyStr = TypeVar("AnyStr", str, bytes)
 
 
@@ -26,6 +31,9 @@ def commonpath(paths: Iterable[AnyStr | os.PathLike[AnyStr]]) -> AnyStr:
     return os_commonpath(paths)
 
 
+commonpath.__module__ = __backlib__
+
+
 def isabs(path: AnyStr | os.PathLike[AnyStr]) -> bool:
     """Return `True` if `path` is an absolute pathname.
 
@@ -37,6 +45,9 @@ def isabs(path: AnyStr | os.PathLike[AnyStr]) -> bool:
     return os_isabs(path)
 
 
+isabs.__module__ = __backlib__
+
+
 def isreserved(path: AnyStr | os.PathLike[AnyStr]) -> bool:
     """Return `True` if `path` is a reserved pathname on the current system.
 
@@ -46,3 +57,6 @@ def isreserved(path: AnyStr | os.PathLike[AnyStr]) -> bool:
     """
     os_isreserved = ntpath.isreserved if is_nt() else posixpath.isreserved
     return os_isreserved(path)
+
+
+isreserved.__module__ = __backlib__
