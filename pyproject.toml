@@ -79,6 +79,11 @@ ignore = [
     "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed in {name}
     "D100",    # Missing docstring in public module
     "D104",    # Missing docstring in public package
+    "FBT001",  # Checks for the use of boolean positional arguments in function definitions, as determined by the presence of a bool type hint.
+    "FBT002",  # Checks for the use of boolean positional arguments in function definitions, as determined by the presence of a boolean default value.
+    "PTH102",  # Checks for uses of os.mkdir.
+    "PTH103",  # Checks for uses of os.makedirs.
+    "PTH116",  # Checks for uses of os.stat.
 ]
 select = ["ALL"]
 
@@ -93,4 +98,5 @@ lines-between-types = 1
 convention = "numpy"
 
 [tool.ruff.lint.pylint]
+allow-magic-value-types = ["bytes", "int", "str"]
 max-args = 8

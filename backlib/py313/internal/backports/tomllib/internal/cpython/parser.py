@@ -690,7 +690,7 @@ def suffixed_err(src: str, pos: Pos, msg: str) -> TOMLDecodeError:
 
 
 def is_unicode_scalar_value(codepoint: int) -> bool:  # noqa: D103
-    return (0 <= codepoint <= 55295) or (57344 <= codepoint <= 1114111)  # noqa: PLR2004
+    return (0 <= codepoint <= 55295) or (57344 <= codepoint <= 1114111)
 
 
 def make_safe_parse_float(parse_float: ParseFloat) -> ParseFloat:
