@@ -1,6 +1,8 @@
 from functools import cache
 from sys import builtin_module_names, platform
 
+from backlib.internal.markers import techdebt
+
 
 @cache
 def is_nt() -> bool:
@@ -14,6 +16,7 @@ def is_posix() -> bool:
     return "posix" in builtin_module_names
 
 
+@techdebt.simplified
 @cache
 def is_unix() -> bool:
     """Check if the platform is `Unix`.

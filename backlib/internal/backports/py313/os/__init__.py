@@ -1,3 +1,5 @@
+import sys
+
 from backlib.internal.backports.py312.os import (
     CLD_CONTINUED,
     CLD_DUMPED,
@@ -184,6 +186,12 @@ from backlib.internal.backports.py313.os.internal.os import (
     makedirs,
     mkdir,
 )
+
+
+if sys.version_info >= (3, 13):
+    from os import makedirs, mkdir
+else:
+    from backlib.internal.backports.py313.os.internal.os import makedirs, mkdir
 
 
 __all__: list[str] = [

@@ -21,6 +21,7 @@ keywords = [
     "json",
     "operator",
     "os",
+    "os.path",
     "stat",
     "tomllib",
 ]
@@ -85,6 +86,7 @@ ignore = [
     "FBT001",  # Checks for the use of boolean positional arguments in function definitions, as determined by the presence of a bool type hint.
     "FBT002",  # Checks for the use of boolean positional arguments in function definitions, as determined by the presence of a boolean default value.
     "N801",    # Checks for class names that do not follow the CamelCase convention.
+    "PTH100",  # Checks for uses of os.path.abspath.
     "PTH102",  # Checks for uses of os.mkdir.
     "PTH103",  # Checks for uses of os.makedirs.
     "PTH116",  # Checks for uses of os.stat.
