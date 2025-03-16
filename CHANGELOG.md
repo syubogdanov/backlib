@@ -33,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Added `backlib.py313.builtins`;
 * Added `backlib.py313.operator`;
 * Added `backlib.py313.os`;
-* Added `backlib.py310.os.path`.
+* Added `backlib.py313.os.path`.
 
 ## [0.1.0] - 2025-03-11
 
