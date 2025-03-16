@@ -28,7 +28,7 @@ Usage
 builtins [UNRELEASED]
 ^^^^^^^^^^^^^^^^^^^^^
 
-For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/builtins.html>`__ (*py313*).
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
 
 .. code:: python
 
@@ -39,7 +39,7 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 errno
 ^^^^^
 
-For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/errno.html>`__ (*py313*).
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
 
 .. code:: python
 
@@ -61,7 +61,7 @@ io [SOON]
 json
 ^^^^
 
-For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/json.html>`__ (*py313*).
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
 
 .. code:: python
 
@@ -74,7 +74,7 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 operator [UNRELEASED]
 ^^^^^^^^^^^^^^^^^^^^^
 
-For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/operator.html>`__ (*py313*).
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
 
 .. code:: python
 
@@ -87,7 +87,7 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 os [UNRELEASED]
 ^^^^^^^^^^^^^^^
 
-For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/os.html>`__ (*py313*).
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
 
 .. code:: python
 
@@ -100,7 +100,7 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 os.path [UNRELEASED]
 ^^^^^^^^^^^^^^^^^^^^
 
-For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/os.path.html>`__ (*py313*).
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
 
 .. code:: python
 
@@ -111,7 +111,7 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 stat
 ^^^^
 
-For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/stat.html>`__ (*py313*).
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
 
 .. code:: python
 
@@ -122,7 +122,7 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 tomllib
 ^^^^^^^
 
-For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/python313/tomllib.html>`__ (*py313*).
+For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
 
 .. code:: python
 
