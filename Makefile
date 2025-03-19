@@ -3,13 +3,18 @@ VENV = poetry run
 LIBRARY = backlib
 TESTS = tests
 
+PYPI-PROD-TOKEN = pypi-XXXYYYZZZ
+PYPI-TEST-TOKEN = pypi-XXXYYYZZZ
+
 
 # CD
 publish-prod:
-	poetry publish --dry-run
+	poetry config pypi-token.pypi $(PYPI-PROD-TOKEN)
+	poetry publish
 
 publish-test:
-	poetry publish --dry-run --repository=test-pypi
+	poetry config pypi-token.test-pypi $(PYPI-TEST-TOKEN)
+	poetry publish --repository=test-pypi
 
 
 # Formatters
