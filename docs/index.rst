@@ -26,7 +26,7 @@ Usage
 ~~~~~
 
 builtins
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^
 
 For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
 
@@ -72,7 +72,7 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
    assert data == {"backlib": "pypi"}
 
 operator
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^
 
 For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
 
@@ -85,7 +85,7 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
    assert value == 42
 
 os
-^^^^^^^^^^^^^^^
+^^
 
 For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
 
@@ -98,7 +98,7 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
    assert st.st_birthtime_ns > 0
 
 os.path
-^^^^^^^^^^^^^^^^^^^^
+^^^^^^^
 
 For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
 
