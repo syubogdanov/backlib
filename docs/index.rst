@@ -25,7 +25,7 @@ The library is available as `backlib <https://pypi.org/project/backlib/>`__ on P
 Usage
 ~~~~~
 
-builtins [UNRELEASED]
+builtins
 ^^^^^^^^^^^^^^^^^^^^^
 
 For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
@@ -71,7 +71,7 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 
    assert data == {"backlib": "pypi"}
 
-operator [UNRELEASED]
+operator
 ^^^^^^^^^^^^^^^^^^^^^
 
 For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
@@ -84,7 +84,7 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 
    assert value == 42
 
-os [UNRELEASED]
+os
 ^^^^^^^^^^^^^^^
 
 For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.
@@ -97,7 +97,7 @@ For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backp
 
    assert st.st_birthtime_ns > 0
 
-os.path [UNRELEASED]
+os.path
 ^^^^^^^^^^^^^^^^^^^^
 
 For more, see the `documentation <https://backlib.readthedocs.io/en/latest/backports/index.html>`__.

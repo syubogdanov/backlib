@@ -26,7 +26,7 @@ pip install backlib
 
 ### Usage
 
-#### builtins [UNRELEASED]
+#### builtins
 
 For more, see the [documentation][docs/all].
 
@@ -70,7 +70,7 @@ data = json.loads("{\"backlib\": \"pypi\"}")
 assert data == {"backlib": "pypi"}
 ```
 
-#### operator [UNRELEASED]
+#### operator
 
 For more, see the [documentation][docs/all].
 
@@ -82,7 +82,7 @@ value = operator.call(abs, -42)
 assert value == 42
 ```
 
-#### os [UNRELEASED]
+#### os
 
 For more, see the [documentation][docs/all].
 
@@ -94,7 +94,7 @@ st = os.stat("pyproject.toml")
 assert st.st_birthtime_ns > 0
 ```
 
-#### os.path [UNRELEASED]
+#### os.path
 
 For more, see the [documentation][docs/all].
 
