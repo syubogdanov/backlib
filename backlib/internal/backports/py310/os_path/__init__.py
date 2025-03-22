@@ -23,14 +23,13 @@ from os.path import (
     relpath,
     samefile,
     sameopenfile,
-    samestat,
     split,
     splitdrive,
     splitext,
     supports_unicode_filenames,
 )
 
-from backlib.internal.backports.py310.os_path.internal.os_path import realpath
+from backlib.internal.backports.py310.os_path.internal.os_path import realpath, samestat
 
 
 __all__: list[str] = [

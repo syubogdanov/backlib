@@ -26,13 +26,12 @@ from backlib.internal.backports.py311.os_path import (
     relpath,
     samefile,
     sameopenfile,
-    samestat,
     split,
     splitdrive,
     splitext,
     supports_unicode_filenames,
 )
-from backlib.internal.backports.py312.os_path.internal.os_path import isdevdrive
+from backlib.internal.backports.py312.os_path.internal.os_path import isdevdrive, samestat
 
 
 if sys.version_info >= (3, 12):

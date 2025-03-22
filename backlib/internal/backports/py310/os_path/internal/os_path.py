@@ -12,7 +12,7 @@ from backlib.internal.utils.platform import is_posix
 
 
 if TYPE_CHECKING:
-    from backlib.internal.backports.py310.os import PathLike
+    from backlib.internal.backports.py310.os import PathLike, stat_result
 
 
 __all__: list[str] = ["realpath"]
@@ -48,3 +48,16 @@ def realpath(
 
 
 realpath.__module__ = __name__
+
+
+def samestat(s1: stat_result, s2: stat_result) -> bool:
+    """Return `True` if the stat tuples `s1` and `s2` refer to the same file.
+
+    See Also
+    --------
+    * `os.path.samestat`.
+    """
+    return s1.st_ino == s2.st_ino and s1.st_dev == s2.st_dev
+
+
+samestat.__module__ = __backlib__
