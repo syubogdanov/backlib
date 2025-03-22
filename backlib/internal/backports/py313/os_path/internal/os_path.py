@@ -31,9 +31,6 @@ def commonpath(paths: Iterable[AnyStr | PathLike[AnyStr]]) -> AnyStr:
     return os_commonpath(paths)
 
 
-commonpath.__module__ = __backlib__
-
-
 def isabs(path: AnyStr | PathLike[AnyStr]) -> bool:
     """Return `True` if `path` is an absolute pathname.
 
@@ -43,9 +40,6 @@ def isabs(path: AnyStr | PathLike[AnyStr]) -> bool:
     """
     os_isabs = ntpath.isabs if is_nt() else posixpath.isabs
     return os_isabs(path)
-
-
-isabs.__module__ = __backlib__
 
 
 def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:
@@ -59,4 +53,6 @@ def isreserved(path: AnyStr | PathLike[AnyStr]) -> bool:
     return os_isreserved(path)
 
 
+commonpath.__module__ = __backlib__
+isabs.__module__ = __backlib__
 isreserved.__module__ = __backlib__

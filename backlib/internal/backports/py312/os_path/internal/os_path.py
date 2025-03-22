@@ -31,9 +31,6 @@ def isjunction(path: str | bytes | PathLike[str] | PathLike[bytes]) -> bool:
     return os_isjunction(path)
 
 
-isjunction.__module__ = __backlib__
-
-
 def isdevdrive(path: str | bytes | PathLike[str] | PathLike[bytes]) -> bool:
     """Return True if pathname path is located on a Windows Dev Drive.
 
@@ -44,9 +41,6 @@ def isdevdrive(path: str | bytes | PathLike[str] | PathLike[bytes]) -> bool:
     if hasattr(py_os_path, "isdevdrive"):
         return py_os_path.isdevdrive(path)
     return genericpath.isdevdrive(path)
-
-
-isdevdrive.__module__ = __backlib__
 
 
 def splitroot(path: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:
@@ -60,9 +54,6 @@ def splitroot(path: AnyStr | PathLike[AnyStr]) -> tuple[AnyStr, AnyStr, AnyStr]:
     return os_splitroot(path)
 
 
-splitroot.__module__ = __backlib__
-
-
 def samestat(s1: stat_result, s2: stat_result) -> bool:
     """Return `True` if the stat tuples `s1` and `s2` refer to the same file.
 
@@ -73,4 +64,7 @@ def samestat(s1: stat_result, s2: stat_result) -> bool:
     return s1.st_ino == s2.st_ino and s1.st_dev == s2.st_dev
 
 
+isdevdrive.__module__ = __backlib__
+isjunction.__module__ = __backlib__
 samestat.__module__ = __backlib__
+splitroot.__module__ = __backlib__

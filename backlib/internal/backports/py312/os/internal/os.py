@@ -185,9 +185,6 @@ class stat_result(NamedTuple):
     st_reparse_tag: int
 
 
-stat_result.__module__ = __backlib__
-
-
 def stat(
     path: int | str | bytes | PathLike[str] | PathLike[bytes],
     *,
@@ -232,9 +229,6 @@ def stat(
     )
 
 
-stat.__module__ = __backlib__
-
-
 def fstat(fd: int) -> stat_result:
     """Get the status of the file descriptor `fd`.
 
@@ -243,9 +237,6 @@ def fstat(fd: int) -> stat_result:
     * `os.fstat`.
     """
     return stat(fd)
-
-
-fstat.__module__ = __backlib__
 
 
 def lstat(
@@ -262,9 +253,6 @@ def lstat(
     return stat(path, dir_fd=dir_fd, follow_symlinks=False)
 
 
-lstat.__module__ = __backlib__
-
-
 def strerror(code: int, /) -> str:
     """Return the error message corresponding to the error code in `code`.
 
@@ -279,9 +267,6 @@ def strerror(code: int, /) -> str:
         return "Interface output queue is full"
 
     return py311_os.strerror(code)
-
-
-strerror.__module__ = __backlib__
 
 
 supports_dir_fd = py311_os.supports_dir_fd.copy()
@@ -303,3 +288,10 @@ supports_follow_symlinks = py311_os.supports_follow_symlinks.copy()
 
 if py311_os.stat in py311_os.supports_follow_symlinks:
     supports_follow_symlinks.add(stat)
+
+
+fstat.__module__ = __backlib__
+lstat.__module__ = __backlib__
+stat.__module__ = __backlib__
+stat_result.__module__ = __backlib__
+strerror.__module__ = __backlib__

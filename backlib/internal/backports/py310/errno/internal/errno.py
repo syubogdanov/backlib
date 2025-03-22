@@ -1615,11 +1615,6 @@ EXFULL: Final[int] = alias.or_platform(
 )
 
 
-# ---
-# Version: Python 3.9+
-# Explain: Use the entire `errno`.
-# ---
-
 errorcode = {
     E2BIG: "E2BIG",
     EACCES: "EACCES",

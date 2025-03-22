@@ -7,7 +7,6 @@ from typing import TYPE_CHECKING, TypeVar
 from warnings import warn
 
 from backlib.internal.backports.py310.os_path.internal import posixpath
-from backlib.internal.markers import techdebt
 from backlib.internal.utils.platform import is_posix
 
 
@@ -23,7 +22,6 @@ __backlib__: str = "backlib.py313.os.path"
 AnyStr = TypeVar("AnyStr", bytes, str)
 
 
-@techdebt.refactor
 def realpath(
     filename: AnyStr | PathLike[AnyStr],
     *,
@@ -47,9 +45,6 @@ def realpath(
     return py_os_path.abspath(filename)
 
 
-realpath.__module__ = __name__
-
-
 def samestat(s1: stat_result, s2: stat_result) -> bool:
     """Return `True` if the stat tuples `s1` and `s2` refer to the same file.
 
@@ -60,4 +55,5 @@ def samestat(s1: stat_result, s2: stat_result) -> bool:
     return s1.st_ino == s2.st_ino and s1.st_dev == s2.st_dev
 
 
+realpath.__module__ = __name__
 samestat.__module__ = __backlib__

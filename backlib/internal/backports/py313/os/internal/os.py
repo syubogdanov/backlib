@@ -72,9 +72,6 @@ def mkdir(
     py312_os.mkdir(path, mode, dir_fd=dir_fd)
 
 
-mkdir.__module__ = __backlib__
-
-
 def makedirs(
     name: str | bytes | PathLike[str] | PathLike[bytes],
     mode: int = 0o777,
@@ -94,3 +91,4 @@ def makedirs(
 
 
 makedirs.__module__ = __backlib__
+mkdir.__module__ = __backlib__

@@ -787,9 +787,6 @@ class stat_result(NamedTuple):
     st_reparse_tag: int
 
 
-stat_result.__module__ = __backlib__
-
-
 def stat(
     path: int | str | bytes | py_os.PathLike[str] | py_os.PathLike[bytes],
     *,
@@ -833,9 +830,6 @@ def stat(
     )
 
 
-stat.__module__ = __backlib__
-
-
 def fstat(fd: int) -> stat_result:
     """Get the status of the file descriptor `fd`.
 
@@ -844,9 +838,6 @@ def fstat(fd: int) -> stat_result:
     * `os.fstat`.
     """
     return stat(fd)
-
-
-fstat.__module__ = __backlib__
 
 
 def lstat(
@@ -861,9 +852,6 @@ def lstat(
     * `os.lstat`.
     """
     return stat(path, dir_fd=dir_fd, follow_symlinks=False)
-
-
-lstat.__module__ = __backlib__
 
 
 def strerror(code: int, /) -> str:
@@ -1035,9 +1023,6 @@ def strerror(code: int, /) -> str:
     raise ValueError(detail)
 
 
-strerror.__module__ = __backlib__
-
-
 supports_dir_fd = py_os.supports_dir_fd.copy()
 
 if py_os.stat in py_os.supports_dir_fd:
@@ -1057,3 +1042,10 @@ supports_follow_symlinks = py_os.supports_follow_symlinks.copy()
 
 if py_os.stat in py_os.supports_follow_symlinks:
     supports_follow_symlinks.add(stat)
+
+
+fstat.__module__ = __backlib__
+lstat.__module__ = __backlib__
+stat.__module__ = __backlib__
+stat_result.__module__ = __backlib__
+strerror.__module__ = __backlib__
