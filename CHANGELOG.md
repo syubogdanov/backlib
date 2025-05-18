@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2025-05-18
+
+* Fixed `ImportError` when importing `os.path` on POSIX Python 3.13 (`os.path.isreserved`).
+
 ## [0.2.1] - 2025-03-22
 
 * Fixed `mypy` errors for `backlib.py3*.os.path.samestat`.
